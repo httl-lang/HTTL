@@ -1,0 +1,36 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"declaration": true,
+		"composite": true,
+		"sourceMap": true,
+		"jsx": "react-jsx",
+		"lib": [
+			"webworker",
+			"dom",
+			"dom.iterable",
+			"esnext",
+			"ES2022"
+		],
+		"baseUrl": "./",
+		"rootDir": "./src",
+		"outDir": "./dist",
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"paths": {
+			"*": [
+				"./node_modules/*",
+				"./src"
+			]
+		}
+	},
+	"exclude": [
+		"node_modules",
+		"**/__tests__/*",
+		"dist",
+		"**/*spec.ts"
+	]
+}

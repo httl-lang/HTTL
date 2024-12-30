@@ -1,0 +1,15 @@
+{
+  "name": "httl",
+  "version": "0.1.0",
+  "scripts": {
+  },
+  "author": "Evgen Mykhailenko",
+  "license": "ISC",
+  "description": "",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

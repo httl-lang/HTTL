@@ -1,0 +1,37 @@
+{
+	"folders": [
+		{
+			"name": "root",
+			"path": ".."
+		},
+		{
+			"name": "httl-mock",
+			"path": "../mock"
+		},
+		{
+			"name": "httl-core",
+			"path": "../packages/httl-core"
+		},
+		{
+			"name": "httl-vscode",
+			"path": "../packages/httl-vscode"
+		},
+	],
+	"launch": {
+		"version": "0.2.0",
+		"compounds": [
+			{
+				"name": "Run VSCode + Mock",
+				"configurations": [
+					"Run VSCode Extension",
+					"HTTL: Mock Server"
+				]
+			}
+		]
+	},
+	"settings": {
+		"jest.disabledWorkspaceFolders": [
+			"root",
+		],
+	},
+}

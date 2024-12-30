@@ -1,0 +1,25 @@
+# Node.js
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+
+**/*.tsbuildinfo
+**/*.antlr/
+**/*_antlr/
+
+**/*.pyc
+**/*.vsix

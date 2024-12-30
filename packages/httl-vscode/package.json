@@ -1,0 +1,154 @@
+{
+	"name": "httl-vscode",
+	"displayName": "HTTL",
+	"description": "A Visual Studio Code extension for HTTL (Hypertext Template Language)",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/httl-lang/httl-vscode.git"
+	},
+	"bugs": {
+		"url": "https://github.com/httl-lang/httl-vscode/issues"
+	},
+	"version": "0.1.0",
+	"publisher": "HTTL",
+	"author": {
+		"name": "Evgen Mykhailenko"
+	},
+	"engines": {
+		"vscode": "^1.92.0"
+	},
+	"main": "./dist/extension.js",
+	"icon": "media/logo.png",
+	"categories": [
+		"Programming Languages",
+		"Snippets",
+		"Testing",
+		"Linters",
+		"Formatters"
+	],
+	"keywords": [
+		"httl",
+		"api",
+		"http",
+		"REST",
+		"client",
+		"postman",
+		"request",
+		"response",
+		"api-client"
+	],
+	"activationEvents": [
+		"onLanguage:plaintext"
+	],
+	"contributes": {
+		"viewsContainers": {
+			"panel": [
+				{
+					"id": "httlResponsePanel",
+					"title": "HTTL",
+					"icon": "media/plain_logo.png"
+				}
+			]
+		},
+		"views": {
+			"httlResponsePanel": [
+				{
+					"id": "httlResponseView",
+					"name": "HTTL Response",
+					"type": "webview"
+				}
+			]
+		},
+		"languages": [
+			{
+				"id": "httl",
+				"aliases": [
+					"HTTL",
+					"Httl",
+					"httl"
+				],
+				"extensions": [
+					".httl"
+				],
+				"configuration": "./language/configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "httl",
+				"scopeName": "source.httl",
+				"path": "./language/grammars.json"
+			}
+		],
+		"commands": [
+			{
+				"command": "httl.run",
+				"title": "Send Request",
+				"category": "HTTL"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "httl.run",
+				"key": "f5",
+				"mac": "cmd+enter",
+				"when": "editorTextFocus && editorLangId == 'httl'"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run package",
+		"compile": "webpack",
+		"watch": "webpack --watch",
+		"package": "webpack --mode production --devtool hidden-source-map",
+		"compile-tests": "tsc -p . --outDir out",
+		"watch-tests": "tsc -p . -w --outDir out",
+		"pretest": "npm run compile-tests && npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "vscode-test"
+	},
+	"devDependencies": {
+		"@svgr/webpack": "^8.1.0",
+		"@types/js-yaml": "^4.0.9",
+		"@types/mocha": "^10.0.7",
+		"@types/node": "20.x",
+		"@types/react": "^18.3.16",
+		"@types/react-dom": "^18.3.5",
+		"@types/styled-components": "^5.1.34",
+		"@types/use-sync-external-store": "^0.0.6",
+		"@types/vscode": "^1.92.0",
+		"@typescript-eslint/eslint-plugin": "^7.14.1",
+		"@typescript-eslint/parser": "^7.11.0",
+		"@vscode/test-cli": "^0.0.9",
+		"@vscode/test-electron": "^2.4.0",
+		"browserify": "^17.0.1",
+		"buffer": "^6.0.3",
+		"css-loader": "^7.1.2",
+		"eslint": "^8.57.0",
+		"monaco-editor-webpack-plugin": "^7.1.0",
+		"sass": "^1.82.0",
+		"sass-loader": "^16.0.4",
+		"source-map-loader": "^5.0.0",
+		"style-loader": "^4.0.0",
+		"ts-loader": "^9.5.1",
+		"typescript": "^5.4.5",
+		"webpack": "^5.92.1",
+		"webpack-cli": "^5.1.4"
+	},
+	"dependencies": {
+		"httl-core": "^0.1.0",
+		"form-data": "^4.0.1",
+		"js-yaml": "^4.1.0",
+		"monaco-editor": "^0.52.2",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"react-icons": "^5.4.0",
+		"react-storm": "^0.5.1",
+		"react-top-loading-bar": "^2.3.1",
+		"styled-components": "^6.1.13",
+		"use-sync-external-store": "^1.4.0",
+		"vscode-languageclient": "^9.0.1",
+		"vscode-languageserver": "^9.0.1",
+		"vscode-languageserver-textdocument": "^1.0.12"
+	}
+}

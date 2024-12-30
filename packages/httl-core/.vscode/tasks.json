@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "tsc-watch",
+      "group": "build",
+      "label": "tsc: watch",
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true
+    },
+    {
+      "label": "grammar: watch",
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "nodemon",
+        "--watch",
+        "src/parser/grammar", // Directory to watch
+        "--ext",
+        "g4", // File extensions to watch
+        "--exec",
+        "npm run build-grammar" // Command to run on file change
+      ],
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true
+    },
+  ]
+}
