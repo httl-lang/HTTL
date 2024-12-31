@@ -2,9 +2,7 @@ import { Action, Model, connect, store } from "react-storm";
 import { HttpResponse } from "httl-core";
 import { HttlResponseListProps } from "./httl-response-list";
 import { HttlOutputModel } from "./httl-output.model";
-import { AppModel } from "./app.model";
-
-
+import { ResponseModel } from "./response.model";
 
 export interface ResponseItem {
   key: number;
@@ -41,7 +39,7 @@ export class HttlResponseListModel {
 
   constructor(
     private readonly httlOutputModel = store(HttlOutputModel),
-    private readonly appModel = store(AppModel)
+    private readonly responseModel = store(ResponseModel)
   ) { }
 
   public init({ responses }: HttlResponseListProps) {
@@ -64,7 +62,7 @@ export class HttlResponseListModel {
     const currentIndex = index ?? this.currentResponseIndex;
     const source = this.responses?.[currentIndex]?.source;
     if (source) {
-      this.appModel.highlightCode(source, scroll);
+      this.responseModel.highlightCode(source, scroll);
     }
   }
 

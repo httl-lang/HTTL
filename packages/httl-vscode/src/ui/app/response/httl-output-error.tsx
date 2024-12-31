@@ -3,14 +3,15 @@ import { VscError } from "react-icons/vsc";
 
 import { HttlDiagnostic } from 'httl-core';
 import * as s from './httl-output-error.styles';
-import { useAppModel } from './app.model';
+import { useResponseModel } from './response.model';
+
 
 export interface HttlOutputErrorProps {
   errors: HttlDiagnostic[];
 }
 
 export const HttlOutputError: FC<HttlOutputErrorProps> = ({ errors }) => {
-  const model = useAppModel(({ highlightCode }) => ({ highlightCode }));
+  const model = useResponseModel(({ highlightCode }) => ({ highlightCode }));
   return (
     <s.ErrorView>
       {

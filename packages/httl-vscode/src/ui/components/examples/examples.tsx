@@ -5,10 +5,10 @@ import { data, Example } from './data';
 
 const Examples = () => {
   const [showFade, setShowFade] = useState(true);
-  const model = useAppModel(({ createExample }) => ({ createExample }));
+  // const model = useAppModel(({ createExample }) => ({ createExample }));
 
   const onClick = useCallback((example: Example) => {
-    model.createExample(example);
+    // model.createExample(example);
   }, []);
 
   return (

@@ -1,18 +1,14 @@
-import HttlOutputView from "./httl-output";
-import { AppContext, useAppModel } from "./app.model";
+import { RouterProvider } from "react-router";
+
+import { AppContext } from "./app.model";
+import { appRouter } from "./app.routes";
 import * as s from "./app.styles";
-import WelcomeView from "./welcome-view";
+
 
 const App = () => {
-  const { viewData } = useAppModel(({ viewData }) => ({ viewData }));
-
   return (
     <s.App>
-      {
-        !!viewData
-          ? <HttlOutputView inProgress={viewData.inProgress} output={viewData.output} />
-          : <WelcomeView />
-      }
+      <RouterProvider router={appRouter} />
     </s.App>
   );
 };

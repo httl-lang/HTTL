@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Toggle from '../components/toggle';
+import Toggle from '../../components/toggle';
 
 export const ResponseView = styled.div`
   height: 100%;

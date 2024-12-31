@@ -1,8 +1,8 @@
-import * as s from './welcome-view.styles';
-import Examples from '../components/examples/examples';
-import Logo from '../components/logo';
+import * as s from './welcome.styles';
+import Examples from '../../components/examples/examples';
+import Logo from '../../components/logo';
 
-const WelcomeView = () => {
+export const WelcomeView = () => {
   return (
     <s.Container>
       <s.Icon>
@@ -18,5 +18,3 @@ const WelcomeView = () => {
     </s.Container>
   );
 };
-
-export default WelcomeView;

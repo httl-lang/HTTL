@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import LoadingBar from 'react-top-loading-bar';
 import { HttlOutput } from 'httl-core';
 
@@ -8,13 +8,14 @@ import * as s from './httl-output.styles';
 import { HttlOutputResponse } from './httl-output-response';
 import { HttlOutputError } from './httl-output-error';
 import HttlResponseList from './httl-response-list';
+import { useResponseModel } from './response.model';
 
 export interface HttlOutputViewProps {
   inProgress: boolean | undefined;
   output?: HttlOutput;
 }
 
-const HttlOutputView = () => {
+const _HttlOutputView: FC = () => {
   const ref = useRef(null);
   const model = useHttlOutputModel(({ inProgress, currentResponse, errors, responses, selectResponse }) =>
     ({ inProgress, currentResponse, errors, responses, selectResponse }));
@@ -63,4 +64,18 @@ const HttlOutputView = () => {
   );
 };
 
-export default (props: HttlOutputViewProps) => <HttlOutputContext {...props}><HttlOutputView /></HttlOutputContext>;
+// const HttlOutput = (props: HttlOutputProps) => <HttlOutputContext {...props}><_HttlOutput /></HttlOutputContext>;
+
+export const HttlOutputView: FC = () => {
+  const { viewData } = useResponseModel(({ viewData }) => ({ viewData }));
+
+  if (!viewData) {
+    return null;
+  }
+
+  return (
+    <HttlOutputContext inProgress={viewData.inProgress} output={viewData.output}>
+      <_HttlOutputView />
+    </HttlOutputContext>
+  );
+};

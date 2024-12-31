@@ -1,6 +1,6 @@
 
 import vscode from 'vscode';
-import { HttlExtensionContext, UIMessage } from '../../common';
+import { AppData, HttlExtensionContext, UIMessage } from '../../common';
 import { Lang } from 'httl-core';
 
 export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
@@ -205,8 +205,9 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
     const baseUri = webview.asWebviewUri(vscode.Uri.joinPath(
       this.context.ext.extensionUri, 'dist'));
 
-    const appData = {
+    const appData: AppData = {
       baseUri: baseUri.toString(),
+      view: 'response',
     };
 
     return /* html */`

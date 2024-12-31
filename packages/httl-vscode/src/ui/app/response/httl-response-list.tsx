@@ -5,8 +5,8 @@ import { HttlResponseListContext, useHttlResponseListModel } from './httl-respon
 import { BiExpandVertical } from "react-icons/bi";
 
 import * as s from './httl-response-list.styles';
-import Toggle from '../components/toggle';
-import Popup from '../components/popup';
+import Toggle from '../../components/toggle';
+import Popup from '../../components/popup';
 import { HttlResponseListItem } from './httl-response-list-item';
 
 export interface HttlResponseListProps {

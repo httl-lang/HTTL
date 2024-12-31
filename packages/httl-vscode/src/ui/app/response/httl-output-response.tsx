@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
 
 import { HttpResponse } from 'httl-core';
-import { Editor } from '../components/editor';
+import { Editor } from '../../components/editor';
 
 import * as s from './httl-output-response.styles';
-import StatusLabel from '../components/status-label';
+import StatusLabel from '../../components/status-label';
 
 export interface HttlOutputResponseProps {
   response: HttpResponse;

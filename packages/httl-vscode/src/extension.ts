@@ -5,6 +5,7 @@ import { HttlInlineCompletionItemProvider } from './client/providers/httl-inline
 import { Logger } from './common/logger';
 import { HttlExtensionContext } from './common';
 import { HttlResponseViewProvider } from './client/views/httl-response-view';
+import { HttlMainViewProvider } from './client/views/httl-main-view';
 
 let logger!: Logger;
 
@@ -18,10 +19,12 @@ export async function activate(context: vscode.ExtensionContext) {
 		HttlInlineCompletionItemProvider.register(httlContext, client);
 
 		// * UI
+		const httlMainView = new HttlMainViewProvider(httlContext);
 		const httlResponseView = new HttlResponseViewProvider(httlContext);
 
 		// * Commands
-		const runCommand = new HttlRunCommand(httlContext, client, httlResponseView);
+		new HttlRunCommand(httlContext, client, httlResponseView);
+		
 
 		// Start the client. This will also launch the server
 		client.start();

@@ -3,8 +3,8 @@ import { HttpResponse } from 'httl-core';
 
 
 import * as s from './httl-response-list.styles';
-import Popup from '../components/popup';
-import { Editor } from '../components/editor';
+import Popup from '../../components/popup';
+import { Editor } from '../../components/editor';
 
 
 export interface HttlResponseListItemProps {

@@ -38,27 +38,10 @@
 		"api-client"
 	],
 	"activationEvents": [
-		"onLanguage:plaintext"
+		"onLanguage:plaintext",
+		"workspaceContains:**/*.httl"
 	],
 	"contributes": {
-		"viewsContainers": {
-			"panel": [
-				{
-					"id": "httlResponsePanel",
-					"title": "HTTL",
-					"icon": "media/plain_logo.png"
-				}
-			]
-		},
-		"views": {
-			"httlResponsePanel": [
-				{
-					"id": "httlResponseView",
-					"name": "HTTL Response",
-					"type": "webview"
-				}
-			]
-		},
 		"languages": [
 			{
 				"id": "httl",
@@ -70,7 +53,11 @@
 				"extensions": [
 					".httl"
 				],
-				"configuration": "./language/configuration.json"
+				"configuration": "./language/configuration.json",
+				"icon": {
+					"light": "media/file-icon.svg",
+					"dark": "media/file-icon.svg"
+				}
 			}
 		],
 		"grammars": [
@@ -80,6 +67,38 @@
 				"path": "./language/grammars.json"
 			}
 		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "httlMainPanel",
+					"title": "HTTL",
+					"icon": "media/plain_logo.png"
+				}
+			],
+			"panel": [
+				{
+					"id": "httlResponsePanel",
+					"title": "HTTL",
+					"icon": "media/plain_logo.png"
+				}
+			]
+		},
+		"views": {
+			"httlMainPanel": [
+				{
+					"id": "httlMainView",
+					"name": "HTTL Web View",
+					"type": "webview"
+				}
+			],
+			"httlResponsePanel": [
+				{
+					"id": "httlResponseView",
+					"name": "HTTL Response View",
+					"type": "webview"
+				}
+			]
+		},
 		"commands": [
 			{
 				"command": "httl.run",
@@ -136,13 +155,14 @@
 		"webpack-cli": "^5.1.4"
 	},
 	"dependencies": {
-		"httl-core": "^0.1.0",
 		"form-data": "^4.0.1",
+		"httl-core": "^0.1.0",
 		"js-yaml": "^4.1.0",
 		"monaco-editor": "^0.52.2",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
 		"react-icons": "^5.4.0",
+		"react-router": "^7.1.1",
 		"react-storm": "^0.5.1",
 		"react-top-loading-bar": "^2.3.1",
 		"styled-components": "^6.1.13",
