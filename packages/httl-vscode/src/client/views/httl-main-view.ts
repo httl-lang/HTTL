@@ -32,8 +32,7 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
       }
 
       case 'run-script': {
-
-
+        // TODO: refactor to use the same logic as in the run-command
         await this.responseView.show();
         await this.responseView.setProgress(constants.QUICK_RUN_DOCUMENT_NAME, true);
 

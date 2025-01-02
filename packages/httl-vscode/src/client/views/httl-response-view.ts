@@ -2,9 +2,11 @@
 import vscode from 'vscode';
 import { AppData, HttlExtensionContext, UIMessage } from '../../common';
 
+// TODO: Refactor to inherit from HttlBaseViewProvider
 export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'httlResponseView';
   private view!: vscode.WebviewView;
+  private isAppReady = false;
 
   private delayedMessages: UIMessage[] = [];
 
@@ -75,7 +77,15 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
       async message => {
         switch (message.command) {
           case 'ready': {
+            this.isAppReady = true;
+
             await this.postMessage({ command: 'initialize' });
+            if (this.delayedMessages.length > 0) {
+              for (const message of this.delayedMessages) {
+                await this.postMessage(message);
+              }
+              this.delayedMessages = [];
+            }
             return;
           }
 
@@ -133,15 +143,6 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
     );
 
     webviewView.webview.html = this.getHtmlForWebview(webviewView.webview);
-
-    if (this.delayedMessages.length > 0) {
-      setTimeout(async () => {
-        for (const message of this.delayedMessages) {
-          await this.postMessage(message);
-        }
-        this.delayedMessages = [];
-      }, 0);
-    }
   }
 
   public async changeActiveEditor(file: string | undefined) {
@@ -173,7 +174,7 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
   }
 
   private async postMessage(message: UIMessage) {
-    if (!this.view) {
+    if (!this.isAppReady) {
       this.delayedMessages.push(message);
       return;
     }
@@ -224,9 +225,6 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
               : undefined;
 
           const appData = ${JSON.stringify(appData)}; 
-          window.addEventListener('DOMContentLoaded', () => {
-            vscode.postMessage({ command: 'ready' });
-          });
         </script>
         <script src="${scriptUri}"></script>
     	</body>

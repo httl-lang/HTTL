@@ -23,6 +23,7 @@ export class ResponseModel {
 
   public init() {
     commutator.onSetProgress(({ file, payload: active }) => {
+      this.currentFile = file;
       let viewData = this.map.get(file);
       viewData = { inProgress: active, output: viewData?.output };
       this.setViewData(viewData);

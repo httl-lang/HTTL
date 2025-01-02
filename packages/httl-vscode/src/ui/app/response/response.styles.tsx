@@ -12,7 +12,9 @@ export const Badge = styled.div`
   left: 50%;
   transform: translateX(-50%);
   background-color: #ff7e00;
-  color: #fff;
+  color: #000;
+  font-weight: 500;
+  font-variant-caps: all-petite-caps;
   padding: 0 4px;
   font-size: 10px;
   padding: 0 6px 3px;

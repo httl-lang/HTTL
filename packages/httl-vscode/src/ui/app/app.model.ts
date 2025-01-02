@@ -5,7 +5,11 @@ import { appRouter } from "./app.routes";
 export class AppModel {
   private router = appRouter;
 
-  public init() { }
+  public init() {
+    vscode.postMessage({
+      command: 'ready'
+    });
+  }
 
   public subscribeOnRouteChangedEvent() {
     this.router.subscribe(({ location }) => {
