@@ -1,17 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { VscClose } from "react-icons/vsc";
+
+import { HttlEditor, Viewer } from '../../../components/editor';
+import Button from '../../../components/button';
 
 import { UtilsContext, useUtilsModel } from './utils.model';
 import * as s from './utils.styles';
-import { HttlEditor, Viewer } from '../../../components/editor';
+
 
 const _UtilsView: React.FC = () => {
-  const model = useUtilsModel(({ decodeJwt, rawJwt, decodedJwt }) => ({ decodeJwt, rawJwt, decodedJwt }));
+  const model = useUtilsModel(({ decodeJwt, clearJwt, rawJwt, decodedJwt }) => ({ decodeJwt, clearJwt, rawJwt, decodedJwt }));
 
   return (
     <s.Container>
       <s.Panel style={{ flex: model.decodedJwt ? 1 : 0 }}>
         <s.Description>
-        Paste a JWT token here to decode it.
+          <span>JWT decoder <small>(Paste your JWT token here)</small> </span>
+          {
+            model.rawJwt && (
+              <Button onClick={() => model.clearJwt()}>
+                <VscClose />
+              </Button>
+            )
+          }
         </s.Description>
         <s.EditPanel>
           <HttlEditor

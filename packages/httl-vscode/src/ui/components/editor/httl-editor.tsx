@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import * as monaco from "monaco-editor";
 import { httlLangInit, jwtLangInit } from "./loaders";
 
@@ -41,46 +41,56 @@ export const HttlEditor: React.FC<EditorProps> = ({
   theme = "vs-dark",
   options = defaultOptions,
 }) => {
+  const [editorValue, setEditorValue] = useState("");
+
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (containerRef.current) {
-      // Initialize the Monaco Editor
-      const editor = editorRef.current = monaco.editor.create(containerRef.current, {
-        value: value || "",
-        language,
-        theme,
-        ...defaultOptions,
-        ...options,
-      });
+    if (!containerRef.current) { return; }
 
-      editor.addAction({
-        id: "run-script",
-        label: "Run Script",
-        keybindings: [
-          monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
-          monaco.KeyCode.F5,
-        ],
-        run: () => {
-          const value = editor.getValue();
-          onRun?.(value);
-        },
-      });
+    // Initialize the Monaco Editor
+    const editor = editorRef.current = monaco.editor.create(containerRef.current, {
+      value: value || "",
+      language,
+      theme,
+      ...defaultOptions,
+      ...options,
+    });
 
-      // Set up event listener for content changes
-      const model = editor.getModel();
-      model?.onDidChangeContent(() => {
-        const newValue = model.getValue();
-        onChange?.(newValue);
-      });
-    }
-    
+    editor.addAction({
+      id: "run-script",
+      label: "Run Script",
+      keybindings: [
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
+        monaco.KeyCode.F5,
+      ],
+      run: () => {
+        const value = editor.getValue();
+        onRun?.(value);
+      },
+    });
+
+    // Set up event listener for content changes
+    const model = editor.getModel();
+    const subscription = model?.onDidChangeContent(() => {
+      const newValue = model.getValue();
+      setEditorValue(newValue);
+      onChange?.(newValue);
+    });
+
     return () => {
-      // Cleanup the editor on unmount
+      subscription?.dispose();
       editorRef.current?.dispose();
     };
   }, []);
+
+  useEffect(() => {
+    if (value !== editorValue) {
+      setEditorValue(value);
+      editorRef.current?.setValue(value);
+    }
+  }, [value]);
 
 
   return <div ref={containerRef} style={{ width: "100%", height: "100%" }} />;

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import * as s from './tutorials.styles';
 import { data, Example } from './data';
 import { TutorialsContext, useTutorialsModel } from './tutorials.model';
@@ -12,6 +12,9 @@ const _TutorialsView = () => {
 
   return (
     <s.Container>
+      <s.Header>
+        Tutorials
+      </s.Header>
       <s.Grid>
         {
           data.map((example, i) => (

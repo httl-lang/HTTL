@@ -1,4 +1,3 @@
-import { NavLink } from 'react-router';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -29,6 +28,19 @@ export const ViewPanel = styled.div`
 
 export const Description = styled.div`
   font-size: 12px;
+  line-height: 21px;
   color: #9d9d9d;
   margin: 0 0 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  small {
+    color: #535353;
+  }
+
+  a {
+    color: #9d9d9d;
+  }
 `;

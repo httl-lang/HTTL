@@ -6,13 +6,6 @@ export const Container = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-`;
-
-export const Welcome = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   
 `;
 
