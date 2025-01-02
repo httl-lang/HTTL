@@ -1,22 +1,18 @@
 import { useCallback, useState } from 'react';
-import * as s from './examples.styles';
-import { useAppModel } from '../../app/app.model';
+import * as s from './tutorials.styles';
 import { data, Example } from './data';
+import { TutorialsContext, useTutorialsModel } from './tutorials.model';
 
-const Examples = () => {
-  const [showFade, setShowFade] = useState(true);
-  // const model = useAppModel(({ createExample }) => ({ createExample }));
+const _TutorialsView = () => {
+  const model = useTutorialsModel(({ createExample }) => ({ createExample }));
 
   const onClick = useCallback((example: Example) => {
-    // model.createExample(example);
+    model.createExample(example);
   }, []);
 
   return (
     <s.Container>
-      <s.SectionName>
-        Examples
-      </s.SectionName>
-      <s.Grid showFade={showFade} onScroll={(e) => setShowFade(false)}>
+      <s.Grid>
         {
           data.map((example, i) => (
             <s.Tile key={i} onClick={() => onClick(example)}>
@@ -37,4 +33,4 @@ const Examples = () => {
   );
 };
 
-export default Examples;
+export const TutorialsView = () => <TutorialsContext><_TutorialsView /></TutorialsContext>;

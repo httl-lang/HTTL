@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 
 import { HttpResponse } from 'httl-core';
-import { Editor } from '../../components/editor';
+import { Viewer } from '../../components/editor';
 
 import * as s from './httl-output-response.styles';
 import StatusLabel from '../../components/status-label';
@@ -44,14 +44,14 @@ export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response }) =>
       <s.Response>
         {
           panel === 'body' && (
-            <Editor value={response.res.data} options={{
+            <Viewer value={response.res.data} options={{
               overviewRulerLanes: 0,
             }} />
           )
         }
         {
           panel === 'headers' && (
-            <Editor value={response.res.headers} language='yaml' options={{
+            <Viewer value={response.res.headers} language='yaml' options={{
               lineNumbers: 'off',
               overviewRulerLanes: 0,
               folding: false,

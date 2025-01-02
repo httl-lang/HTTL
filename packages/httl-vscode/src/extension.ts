@@ -19,12 +19,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		HttlInlineCompletionItemProvider.register(httlContext, client);
 
 		// * UI
-		const httlMainView = new HttlMainViewProvider(httlContext);
 		const httlResponseView = new HttlResponseViewProvider(httlContext);
+		const httlMainView = new HttlMainViewProvider(httlContext, client, httlResponseView);
 
 		// * Commands
 		new HttlRunCommand(httlContext, client, httlResponseView);
-		
 
 		// Start the client. This will also launch the server
 		client.start();

@@ -102,8 +102,12 @@
 		"commands": [
 			{
 				"command": "httl.run",
-				"title": "Send Request",
-				"category": "HTTL"
+				"title": "Run HTTL File",
+				"category": "HTTL",
+				"icon": {
+					"dark": "media/run.svg",
+					"light": "media/run.svg"
+				}
 			}
 		],
 		"keybindings": [
@@ -113,7 +117,16 @@
 				"mac": "cmd+enter",
 				"when": "editorTextFocus && editorLangId == 'httl'"
 			}
-		]
+		],
+		"menus": {
+			"editor/title": [
+				{
+					"command": "httl.run",
+					"when": "editorLangId == 'httl'",
+					"group": "navigation"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",
@@ -129,6 +142,7 @@
 	"devDependencies": {
 		"@svgr/webpack": "^8.1.0",
 		"@types/js-yaml": "^4.0.9",
+		"@types/jsonwebtoken": "^9.0.7",
 		"@types/mocha": "^10.0.7",
 		"@types/node": "20.x",
 		"@types/react": "^18.3.16",
@@ -155,9 +169,11 @@
 		"webpack-cli": "^5.1.4"
 	},
 	"dependencies": {
+		"crypto-browserify": "^3.12.1",
 		"form-data": "^4.0.1",
 		"httl-core": "^0.1.0",
 		"js-yaml": "^4.1.0",
+		"jsonwebtoken": "^9.0.2",
 		"monaco-editor": "^0.52.2",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
@@ -165,6 +181,7 @@
 		"react-router": "^7.1.1",
 		"react-storm": "^0.5.1",
 		"react-top-loading-bar": "^2.3.1",
+		"stream-browserify": "^3.0.0",
 		"styled-components": "^6.1.13",
 		"use-sync-external-store": "^1.4.0",
 		"vscode-languageclient": "^9.0.1",

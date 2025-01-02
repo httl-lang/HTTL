@@ -5,14 +5,32 @@ import { appRouter } from "./app.routes";
 export class AppModel {
   private router = appRouter;
 
-  public init() { }
+  public init() { 
+    this.router.subscribe(({ location }) => {
+      this.saveState('view', location.pathname);
+    });
+  }
 
-  public displayResponse(path: string) {
+  public navigateMain(path: string) {
+    this.router.navigate(`/main/${path}`);
+  }
+
+  public navigateResponse(path: string) {
     this.router.navigate(`/response/show`);
   }
 
-  public displayDefault() {
+  public navigateDefault() {
     this.router.navigate('/' + appData.view);
+  }
+
+  public saveState(key: string, value: any, global = false) {
+    vscode.postMessage({
+      command: 'save-state',
+      payload: {
+        global,
+        state: { key, value }
+      }
+    });
   }
 }
 

@@ -1,7 +1,6 @@
 import { Action, Model, connect, store } from "react-storm";
 import { commutator } from "../../services/commutator";
 import { HttlOutputViewProps } from "./httl-output";
-import { Example } from "../../components/examples";
 import { AppModel } from "../app.model";
 
 @Model()
@@ -46,9 +45,9 @@ export class ResponseModel {
     this.viewData = viewData;
     if (!!viewData) {
       console.log('setViewData', viewData);
-      this.appModel.displayResponse(this.currentFile!);
+      this.appModel.navigateResponse(this.currentFile!);
     } else {
-      this.appModel.displayDefault();
+      this.appModel.navigateDefault();
     }
   }
 
@@ -69,14 +68,6 @@ export class ResponseModel {
       command: "code-scroll",
       file: this.currentFile,
       payload: source
-    });
-  }
-
-  public createExample(example: Example) {
-    vscode.postMessage({
-      command: 'create-example',
-      file: this.currentFile,
-      payload: `# ${example.title}\n\n# ${example.description}\n${example.code}`
     });
   }
 }

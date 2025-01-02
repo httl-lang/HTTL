@@ -77,16 +77,6 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
             return;
           }
 
-          case 'create-example': {
-            const document = await vscode.workspace.openTextDocument({
-              content: message.payload,
-              language: Lang.LANG_ID,
-            });
-
-            vscode.window.showTextDocument(document);
-            return;
-          }
-
           case 'code-scroll': {
             const editor = vscode.window.activeTextEditor;
             if (!editor) {

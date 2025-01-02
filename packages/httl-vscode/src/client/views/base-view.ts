@@ -44,12 +44,19 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
             return;
           }
         }
+        this.handleUIMessages(message);
       },
       undefined,
       this.context.ext.subscriptions
     );
 
-    webviewView.webview.html = this.getHtmlForWebview(webviewView.webview);
+    const state = this.context.getState(`ui.${this.appData.view}`);
+    const appData = {
+      ...this.appData,
+      ...state,
+    };
+
+    webviewView.webview.html = this.getHtmlForWebview(webviewView.webview, appData);
 
     if (this.delayedMessages.length > 0) {
       setTimeout(async () => {
@@ -73,6 +80,8 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
     }
   }
 
+  protected async handleUIMessages(messagefromUI: any) { }
+
   protected async postMessage(message: UIMessage) {
     if (!this.view) {
       this.delayedMessages.push(message);
@@ -82,7 +91,7 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
     await this.view.webview.postMessage(message);
   }
 
-  protected getHtmlForWebview(webview: vscode.Webview): string {
+  protected getHtmlForWebview(webview: vscode.Webview, appData: any): string {
     const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(
       this.context.ext.extensionUri, 'dist', 'ui.js'));
 
@@ -98,8 +107,8 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
     const baseUri = webview.asWebviewUri(vscode.Uri.joinPath(
       this.context.ext.extensionUri, 'dist'));
 
-    const appData = {
-      ...this.appData,
+    const finalAppData = {
+      ...appData,
       baseUri: baseUri.toString(),
     };
 
@@ -124,7 +133,7 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
               ? acquireVsCodeApi()
               : undefined;
 
-          const appData = ${JSON.stringify(appData)}; 
+          const appData = ${JSON.stringify(finalAppData)}; 
           window.addEventListener('DOMContentLoaded', () => {
             vscode.postMessage({ command: 'ready' });
           });

@@ -1,6 +1,5 @@
 import * as s from './welcome.styles';
-import Examples from '../../components/examples/examples';
-import Logo from '../../components/logo';
+import Logo from '../logo';
 
 export const WelcomeView = () => {
   return (
@@ -14,7 +13,6 @@ export const WelcomeView = () => {
       <s.Message>
         HTTL (Hypertext Transfer Language) is a lightweight programming language designed to simplify and streamline HTTP calls.
       </s.Message>
-      <Examples />
     </s.Container>
   );
 };

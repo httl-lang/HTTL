@@ -1,9 +1,9 @@
 import ReactDOM from 'react-dom/client';
 
 import App from './app';
-import { editorInit } from './components/editor';
+import { monacoInit } from './components/editor';
 
-editorInit(appData.baseUri);
+monacoInit(appData.baseUri);
 
 ReactDOM
   .createRoot(

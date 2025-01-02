@@ -2,31 +2,14 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   height: 100%;
-  overflow: hidden;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-`;
-
-export const Grid = styled.div<{ showFade: boolean }>`
-  height: 100%;
   overflow: auto;
-
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  max-width: 80%;
-  mask-image: ${({ showFade }) => showFade ? 'linear-gradient(to bottom, black, transparent 50%)' : 'none'}; 
 `;
 
-
-export const SectionName = styled.div`
+export const Grid = styled.div`
+  height: 100%;
   display: flex;
-  gap: 10px; 
-  margin: 10px;
-  justify-content: center;
-  font-weight: 500;
-  color: gray;
+  gap: 15px;
+  flex-direction: column;
 `;
 
 export const Code = styled.code`
