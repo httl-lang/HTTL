@@ -8,7 +8,9 @@ export class MainModel {
     private readonly appModel = store(AppModel)
   ) { }
 
-  public init() { }
+  public init() {
+    this.appModel.subscribeOnRouteChangedEvent();
+  }
 }
 
 const [MainContext, useMainModel] = connect(MainModel);

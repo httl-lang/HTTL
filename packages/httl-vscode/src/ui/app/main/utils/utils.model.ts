@@ -14,7 +14,7 @@ export class UtilsModel {
   ) { }
 
   public init() {
-    this.rawJwt = (appData as any)[UtilsModel.STORE_JWT_KEY] ?? '';
+    this.rawJwt = this.appModel.getState(UtilsModel.STORE_JWT_KEY) ?? '';
   }
 
   @Action()

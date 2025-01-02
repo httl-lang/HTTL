@@ -2,6 +2,7 @@ import { Action, Model, connect, store } from "react-storm";
 import { commutator } from "../../services/commutator";
 import { HttlOutputViewProps } from "./httl-output";
 import { AppModel } from "../app.model";
+// import { constants } from "../../../common";
 
 @Model()
 export class ResponseModel {
@@ -10,6 +11,11 @@ export class ResponseModel {
 
   public map = new Map<string, HttlOutputViewProps>();
   public currentFile?: string;
+
+  public get isQuickRunFile() {
+    // TODO: fix - constants.QUICK_RUN_DOCUMENT causes import module (httl-core) error
+    return this.currentFile === "quick-run-document";
+  }
 
   constructor(
     private readonly appModel = store(AppModel)
@@ -24,7 +30,7 @@ export class ResponseModel {
 
     commutator.onChangeActiveEditor(({ file }) => {
       this.currentFile = file;
-      const res = this.map.get(file);
+      const res = file ? this.map.get(file) : undefined;
       this.setViewData(res);
     });
 

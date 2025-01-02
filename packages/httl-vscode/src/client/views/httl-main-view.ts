@@ -1,6 +1,6 @@
 
 import vscode from 'vscode';
-import { HttlExtensionContext, UIMessage } from '../../common';
+import { constants, HttlExtensionContext } from '../../common';
 import { Lang } from 'httl-core';
 import { HttlBaseViewProvider } from './base-view';
 import { HttlResponseViewProvider } from './httl-response-view';
@@ -30,22 +30,29 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
         vscode.window.showTextDocument(document);
         return;
       }
+
       case 'run-script': {
-        const quickRunDocName = "quick-run-document";
+
 
         await this.responseView.show();
-        await this.responseView.setProgress(quickRunDocName, true);
+        await this.responseView.setProgress(constants.QUICK_RUN_DOCUMENT_NAME, true);
 
         const response = await this.client.sendRun(
-          quickRunDocName,
+          constants.QUICK_RUN_DOCUMENT_NAME,
           messagefromUI.payload,
         );
-        await this.responseView.setResponse(quickRunDocName, response);
+        await this.responseView.setResponse(constants.QUICK_RUN_DOCUMENT_NAME, response);
         return;
       }
+
       case 'save-state': {
         const { global, state: { key, value } } = messagefromUI.payload;
         this.context.saveState(`ui.main.${key}`, value, global);
+        return;
+      }
+
+      case 'set-focus': {
+        await this.responseView.changeActiveEditor(constants.QUICK_RUN_DOCUMENT_NAME);
         return;
       }
     }

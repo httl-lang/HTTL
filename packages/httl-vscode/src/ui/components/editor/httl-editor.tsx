@@ -10,6 +10,7 @@ interface EditorProps {
   value: string;
   onChange?: (value: string) => void;
   onRun?: (value: string) => void;
+  onFocus?: () => void;
   language?: string;
   theme?: string;
   options?: monaco.editor.IStandaloneEditorConstructionOptions;
@@ -37,6 +38,7 @@ export const HttlEditor: React.FC<EditorProps> = ({
   value,
   onChange,
   onRun,
+  onFocus,
   language = "httl",
   theme = "vs-dark",
   options = defaultOptions,
@@ -73,14 +75,19 @@ export const HttlEditor: React.FC<EditorProps> = ({
 
     // Set up event listener for content changes
     const model = editor.getModel();
-    const subscription = model?.onDidChangeContent(() => {
+    const onDidChangeContent = model?.onDidChangeContent(() => {
       const newValue = model.getValue();
       setEditorValue(newValue);
       onChange?.(newValue);
     });
 
+    const onDidFocusEditorText = editor.onDidFocusEditorText(() => {
+      onFocus?.();
+    }); 
+
     return () => {
-      subscription?.dispose();
+      onDidFocusEditorText.dispose();
+      onDidChangeContent?.dispose();
       editorRef.current?.dispose();
     };
   }, []);

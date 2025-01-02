@@ -5,7 +5,9 @@ import { appRouter } from "./app.routes";
 export class AppModel {
   private router = appRouter;
 
-  public init() { 
+  public init() { }
+
+  public subscribeOnRouteChangedEvent() {
     this.router.subscribe(({ location }) => {
       this.saveState('view', location.pathname);
     });
@@ -24,6 +26,7 @@ export class AppModel {
   }
 
   public saveState(key: string, value: any, global = false) {
+    (appData as any)[key] = value;
     vscode.postMessage({
       command: 'save-state',
       payload: {
@@ -31,6 +34,10 @@ export class AppModel {
         state: { key, value }
       }
     });
+  }
+
+  public getState(key: string) {
+    return (appData as any)[key];
   }
 }
 

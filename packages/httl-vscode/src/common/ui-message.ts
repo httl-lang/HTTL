@@ -6,7 +6,7 @@ interface InitializeMessage {
 
 interface ChangeActiveEditorMessage {
   command: 'change-active-editor';
-  file: string;
+  file?: string;
 }
 export type ChangeActiveEditorMessagePayload = Omit<ChangeActiveEditorMessage, 'command'>;
 

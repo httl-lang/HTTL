@@ -14,7 +14,7 @@ export class QuickRunModel {
   ) { }
 
   public init() {
-    this.script = (appData as any)[QuickRunModel.STORE_SCRIPT_KEY] ?? this.script;
+    this.script = this.appModel.getState(QuickRunModel.STORE_SCRIPT_KEY) ?? this.script;
   }
 
   @Action()
@@ -29,6 +29,13 @@ export class QuickRunModel {
     vscode.postMessage({
       command: 'run-script',
       payload: script,
+    });
+  }
+
+  @Action()
+  public setFocus() {
+    vscode.postMessage({
+      command: 'set-focus',
     });
   }
 }

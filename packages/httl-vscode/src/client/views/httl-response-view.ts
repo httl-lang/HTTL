@@ -1,7 +1,6 @@
 
 import vscode from 'vscode';
 import { AppData, HttlExtensionContext, UIMessage } from '../../common';
-import { Lang } from 'httl-core';
 
 export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'httlResponseView';
@@ -33,12 +32,15 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
     );
 
     context.ext.subscriptions.push(
+      vscode.window.onDidChangeTextEditorSelection((editorSelection) => {
+        this.changeActiveEditor(editorSelection.textEditor.document.uri.fsPath);
+      })
+    );
+
+    context.ext.subscriptions.push(
       vscode.window.onDidChangeActiveTextEditor((editor) => {
         if (editor) {
-          const document = editor.document;
-          const filePath = document.uri.fsPath;
-
-          this.changeActiveEditor(filePath);
+          this.changeActiveEditor(editor.document.uri.fsPath);
         }
       })
     );
@@ -142,7 +144,7 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
     }
   }
 
-  public async changeActiveEditor(file: string) {
+  public async changeActiveEditor(file: string | undefined) {
     await this.postMessage({ command: 'change-active-editor', file });
   }
 

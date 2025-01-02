@@ -10,7 +10,7 @@ import LogoSvg from './run.svg';
 
 
 const _QuickRunView: React.FC = () => {
-  const model = useQuickRunModel(({ run, setScript, script }) => ({ run, setScript, script }));
+  const model = useQuickRunModel(({ run, setScript, setFocus, script }) => ({ run, setScript, setFocus, script }));
 
   return (
     <s.Container>
@@ -34,6 +34,7 @@ const _QuickRunView: React.FC = () => {
             }}
             onChange={(script) => model.setScript(script)}
             onRun={(script) => model.run(script)}
+            onFocus={() => model.setFocus()}
           />
         </s.Editor>
       </s.Panel>
