@@ -59,6 +59,10 @@ export class ResponseModel {
   }
 
   public highlightCode(source: { start: number, end: number }, scroll = false) {
+    if (this.isQuickRunFile) {
+      return;
+    }
+
     vscode.postMessage({
       command: "code-highlight",
       file: this.currentFile,
@@ -71,6 +75,10 @@ export class ResponseModel {
   }
 
   public scrollToCode(source: { start: number, end: number }) {
+    if (this.isQuickRunFile) {
+      return;
+    }
+    
     vscode.postMessage({
       command: "code-scroll",
       file: this.currentFile,
