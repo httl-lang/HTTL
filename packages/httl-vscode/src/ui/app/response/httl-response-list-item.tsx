@@ -3,8 +3,8 @@ import { HttpResponse } from 'httl-core';
 
 
 import * as s from './httl-response-list.styles';
-import Popup from '../components/popup';
-import { Editor } from '../components/editor';
+import Popup from '../../components/popup';
+import { Viewer } from '../../components/editor';
 
 
 export interface HttlResponseListItemProps {
@@ -34,7 +34,7 @@ export const HttlResponseListItem: FC<HttlResponseListItemProps> = ({ response, 
           </s.Caption>
 
           <s.ReqHeader>
-            <Editor
+            <Viewer
               value={response.req.headers}
               language='yaml'
               relayoutAfterValueChange={true}
@@ -49,7 +49,7 @@ export const HttlResponseListItem: FC<HttlResponseListItemProps> = ({ response, 
           {
             response.req.body && (
               <s.ReqBody>
-                <Editor value={response.req.body} relayoutAfterValueChange={true} options={{
+                <Viewer value={response.req.body} relayoutAfterValueChange={true} options={{
                   lineNumbers: 'off',
                   overviewRulerLanes: 0,
                   folding: false,

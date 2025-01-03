@@ -29,6 +29,7 @@ export const ResponseItem = styled.div<{ active?: number }>`
     border-color: ${({ active }) => active ? 'var(--vscode-focusBorder) !important' : 'transparent'};
     position: relative;
     display: block;
+    line-height: 17px;
     cursor: pointer;
     background-color: var(--vscode-input-background);
     border: 1px solid var(--vscode-input-border, transparent);

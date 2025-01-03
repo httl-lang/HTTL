@@ -1,2 +1,3 @@
-export * from './editor';
-export * from './loader';
+export * from './httl-editor';
+export * from './viewer';
+export * from './loaders';

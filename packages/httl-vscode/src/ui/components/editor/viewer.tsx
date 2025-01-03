@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef } from "react";
 import * as monaco from "monaco-editor";
 import yaml from 'js-yaml';
 
-interface MonacoEditorProps {
+interface ViewerProps {
   value: string | [string, string][] | object;
   onChange?: (value: string) => void;
   language?: string;
@@ -24,9 +24,11 @@ const defaultOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   tabSize: 2,
   insertSpaces: true,
   fontSize: 12,
+  lineDecorationsWidth: 0,
+  glyphMargin: false,
 };
 
-export const Editor: React.FC<MonacoEditorProps> = ({
+export const Viewer: React.FC<ViewerProps> = ({
   value,
   onChange,
   language = "json",

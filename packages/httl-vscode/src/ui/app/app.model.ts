@@ -1,74 +1,48 @@
-import { Action, Model, connect } from "react-storm";
-import { commutator } from "../services/commutator";
-import { HttlOutputViewProps } from "./httl-output";
-import { Example } from "../components/examples";
+import { Model, connect } from "react-storm";
+import { appRouter } from "./app.routes";
 
 @Model()
 export class AppModel {
-
-  public viewData?: HttlOutputViewProps;
-
-  public map = new Map<string, HttlOutputViewProps>();
-  public currentFile?: string;
+  private router = appRouter;
 
   public init() {
-    commutator.onSetProgress(({ file, payload: active }) => {
-      let viewData = this.map.get(file);
-      viewData = { inProgress: active, output: viewData?.output };
-      this.setViewData(viewData);
-    });
-
-    commutator.onChangeActiveEditor(({ file }) => {
-      this.currentFile = file;
-      const res = this.map.get(file);
-      this.setViewData(res);
-    });
-
-    commutator.onSetResponse(({ payload, file }) => {
-      this.currentFile = file;
-      const viewData = { inProgress: false, output: payload };
-      this.map.set(file, viewData);
-      this.setViewData(viewData);
-    });
-
-    commutator.onCloseResponse(({ file }) => {
-      this.map.delete(file);
-    });
-  }
-
-  @Action()
-  public setViewData(viewData?: HttlOutputViewProps) {
-    this.viewData = viewData;
-  }
-
-  public highlightCode(source: { start: number, end: number }, scroll = false) {
     vscode.postMessage({
-      command: "code-highlight",
-      file: this.currentFile,
-      payload: source
+      command: 'ready'
     });
-
-    if (scroll) {
-      this.scrollToCode(source);
-    }
   }
 
-  public scrollToCode(source: { start: number, end: number }) {
+  public subscribeOnRouteChangedEvent() {
+    this.router.subscribe(({ location }) => {
+      this.saveState('view', location.pathname);
+    });
+  }
+
+  public navigateMain(path: string) {
+    this.router.navigate(`/main/${path}`);
+  }
+
+  public navigateResponse(path: string) {
+    this.router.navigate(`/response/show`);
+  }
+
+  public navigateDefault() {
+    this.router.navigate('/' + appData.view);
+  }
+
+  public saveState(key: string, value: any, global = false) {
+    (appData as any)[key] = value;
     vscode.postMessage({
-      command: "code-scroll",
-      file: this.currentFile,
-      payload: source
+      command: 'save-state',
+      payload: {
+        global,
+        state: { key, value }
+      }
     });
   }
 
-  public createExample(example: Example) {
-    vscode.postMessage({
-      command: 'create-example',
-      file: this.currentFile,
-      payload: `# ${example.title}\n\n# ${example.description}\n${example.code}`
-    });
+  public getState(key: string) {
+    return (appData as any)[key];
   }
-
 }
 
 const [AppContext, useAppModel] = connect(AppModel);

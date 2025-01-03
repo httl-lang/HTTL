@@ -104,6 +104,10 @@ const uiConfig = {
 
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    fallback: {
+      stream: require.resolve('stream-browserify'),
+      crypto: require.resolve('crypto-browserify'),
+    },
   },
 
   module: {
@@ -154,7 +158,10 @@ const uiConfig = {
     }),
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
-    })
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
   ],
 
   devtool: process.env.NODE_ENV === 'development' ? 'source-map' : false,

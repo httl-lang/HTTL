@@ -7,6 +7,7 @@
 		"declaration": true,
 		"composite": true,
 		"sourceMap": true,
+		"resolveJsonModule": true,
 		"jsx": "react-jsx",
 		"lib": [
 			"webworker",

@@ -1,11 +1,12 @@
 
 import vscode from 'vscode';
-import { HttlExtensionContext, UIMessage } from '../../common';
-import { Lang } from 'httl-core';
+import { AppData, HttlExtensionContext, UIMessage } from '../../common';
 
+// TODO: Refactor to inherit from HttlBaseViewProvider
 export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'httlResponseView';
   private view!: vscode.WebviewView;
+  private isAppReady = false;
 
   private delayedMessages: UIMessage[] = [];
 
@@ -33,12 +34,15 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
     );
 
     context.ext.subscriptions.push(
+      vscode.window.onDidChangeTextEditorSelection((editorSelection) => {
+        this.changeActiveEditor(editorSelection.textEditor.document.uri.fsPath);
+      })
+    );
+
+    context.ext.subscriptions.push(
       vscode.window.onDidChangeActiveTextEditor((editor) => {
         if (editor) {
-          const document = editor.document;
-          const filePath = document.uri.fsPath;
-
-          this.changeActiveEditor(filePath);
+          this.changeActiveEditor(editor.document.uri.fsPath);
         }
       })
     );
@@ -73,17 +77,15 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
       async message => {
         switch (message.command) {
           case 'ready': {
+            this.isAppReady = true;
+
             await this.postMessage({ command: 'initialize' });
-            return;
-          }
-
-          case 'create-example': {
-            const document = await vscode.workspace.openTextDocument({
-              content: message.payload,
-              language: Lang.LANG_ID,
-            });
-
-            vscode.window.showTextDocument(document);
+            if (this.delayedMessages.length > 0) {
+              for (const message of this.delayedMessages) {
+                await this.postMessage(message);
+              }
+              this.delayedMessages = [];
+            }
             return;
           }
 
@@ -141,18 +143,9 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
     );
 
     webviewView.webview.html = this.getHtmlForWebview(webviewView.webview);
-
-    if (this.delayedMessages.length > 0) {
-      setTimeout(async () => {
-        for (const message of this.delayedMessages) {
-          await this.postMessage(message);
-        }
-        this.delayedMessages = [];
-      }, 0);
-    }
   }
 
-  public async changeActiveEditor(file: string) {
+  public async changeActiveEditor(file: string | undefined) {
     await this.postMessage({ command: 'change-active-editor', file });
   }
 
@@ -181,7 +174,7 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
   }
 
   private async postMessage(message: UIMessage) {
-    if (!this.view) {
+    if (!this.isAppReady) {
       this.delayedMessages.push(message);
       return;
     }
@@ -205,8 +198,9 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
     const baseUri = webview.asWebviewUri(vscode.Uri.joinPath(
       this.context.ext.extensionUri, 'dist'));
 
-    const appData = {
+    const appData: AppData = {
       baseUri: baseUri.toString(),
+      view: 'response',
     };
 
     return /* html */`
@@ -231,9 +225,6 @@ export class HttlResponseViewProvider implements vscode.WebviewViewProvider {
               : undefined;
 
           const appData = ${JSON.stringify(appData)}; 
-          window.addEventListener('DOMContentLoaded', () => {
-            vscode.postMessage({ command: 'ready' });
-          });
         </script>
         <script src="${scriptUri}"></script>
     	</body>
