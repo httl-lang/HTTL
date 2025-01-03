@@ -9,7 +9,7 @@
 	"bugs": {
 		"url": "https://github.com/httl-lang/httl-vscode/issues"
 	},
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"publisher": "HTTL",
 	"author": {
 		"name": "Evgen Mykhailenko"
@@ -35,7 +35,9 @@
 		"postman",
 		"request",
 		"response",
-		"api-client"
+		"api-client",
+		"rest-client",
+		"jwt"
 	],
 	"activationEvents": [
 		"onLanguage:plaintext",
