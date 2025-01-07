@@ -79,8 +79,8 @@ export async function httlLangInit(baseUri: string) {
         [/^\s*(get|post|put|delete|patch|head|options|connect|trace|lock|unlock|propfind|proppatch|copy|move|mkcol|mkcalendar|acl|search)\s+/, 'keyword'],
 
         // Extended HTTP syntax
-        [/^(@)([^:\s]+:)(\{[^}]+\}|[^{}\s]+)/, ['keyword', 'variable', 'string']],
-        [/^([^:\s]+)\s*:(\{[^}]+\}|[^{}\s]+)/, ['entity.name.tag', 'string']],
+        [/^(@)([^\s:]+\s*:)(.*)$/, ['keyword', 'variable', 'string']],
+        [/^([^\s:]+\s*:)(.*)$/, ['variable', 'string']],
 
         // Keywords
         [/\b(assert|as|use)\b/, 'keyword.control'],

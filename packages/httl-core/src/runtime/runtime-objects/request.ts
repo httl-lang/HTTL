@@ -5,7 +5,7 @@ import { IRuntimeExecutor } from "../executors";
 import { Err, Ok, Result } from "oxide.ts";
 import { HttpHeaderRt, RequestAssertionRt, RequestBodyRt, UrlRt, VariableRt } from ".";
 import { IExtension } from "../../extensions";
-import { HttpResponse } from '../http/http-response';
+import { HttpResponse, HttpWarningCode } from '../http/http-response';
 import { KeywordRt } from "./keyword";
 import { CompletionContext, CompletionTarget } from "../../code";
 import { CompletionProvider } from "../../code/completion/providers/completion-provider";
@@ -180,6 +180,15 @@ export class RequestRt extends RootRuntimeObject<RequestExpression> {
       headers,
       body,
     })
+
+    if (this._response.isSelfSignedCertError) {
+      this._response = await this.executor.httpRequest(url, {
+        method: this.method.value,
+        headers,
+        body,
+        rejectUnauthorized: false,
+      })
+    }
 
     // TODO: temoporary fix
     this._response.source = {

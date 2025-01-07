@@ -5,6 +5,7 @@ import { Lang } from 'httl-core';
 import { HttlBaseViewProvider } from './base-view';
 import { HttlResponseViewProvider } from './httl-response-view';
 import { HttlLanguageClient } from '../httl-language-client';
+import { HttlRunCommand } from '../commands/run-command';
 
 export class HttlMainViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlMainView';
@@ -32,15 +33,13 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
       }
 
       case 'run-script': {
-        // TODO: refactor to use the same logic as in the run-command
-        await this.responseView.show();
-        await this.responseView.setProgress(constants.QUICK_RUN_DOCUMENT_NAME, true);
-
-        const response = await this.client.sendRun(
-          constants.QUICK_RUN_DOCUMENT_NAME,
+        await HttlRunCommand.execute(
+          this.responseView,
+          this.client,
           messagefromUI.payload,
-        );
-        await this.responseView.setResponse(constants.QUICK_RUN_DOCUMENT_NAME, response);
+          constants.QUICK_RUN_DOCUMENT_NAME,
+          constants.QUICK_RUN_DOCUMENT_NAME);
+
         return;
       }
 

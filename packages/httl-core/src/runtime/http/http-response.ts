@@ -1,7 +1,7 @@
 import http from 'http';
 import FormData from 'form-data';
 import { HttpEventTimes } from './http-timings';
-import { TokenSource } from '../../common';
+import { TokenRange, TokenSource } from '../../common';
 
 export interface HttpRequestMessage {
   method: string;
@@ -16,6 +16,14 @@ export interface HttpResponseMessage {
   size: HttpSize;
 }
 
+export enum HttpWarningCode {
+  SELF_SIGNED_CERTIFICATE,
+}
+
+export interface HttpWarning {
+  code: HttpWarningCode;
+  message: string;
+}
 
 export class HttpSize {
   public static sizeOf({ headers, data }: { headers: string[], data: string }) {
@@ -41,7 +49,7 @@ export class HttpSize {
 }
 
 export class HttpResponse {
-  public static ok(res: http.IncomingMessage, data: string, req: http.ClientRequest, body: string | FormData, timings: HttpEventTimes): HttpResponse {
+  public static ok(res: http.IncomingMessage, data: string, req: http.ClientRequest, body: string | FormData, timings: HttpEventTimes, warnings: HttpWarning[]): HttpResponse {
 
     const resHeaders = res.rawHeaders.reduce((acc, curr, idx) => {
       if (idx % 2 === 0) {
@@ -60,6 +68,7 @@ export class HttpResponse {
       statusCode: res.statusCode,
       statusMessage: res.statusMessage,
       httpVersion: res.httpVersion,
+      warnings,
 
       req: {
         method: req.method,
@@ -111,6 +120,7 @@ export class HttpResponse {
   public readonly timings: HttpEventTimes;
 
   public readonly error: Error | string;
+  public readonly warnings: HttpWarning[] = [];
 
   public source?: TokenSource;
 
@@ -118,5 +128,12 @@ export class HttpResponse {
 
   public isError(): boolean {
     return this.error !== undefined;
+  }
+
+  public get isSelfSignedCertError(): boolean {
+    const error = this.error as any;
+    return error?.code === 'DEPTH_ZERO_SELF_SIGNED_CERT' ||
+      error?.code === 'SELF_SIGNED_CERT_IN_CHAIN' ||
+      error?.message?.includes('self signed certificate')
   }
 }

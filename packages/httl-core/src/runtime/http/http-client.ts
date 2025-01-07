@@ -1,15 +1,17 @@
 import http from 'http';
 import https from 'https';
 import FormData from 'form-data';
+import tls from 'tls';
 
 import { constants } from '../../common/constants';
 import { HttpTimings } from './http-timings';
-import { HttpResponse } from './http-response';
+import { HttpResponse, HttpWarning, HttpWarningCode } from './http-response';
 
 export interface HttpRequestOptions {
   method: string;
   body?: string | FormData;
   headers: http.OutgoingHttpHeaders;
+  rejectUnauthorized?: boolean;
 }
 
 export class HttpClient {
@@ -27,6 +29,8 @@ export class HttpClient {
         'User-Agent': constants.HTTP_AGENT_NAME,
       },
       timeout: constants.DEFAULT_INSTRUCTION_TIMEOUT,
+      // @ts-ignore
+      rejectUnauthorized: options.rejectUnauthorized,
     } satisfies http.RequestOptions;
 
     const textualBodySent = options.body instanceof FormData
@@ -40,6 +44,18 @@ export class HttpClient {
 
         const timings = HttpTimings.start();
         const req = client.request(finalURL, reqOptions, (res) => {
+          const warnings: HttpWarning[] = [];
+
+          if (options.rejectUnauthorized === false && res.socket instanceof tls.TLSSocket) {
+            const cert = res.socket.getPeerCertificate();
+            if (cert.subject.CN === cert.issuer.CN) {
+              warnings.push({
+                message: "Self-signed certificate detected",
+                code: HttpWarningCode.SELF_SIGNED_CERTIFICATE,
+              });
+            }
+          }
+
           let responseData = '';
 
           res.once('readable', () => {
@@ -61,7 +77,8 @@ export class HttpClient {
                 responseData,
                 req,
                 textualBodySent,
-                timings.getTimings()
+                timings.getTimings(),
+                warnings,
               )
             );
           });
