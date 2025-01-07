@@ -78,12 +78,12 @@ export const HttlEditor: React.FC<EditorProps> = ({
     const onDidChangeContent = model?.onDidChangeContent(() => {
       const newValue = model.getValue();
       setEditorValue(newValue);
-      onChange?.(newValue);
+
     });
 
     const onDidFocusEditorText = editor.onDidFocusEditorText(() => {
       onFocus?.();
-    }); 
+    });
 
     return () => {
       onDidFocusEditorText.dispose();
@@ -98,6 +98,12 @@ export const HttlEditor: React.FC<EditorProps> = ({
       editorRef.current?.setValue(value);
     }
   }, [value]);
+
+  useEffect(() => {
+    if (value !== editorValue) {
+      onChange?.(editorValue);
+    }
+  }, [editorValue]);
 
 
   return <div ref={containerRef} style={{ width: "100%", height: "100%" }} />;

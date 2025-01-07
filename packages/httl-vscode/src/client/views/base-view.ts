@@ -4,6 +4,7 @@ import { AppData, HttlExtensionContext, UIMessage } from '../../common';
 import { Lang } from 'httl-core';
 
 export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider {
+  private isAppReady = false;
   protected view!: vscode.WebviewView;
   protected delayedMessages: UIMessage[] = [];
 
@@ -40,11 +41,20 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
       async message => {
         switch (message.command) {
           case 'ready': {
+            this.isAppReady = true;
+
             await this.postMessage({ command: 'initialize' });
+            if (this.delayedMessages.length > 0) {
+              for (const message of this.delayedMessages) {
+                await this.postMessage(message);
+              }
+              this.delayedMessages = [];
+            }
             return;
           }
         }
-        this.handleUIMessages(message);
+
+        await this.handleUIMessages(message);
       },
       undefined,
       this.context.ext.subscriptions
@@ -57,15 +67,6 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
     };
 
     webviewView.webview.html = this.getHtmlForWebview(webviewView.webview, appData);
-
-    if (this.delayedMessages.length > 0) {
-      setTimeout(async () => {
-        for (const message of this.delayedMessages) {
-          await this.postMessage(message);
-        }
-        this.delayedMessages = [];
-      }, 0);
-    }
   }
 
   public async show() {
@@ -83,7 +84,7 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
   protected async handleUIMessages(messagefromUI: any) { }
 
   protected async postMessage(message: UIMessage) {
-    if (!this.view) {
+    if (!this.isAppReady) {
       this.delayedMessages.push(message);
       return;
     }
@@ -134,9 +135,6 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
               : undefined;
 
           const appData = ${JSON.stringify(finalAppData)}; 
-          window.addEventListener('DOMContentLoaded', () => {
-            vscode.postMessage({ command: 'ready' });
-          });
         </script>
         <script src="${scriptUri}"></script>
       </body>

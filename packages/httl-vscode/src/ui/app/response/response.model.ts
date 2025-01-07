@@ -12,7 +12,7 @@ export class ResponseModel {
   public map = new Map<string, HttlOutputViewProps>();
   public currentFile?: string;
 
-  public get isQuickRunFile() {
+  public get isQuickRunResponse() {
     // TODO: fix - constants.QUICK_RUN_DOCUMENT causes import module (httl-core) error
     return this.currentFile === "quick-run-document";
   }
@@ -59,7 +59,7 @@ export class ResponseModel {
   }
 
   public highlightCode(source: { start: number, end: number }, scroll = false) {
-    if (this.isQuickRunFile) {
+    if (this.isQuickRunResponse) {
       return;
     }
 
@@ -75,7 +75,7 @@ export class ResponseModel {
   }
 
   public scrollToCode(source: { start: number, end: number }) {
-    if (this.isQuickRunFile) {
+    if (this.isQuickRunResponse) {
       return;
     }
     

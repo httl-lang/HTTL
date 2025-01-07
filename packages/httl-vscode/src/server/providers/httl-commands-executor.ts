@@ -31,8 +31,8 @@ export class HttlCommandsExecutor extends HttlLanguageServerProvider {
         const diagnostic: Diagnostic = {
           severity: error.severity,
           range: {
-            start: document.origin.positionAt(error.token.start),
-            end: document.origin.positionAt(error.token.end)
+            start: document.origin?.positionAt(error.token.start),
+            end: document.origin?.positionAt(error.token.end)
           },
           message: `${error.error}` || 'Unknown error',
         };

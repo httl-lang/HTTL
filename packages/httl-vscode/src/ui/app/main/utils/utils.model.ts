@@ -25,7 +25,7 @@ export class UtilsModel {
     }
     
     this.setJwt(jwtString);
-    this.decodedJwt = jwt.decode(jwtString, { complete: true, json: true }) ?? "Invalid JWT";
+    this.decodedJwt = jwt.decode(jwtString.trim(), { complete: true, json: true }) ?? "Invalid JWT";
   }
 
   @Action()

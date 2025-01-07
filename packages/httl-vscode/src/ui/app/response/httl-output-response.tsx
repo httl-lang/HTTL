@@ -15,6 +15,14 @@ type Panels = 'body' | 'headers';
 export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response }) => {
   const [panel, setPanel] = useState<Panels>('body');
 
+  // todo: very dirty
+  const lang =
+    response.res.headers.some(([key, value]) => key.toLowerCase() === 'content-type' && value.includes('xml'))
+      ? 'xml'
+      : response.res.headers.some(([key, value]) => key.toLowerCase() === 'content-type' && value.includes('html'))
+        ? 'html'
+        : 'json';
+
   return (
     <s.ResponseView>
       <s.ActionBar>
@@ -44,7 +52,7 @@ export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response }) =>
       <s.Response>
         {
           panel === 'body' && (
-            <Viewer value={response.res.data} options={{
+            <Viewer value={response.res.data} language={lang} options={{
               overviewRulerLanes: 0,
             }} />
           )

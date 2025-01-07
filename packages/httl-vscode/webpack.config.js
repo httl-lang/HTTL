@@ -150,7 +150,7 @@ const uiConfig = {
   plugins: [
     new MonacoWebpackPlugin({
       features: ['format'],
-      languages: ['javascript', 'typescript', 'json'],
+      languages: ['json', 'xml', 'html'],
     }),
     new webpack.ProvidePlugin({
       Buffer: ["buffer", "Buffer"],
@@ -158,9 +158,6 @@ const uiConfig = {
     }),
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
-    }),
-    new webpack.ProvidePlugin({
-      process: 'process/browser',
     }),
   ],
 

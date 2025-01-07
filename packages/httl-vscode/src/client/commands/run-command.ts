@@ -5,6 +5,17 @@ import { HttlResponseViewProvider } from '../views/httl-response-view';
 
 export class HttlRunCommand {
 
+  public static async execute(responseView: HttlResponseViewProvider, client: HttlLanguageClient, text: string, documentUri: string, filePath: string) {
+    await responseView.show();
+    await responseView.setProgress(filePath, true);
+
+    const response = await client.sendRun(
+      documentUri,
+      text,
+    );
+    await responseView.setResponse(filePath, response);
+  };
+
   constructor(
     private readonly context: HttlExtensionContext,
     private readonly client: HttlLanguageClient,
@@ -19,13 +30,11 @@ export class HttlRunCommand {
     const { document, selection } = textEditor;
     const text = document.isUntitled ? document.getText() : '';
 
-    await this.responseView.show();
-    await this.responseView.setProgress(document.uri.fsPath, true);
-
-    const response = await this.client.sendRun(
-      document.uri.toString(),
+    await HttlRunCommand.execute(
+      this.responseView,
+      this.client,
       text,
-    );
-    await this.responseView.setResponse(document.uri.fsPath, response);
+      document.uri.toString(),
+      document.uri.fsPath);
   };
 }

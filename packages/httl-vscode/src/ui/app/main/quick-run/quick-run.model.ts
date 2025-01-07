@@ -4,10 +4,13 @@ import { AppModel } from "../../app.model";
 @Model()
 export class QuickRunModel {
   private static readonly STORE_SCRIPT_KEY = 'quick-run-script';
+  private static readonly STORE_SIZE_KEY = 'quick-run-size';
 
   public script =
     `# Uncomment and press F5 or Ctrl|CMD+Enter to run the script
 # get https://jsonplaceholder.typicode.com/todos/1`;
+
+  public size = "100px";
 
   constructor(
     private readonly appModel = store(AppModel)
@@ -15,12 +18,19 @@ export class QuickRunModel {
 
   public init() {
     this.script = this.appModel.getState(QuickRunModel.STORE_SCRIPT_KEY) ?? this.script;
+    this.size = this.appModel.getState(QuickRunModel.STORE_SIZE_KEY) ?? "100px";
   }
 
   @Action()
   public setScript(script: string) {
     this.script = script;
     this.appModel.saveState(QuickRunModel.STORE_SCRIPT_KEY, script);
+  }
+
+  @Action()
+  public saveSize(size: string) {
+    this.size = size;
+    this.appModel.saveState(QuickRunModel.STORE_SIZE_KEY, size);
   }
 
   @Action()

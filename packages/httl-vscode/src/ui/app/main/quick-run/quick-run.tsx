@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Link } from 'react-router';
 
 import Button from '../../../components/button';
@@ -10,7 +10,27 @@ import LogoSvg from './run.svg';
 
 
 const _QuickRunView: React.FC = () => {
-  const model = useQuickRunModel(({ run, setScript, setFocus, script }) => ({ run, setScript, setFocus, script }));
+  const editorRef = useRef<HTMLDivElement>(null);
+  const model = useQuickRunModel(({ run, setScript, setFocus, saveSize, size, script }) => ({ run, setScript, setFocus, saveSize, size, script }));
+
+  const onResize = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const startY = e.clientY;
+    const startHeight = editorRef.current!.offsetHeight;
+
+    const onMouseMove = (e: any) => {
+      const newHeight = startHeight + (e.clientY - startY);
+      editorRef.current!.style.height = `${newHeight}px`;
+    };
+
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      model.saveSize(editorRef.current!.style.height);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  }, []);
 
   return (
     <s.Container>
@@ -21,7 +41,7 @@ const _QuickRunView: React.FC = () => {
             <LogoSvg />
           </Button>
         </s.Description>
-        <s.Editor>
+        <s.Editor ref={editorRef} style={{ height: model.size }}>
           <HttlEditor
             value={model.script}
             options={{
@@ -37,6 +57,7 @@ const _QuickRunView: React.FC = () => {
             onFocus={() => model.setFocus()}
           />
         </s.Editor>
+        <s.Resizer onMouseDown={onResize} />
       </s.Panel>
       <s.Note>
         * Quick Run lacks some features available in the main editor. For the full feature set, visit <Link to="/main/tutorials">Tutorials</Link>
