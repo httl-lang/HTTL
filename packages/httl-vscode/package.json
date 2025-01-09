@@ -116,6 +116,11 @@
 			{
 				"command": "httl.run",
 				"key": "f5",
+				"when": "editorTextFocus && editorLangId == 'httl'"
+			},
+			{
+				"command": "httl.run",
+				"key": "ctrl+enter",
 				"mac": "cmd+enter",
 				"when": "editorTextFocus && editorLangId == 'httl'"
 			}

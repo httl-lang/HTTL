@@ -14,6 +14,8 @@ const _QuickRunView: React.FC = () => {
   const model = useQuickRunModel(({ run, setScript, setFocus, saveSize, size, script }) => ({ run, setScript, setFocus, saveSize, size, script }));
 
   const onResize = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
     const startY = e.clientY;
     const startHeight = editorRef.current!.offsetHeight;
 
@@ -57,7 +59,9 @@ const _QuickRunView: React.FC = () => {
             onFocus={() => model.setFocus()}
           />
         </s.Editor>
-        <s.Resizer onMouseDown={onResize} />
+        <s.Resizer onMouseDown={onResize}>
+          <s.Handler />
+        </s.Resizer>
       </s.Panel>
       <s.Note>
         * Quick Run lacks some features available in the main editor. For the full feature set, visit <Link to="/main/tutorials">Tutorials</Link>
