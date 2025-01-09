@@ -28,7 +28,7 @@ Ready to code smarter? Let’s dive in! 🚀 <br />
 
 2.  Create or Open *.httl file to activate the extension.
 
-3.  Write simple query e.g. `get https://httpbin.org/anything` and press F5 or CTRL|CMD+Enter
+3.  Write a simple query e.g. `get https://httpbin.org/anything` and press F5 or CTRL|CMD+Enter
 
 <p align="center">
 <img src="docs/images/httl-file-demo.gif" width=75%>

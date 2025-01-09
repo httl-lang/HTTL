@@ -4,10 +4,10 @@
 	"description": "A Visual Studio Code extension for HTTL (Hypertext Template Language)",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/httl-lang/httl-vscode.git"
+		"url": "https://github.com/httl-lang/httl.git"
 	},
 	"bugs": {
-		"url": "https://github.com/httl-lang/httl-vscode/issues"
+		"url": "https://github.com/httl-lang/httl/issues"
 	},
 	"version": "0.1.4",
 	"publisher": "HTTL",
