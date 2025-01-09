@@ -16,7 +16,9 @@ export class EnvironmentVariables {
   }
 
   public refresh() {
-    dotenv.config({ path: Path.toAbsolutePath(this.workdir, '.env') });
+    if (this.workdir) {
+      dotenv.config({ path: Path.toAbsolutePath(this.workdir, '.env') });
+    }
   }
 
   public get(key: string): string | undefined {

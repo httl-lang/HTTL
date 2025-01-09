@@ -2,15 +2,9 @@
 
 All notable changes to the "HTTL" extension will be documented in this file.
 
-## [Unreleased]
+[0.1.0] 2024-12-29 (Initial Release)
 
-## v0.1.0 (Initial Release)
-
-Date: 2024-12-29
-
-## v0.1.1
-
-Date: 2025-01-02
+[0.1.1] 2025-01-02
 
 - Prevent code highlighting and scrolling for quick run files in response model
 - Refactor response view initialization, enhance message handling, and update styles for better readability
@@ -18,9 +12,7 @@ Date: 2025-01-02
 - Add header to tutorials view, implement quick run button, and update styles; version bump to 0.1.1
 - Implement main and response views with routing; refactor app structure and remove deprecated components
 
-## v0.1.3
-
-Date: 2025-01-06
+[0.1.3] 2025-01-06
 
 - Improve JWT handling, update response model for quick run, enhance editor functionality, and refine response styles
 - Added new dependencies for improved functionality; adjust line height in response item styles for better readability

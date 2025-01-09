@@ -21,8 +21,8 @@ export class Path {
     return path.startsWith("/");
   }
 
-  public static toAbsolutePath(workdir: string, filePath: string): string {
-    const _workdir = Path.fileUriToAbsolutePath(workdir);
+  public static toAbsolutePath(workdir: string | undefined, filePath: string): string {
+    const _workdir = workdir ? Path.fileUriToAbsolutePath(workdir) : process.cwd();
     const _filePath = Path.fileUriToAbsolutePath(filePath);
 
     return path.isAbsolute(_filePath) ? _filePath : path.resolve(_workdir, _filePath);

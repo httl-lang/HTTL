@@ -9,7 +9,7 @@
 	"bugs": {
 		"url": "https://github.com/httl-lang/httl-vscode/issues"
 	},
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"publisher": "HTTL",
 	"author": {
 		"name": "Evgen Mykhailenko"
@@ -116,6 +116,11 @@
 			{
 				"command": "httl.run",
 				"key": "f5",
+				"when": "editorTextFocus && editorLangId == 'httl'"
+			},
+			{
+				"command": "httl.run",
+				"key": "ctrl+enter",
 				"mac": "cmd+enter",
 				"when": "editorTextFocus && editorLangId == 'httl'"
 			}

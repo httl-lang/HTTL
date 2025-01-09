@@ -8,7 +8,8 @@ export class QuickRunModel {
 
   public script =
     `# Uncomment and press F5 or Ctrl|CMD+Enter to run the script
-# get https://jsonplaceholder.typicode.com/todos/1`;
+# @base: https://jsonplaceholder.typicode.com
+# get /todos/1`;
 
   public size = "100px";
 

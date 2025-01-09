@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
+  user-select: none;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -10,7 +11,7 @@ export const Container = styled.div`
 `;
 
 export const Panel = styled.div`
-  padding: 5px 5px 3px 5px;
+  padding: 5px 5px 0px 5px;
   margin: 6px;
   background-color: var(--vscode-editor-background);
   border-radius: 5px;
@@ -47,16 +48,25 @@ export const Placeholder = styled.div`
   right: 10px;
 `;
 
-export const Resizer = styled.div`
-  cursor: ns-resize;
+export const Handler = styled.div`
   background-color: var(--vscode-input-background);
   width: 10%;
-  align-self: center;
   height: 3px;
   border-radius: 3px;
-  margin-top: 3px;
+`;
 
+export const Resizer = styled.div`
+  cursor: ns-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 10px;
+  
   &:hover {
-    background-color: var(--vscode-input-border);
+    ${Handler} {
+      background-color: var(--vscode-input-border);
+    }
   }
 `;
+
