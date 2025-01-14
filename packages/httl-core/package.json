@@ -13,9 +13,9 @@
     "tsc-watch": "tsc --watch"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "author": "Evgen Mykhailenko",
+  "license": "HTTL License",
+  "description": "Core library for HTTL",
   "dependencies": {
     "antlr4": "^4.13.2",
     "dotenv": "^16.4.7",

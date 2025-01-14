@@ -8,10 +8,6 @@ export interface StatusLabelProps {
 }
 
 const StatusLabel: FC<StatusLabelProps> = ({ value }) => {
-  if (!value) {
-    return "ERR:Unknown";
-  }
-
   const statusText = useMemo(() => {
     return `${value} ${HTTP_CODES[value.toString()] || 'Unknown'}`;
   }, [value]);
@@ -19,6 +15,10 @@ const StatusLabel: FC<StatusLabelProps> = ({ value }) => {
   const statusStyle = useMemo(() => {
     return CODE_COLORS[value.toString()[0] + 'xx'] || CODE_COLORS.default;
   }, [value]);
+
+  if (!value) {
+    return "ERR:Unknown";
+  }
 
   return (
     <s.StatusLabel style={statusStyle}>

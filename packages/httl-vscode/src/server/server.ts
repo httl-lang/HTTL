@@ -1,4 +1,4 @@
-import { HttlLanguageServer } from './httl-language-server';
+import HttlLanguageServer from 'httl-lsp';
 
 const server = new HttlLanguageServer();
 server.start();

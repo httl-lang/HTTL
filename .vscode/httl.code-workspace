@@ -13,6 +13,10 @@
 			"path": "../packages/httl-core"
 		},
 		{
+			"name": "httl-lsp",
+			"path": "../packages/httl-lsp"
+		},
+		{
 			"name": "httl-vscode",
 			"path": "../packages/httl-vscode"
 		},

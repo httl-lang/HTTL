@@ -16,7 +16,7 @@ import { HttlCommandsExecutor } from './providers/httl-commands-executor';
 import { HttlFormattingProvider } from './providers/httl-formatting-provider';
 
 
-export class HttlLanguageServer {
+export default class HttlLanguageServer {
   public readonly connection: _Connection;
 
   public declare httl: Httl;
