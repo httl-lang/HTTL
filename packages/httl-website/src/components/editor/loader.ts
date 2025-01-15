@@ -2,7 +2,7 @@
 
 import * as monaco from 'monaco-editor';
 import { initServices } from 'monaco-languageclient/vscode/services';
-import { LogLevel } from 'vscode/services';
+import { LogLevel, initialize, createInstance } from 'vscode/services';
 import getConfigurationServiceOverride from '@codingame/monaco-vscode-configuration-service-override';
 import getKeybindingsServiceOverride from '@codingame/monaco-vscode-keybindings-service-override';
 import getEditorServiceOverride from '@codingame/monaco-vscode-editor-service-override';
@@ -14,6 +14,10 @@ import { MonacoLanguageClient } from 'monaco-languageclient';
 import { WebSocketMessageReader, WebSocketMessageWriter, toSocket } from 'vscode-ws-jsonrpc';
 import { CloseAction, ErrorAction, MessageTransports } from 'vscode-languageclient/browser.js';
 import { ConsoleLogger } from 'monaco-languageclient/tools';
+import { StandaloneServices } from 'vscode/services';
+// import getMessageServiceOverride from 'vscode/service-override/messages';
+import getFilesServiceOverride from '@codingame/monaco-vscode-files-service-override'
+
 
 export const useOpenEditorStub = async (modelRef: any, options: any, sideBySide: any) => {
   console.log('Received open editor call with parameters: ', modelRef, options, sideBySide);
@@ -25,26 +29,36 @@ export const runClient = async () => {
 
   monaco.languages.register({ id: 'httl' });
 
-  const logger = new ConsoleLogger(LogLevel.Debug);
-  const htmlContainer = document.getElementById('monaco-editor-root')!;
-  await initServices({
-    serviceOverrides: {
-      ...getConfigurationServiceOverride(),
-      ...getKeybindingsServiceOverride(),
-      ...getEditorServiceOverride(useOpenEditorStub),
-      ...getViewsServiceOverride(),
-      ...getWorkbenchServiceOverride(),
-    },
-    // vscodeApiInitPerformExternally: true,
-    // userConfiguration: {
-    //   json: JSON.stringify({
-    //     'editor.experimental.asyncTokenization': true
-    //   })
-    // },
-  }, {
-    htmlContainer,
-    logger
-  });
+  // StandaloneServices.initialize({});
+  await initialize({}, undefined);
+
+  // const logger = new ConsoleLogger(LogLevel.Debug);
+  // const htmlContainer = document.getElementById('monaco-editor-root')!;
+  // await initServices({
+  //   // viewsConfig: {
+  //   //   viewServiceType: 'ViewsService',
+  //   // },
+  //   workspaceConfig: {
+
+  //   },
+  //   serviceOverrides: {
+  //     ...getConfigurationServiceOverride(),
+  //     ...getKeybindingsServiceOverride(),
+  //     ...getEditorServiceOverride(useOpenEditorStub),
+  //     ...getViewsServiceOverride(),
+  //     ...getWorkbenchServiceOverride(),
+  //     ...getFilesServiceOverride(),
+  //   },
+  //   // vscodeApiInitPerformExternally: true,
+  //   // userConfiguration: {
+  //   //   json: JSON.stringify({
+  //   //     'editor.experimental.asyncTokenization': true
+  //   //   })
+  //   // },
+  // }, {
+  //   htmlContainer: htmlContainer,
+  //   logger
+  // });
 
   initWebSocketAndStartClient('ws://localhost:3000/lsp');
 };

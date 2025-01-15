@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@codingame/monaco-vscode-editor-service-override": "^11.1.2",
+    "@codingame/monaco-vscode-files-service-override": "^11.1.2",
     "@codingame/monaco-vscode-json-default-extension": "^11.1.2",
     "@codingame/monaco-vscode-keybindings-service-override": "^11.1.2",
     "@codingame/monaco-vscode-views-service-override": "^11.1.2",

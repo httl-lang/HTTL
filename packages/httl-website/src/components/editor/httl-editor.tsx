@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { RegisteredFileSystemProvider, RegisteredMemoryFile, registerFileSystemOverlay } from '@codingame/monaco-vscode-files-service-override'
 
 import type { editor } from "monaco-editor";
 import * as monaco from 'monaco-editor';
@@ -70,6 +71,18 @@ const HttlEditor = ({
       // });
 
       // if (editorRef.current) return;
+
+      const fileUri = monaco.Uri.file('quick-run.httl');
+
+      // const fileSystemProvider = new RegisteredFileSystemProvider(false)
+      // fileSystemProvider.registerFile(new RegisteredMemoryFile(fileUri, value))
+      // const overlayDisposable = registerFileSystemOverlay(1, fileSystemProvider)
+
+      // const modelRef = await monaco.editor.createModelReference(fileUri)
+
+      // const editor = monaco.editor.create({ model: modelRef.object.textEditorModel })
+
+
 
       // // Initialize the Monaco Editor
       const editor = editorRef.current = monaco.editor.create(containerRef.current!, {
