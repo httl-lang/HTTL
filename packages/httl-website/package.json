@@ -9,6 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@codingame/monaco-vscode-configuration-service-override": "^11.1.2",
+    "@codingame/monaco-vscode-languages-service-override": "^11.1.2",
+    "@codingame/monaco-vscode-textmate-service-override": "^11.1.2",
+    "@codingame/monaco-vscode-theme-defaults-default-extension": "^11.1.2",
+    "@codingame/monaco-vscode-theme-service-override": "^11.1.2",
     "httl-lsp": "^0.1.0",
     "monaco-editor": "npm:@codingame/monaco-vscode-editor-api@^11.1.2",
     "monaco-languageclient": "^9.1.0",

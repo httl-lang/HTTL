@@ -1,17 +1,21 @@
 'use client';
 
 import * as monaco from 'monaco-editor';
-// @ts-ignore
+
+// monaco workers 
+// @ts-ignore 
 import editorWorker from '@root/monaco-editor/esm/vs/editor/editor.worker.js';
 import { initialize as initializeMonacoService } from 'vscode/services'
 
+
+import getLanguagesServiceOverride from "@codingame/monaco-vscode-languages-service-override";
+import getThemeServiceOverride from "@codingame/monaco-vscode-theme-service-override";
+import getTextMateServiceOverride from "@codingame/monaco-vscode-textmate-service-override";
+import getConfigurationServiceOverride from "@codingame/monaco-vscode-configuration-service-override";
+
 import { initServices } from 'monaco-languageclient/vscode/services';
 import { LogLevel, initialize, createInstance } from 'vscode/services';
-// import getConfigurationServiceOverride from '@codingame/monaco-vscode-configuration-service-override';
-// import getKeybindingsServiceOverride from '@codingame/monaco-vscode-keybindings-service-override';
-// import getEditorServiceOverride from '@codingame/monaco-vscode-editor-service-override';
-// import getViewsServiceOverride from '@codingame/monaco-vscode-views-service-override';
-// import getWorkbenchServiceOverride from '@codingame/monaco-vscode-workbench-service-override';
+
 
 // import '@codingame/monaco-vscode-json-default-extension';
 import { MonacoLanguageClient } from 'monaco-languageclient';
@@ -29,7 +33,7 @@ const workerLoaders: Partial<Record<string, () => Worker>> = {
   TextEditorWorker: () => new editorWorker()
   // TextEditorWorker: () => new Worker('@root/monaco-editor/esm/vs/editor/editor.worker.js?worker', { type: 'module' })
   // TextEditorWorker: () => new Worker('/_next/static/editor.worker.js', { type: 'module' })
-  
+
 }
 
 window.MonacoEnvironment = {
@@ -71,37 +75,45 @@ export const runClient = async () => {
 
   // StandaloneServices.initialize({});
 
-  await initializeMonacoService({})
+  // await initializeMonacoService({
+  //   ...getTextMateServiceOverride(),
+  //   ...getThemeServiceOverride(),
+  //   ...getLanguagesServiceOverride(),
+  // })
 
-  // const logger = new ConsoleLogger(LogLevel.Debug);
-  // const htmlContainer = document.getElementById('monaco-editor-root')!;
-  // await initServices({
-  //   // viewsConfig: {
-  //   //   viewServiceType: 'ViewsService',
-  //   // },
-  //   workspaceConfig: {
+  const logger = new ConsoleLogger(LogLevel.Debug);
+  const htmlContainer = document.getElementById('monaco-editor-root')!;
+  await initServices({
+    // viewsConfig: {
+    //   viewServiceType: 'ViewsService',
+    // },
+    workspaceConfig: {
 
-  //   },
-  //   serviceOverrides: {
-  //     // ...getConfigurationServiceOverride(),
-  //     // ...getKeybindingsServiceOverride(),
-  //     // ...getEditorServiceOverride(useOpenEditorStub),
-  //     // ...getViewsServiceOverride(),
-  //     // ...getWorkbenchServiceOverride(),
-  //     // ...getFilesServiceOverride(),
-  //   },
-  //   // vscodeApiInitPerformExternally: true,
-  //   // userConfiguration: {
-  //   //   json: JSON.stringify({
-  //   //     'editor.experimental.asyncTokenization': true
-  //   //   })
-  //   // },
-  // }, {
-  //   htmlContainer: htmlContainer,
-  //   logger
-  // });
+    },
+    serviceOverrides: {
+      ...getConfigurationServiceOverride(),
+      // ...getTextMateServiceOverride(),
+      // ...getThemeServiceOverride(),
+      // ...getLanguagesServiceOverride(),
 
-  // monaco.languages.register({ id: 'httl' });
+      // ...getKeybindingsServiceOverride(),
+      // ...getEditorServiceOverride(useOpenEditorStub),
+      // ...getViewsServiceOverride(),
+      // ...getWorkbenchServiceOverride(),
+      // ...getFilesServiceOverride(),
+    },
+    // vscodeApiInitPerformExternally: true,
+    // userConfiguration: {
+    //   json: JSON.stringify({
+    //     'editor.experimental.asyncTokenization': true
+    //   })
+    // },
+  }, {
+    htmlContainer: htmlContainer,
+    logger
+  });
+
+  monaco.languages.register({ id: 'httl' });
 
   initWebSocketAndStartClient('ws://localhost:3000/lsp');
 };
