@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { RegisteredFileSystemProvider, RegisteredMemoryFile, registerFileSystemOverlay } from '@codingame/monaco-vscode-files-service-override'
 
 import type { editor } from "monaco-editor";
-import * as monaco from 'monaco-editor';
 import { runClient } from "./loader";
+import * as monaco from 'monaco-editor';
+
 
 
 interface EditorProps {

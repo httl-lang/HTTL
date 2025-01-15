@@ -1,15 +1,19 @@
 import type { NextConfig } from "next";
-import MonacoWebpackPlugin from 'monaco-editor-webpack-plugin';
 
 const nextConfig: NextConfig = {
   webpack(config, { isServer }) {
     if (!isServer) {
-      config.plugins.push(
-        new MonacoWebpackPlugin({
-          languages: ['javascript', 'typescript', 'json', 'xml', 'html'],
-          filename: 'static/[name].worker.js',
-        })
-      )
+      config.module.rules.push({
+        test: /\.worker\.js$/,
+        use: {
+          loader: 'worker-loader',
+          // options: { inline: true } ,
+          options: {
+            filename: 'static/[hash].worker.js',
+            publicPath: '/_next/',
+          },
+        },
+      });
     }
 
     return config;

@@ -1,23 +1,65 @@
 'use client';
 
 import * as monaco from 'monaco-editor';
+// @ts-ignore
+import editorWorker from '@root/monaco-editor/esm/vs/editor/editor.worker.js';
+import { initialize as initializeMonacoService } from 'vscode/services'
+
 import { initServices } from 'monaco-languageclient/vscode/services';
 import { LogLevel, initialize, createInstance } from 'vscode/services';
-import getConfigurationServiceOverride from '@codingame/monaco-vscode-configuration-service-override';
-import getKeybindingsServiceOverride from '@codingame/monaco-vscode-keybindings-service-override';
-import getEditorServiceOverride from '@codingame/monaco-vscode-editor-service-override';
-import getViewsServiceOverride from '@codingame/monaco-vscode-views-service-override';
-import getWorkbenchServiceOverride from '@codingame/monaco-vscode-workbench-service-override';
+// import getConfigurationServiceOverride from '@codingame/monaco-vscode-configuration-service-override';
+// import getKeybindingsServiceOverride from '@codingame/monaco-vscode-keybindings-service-override';
+// import getEditorServiceOverride from '@codingame/monaco-vscode-editor-service-override';
+// import getViewsServiceOverride from '@codingame/monaco-vscode-views-service-override';
+// import getWorkbenchServiceOverride from '@codingame/monaco-vscode-workbench-service-override';
 
-import '@codingame/monaco-vscode-json-default-extension';
+// import '@codingame/monaco-vscode-json-default-extension';
 import { MonacoLanguageClient } from 'monaco-languageclient';
 import { WebSocketMessageReader, WebSocketMessageWriter, toSocket } from 'vscode-ws-jsonrpc';
 import { CloseAction, ErrorAction, MessageTransports } from 'vscode-languageclient/browser.js';
 import { ConsoleLogger } from 'monaco-languageclient/tools';
-import { StandaloneServices } from 'vscode/services';
-// import getMessageServiceOverride from 'vscode/service-override/messages';
-import getFilesServiceOverride from '@codingame/monaco-vscode-files-service-override'
+// import { StandaloneServices } from 'vscode/services';
+// // import getMessageServiceOverride from 'vscode/service-override/messages';
+// import getFilesServiceOverride from '@codingame/monaco-vscode-files-service-override'
 
+
+
+const workerLoaders: Partial<Record<string, () => Worker>> = {
+  // TextEditorWorker: () => new Worker(new URL('/_next/static/editor.worker.js', import.meta.url), { type: 'module' })
+  TextEditorWorker: () => new editorWorker()
+  // TextEditorWorker: () => new Worker('@root/monaco-editor/esm/vs/editor/editor.worker.js?worker', { type: 'module' })
+  // TextEditorWorker: () => new Worker('/_next/static/editor.worker.js', { type: 'module' })
+  
+}
+
+window.MonacoEnvironment = {
+  getWorker: function (moduleId, label) {
+    const workerFactory = workerLoaders[label]
+    console.log('getWorker', moduleId, label, workerFactory)
+    if (workerFactory != null) {
+      return workerFactory()
+    }
+    throw new Error(`Unimplemented worker ${label} (${moduleId})`)
+  }
+}
+
+// self.MonacoEnvironment = {
+//   getWorkerUrl: function (moduleId, label) {
+//     if (label === 'json') {
+//       return '/_next/static/json.worker.js';
+//     }
+//     if (label === 'css') {
+//       return '/_next/static/css.worker.js';
+//     }
+//     if (label === 'html') {
+//       return '/_next/static/html.worker.js';
+//     }
+//     if (label === 'typescript' || label === 'javascript') {
+//       return '/_next/static/ts.worker.js';
+//     }
+//     return '/_next/static/editor.worker.js';
+//   },
+// };
 
 export const useOpenEditorStub = async (modelRef: any, options: any, sideBySide: any) => {
   console.log('Received open editor call with parameters: ', modelRef, options, sideBySide);
@@ -27,10 +69,9 @@ export const useOpenEditorStub = async (modelRef: any, options: any, sideBySide:
 export const runClient = async () => {
   await fetch('/api/socket');
 
-  monaco.languages.register({ id: 'httl' });
-
   // StandaloneServices.initialize({});
-  await initialize({}, undefined);
+
+  await initializeMonacoService({})
 
   // const logger = new ConsoleLogger(LogLevel.Debug);
   // const htmlContainer = document.getElementById('monaco-editor-root')!;
@@ -42,12 +83,12 @@ export const runClient = async () => {
 
   //   },
   //   serviceOverrides: {
-  //     ...getConfigurationServiceOverride(),
-  //     ...getKeybindingsServiceOverride(),
-  //     ...getEditorServiceOverride(useOpenEditorStub),
-  //     ...getViewsServiceOverride(),
-  //     ...getWorkbenchServiceOverride(),
-  //     ...getFilesServiceOverride(),
+  //     // ...getConfigurationServiceOverride(),
+  //     // ...getKeybindingsServiceOverride(),
+  //     // ...getEditorServiceOverride(useOpenEditorStub),
+  //     // ...getViewsServiceOverride(),
+  //     // ...getWorkbenchServiceOverride(),
+  //     // ...getFilesServiceOverride(),
   //   },
   //   // vscodeApiInitPerformExternally: true,
   //   // userConfiguration: {
@@ -59,6 +100,8 @@ export const runClient = async () => {
   //   htmlContainer: htmlContainer,
   //   logger
   // });
+
+  // monaco.languages.register({ id: 'httl' });
 
   initWebSocketAndStartClient('ws://localhost:3000/lsp');
 };
