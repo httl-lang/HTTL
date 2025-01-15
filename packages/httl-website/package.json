@@ -1,0 +1,35 @@
+{
+  "name": "httl-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@codingame/monaco-vscode-editor-service-override": "^11.1.2",
+    "@codingame/monaco-vscode-json-default-extension": "^11.1.2",
+    "@codingame/monaco-vscode-keybindings-service-override": "^11.1.2",
+    "@codingame/monaco-vscode-views-service-override": "^11.1.2",
+    "@codingame/monaco-vscode-workbench-service-override": "^11.1.2",
+    "@typefox/monaco-editor-react": "^6.1.0",
+    "httl-lsp": "^0.1.0",
+    "monaco-editor": "^0.52.2",
+    "monaco-editor-wrapper": "^6.1.0",
+    "monaco-languageclient": "^9.1.0",
+    "next": "15.1.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "monaco-editor-webpack-plugin": "^7.1.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

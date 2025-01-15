@@ -1,0 +1,73 @@
+'use client';
+
+import dynamic from 'next/dynamic';
+import { LogLevel } from 'vscode/services';
+import { Logger } from 'monaco-languageclient/tools';
+import { useWorkerFactory } from 'monaco-editor-wrapper/workerFactory';
+import { MonacoEditorLanguageClientWrapper, WrapperConfig } from 'monaco-editor-wrapper';
+// import { MonacoEditorReactComp } from '@typefox/monaco-editor-react';
+
+const MonacoEditorReactComp = dynamic(async () => (await import('@typefox/monaco-editor-react')).MonacoEditorReactComp, {
+  ssr: false, // This is allowed in a client component
+})
+
+// self.MonacoEnvironment = {
+//   getWorkerUrl: function (moduleId, label) {
+//     if (label === 'json') {
+//       return '/_next/static/json.worker.js';
+//     }
+//     if (label === 'css') {
+//       return '/_next/static/css.worker.js';
+//     }
+//     if (label === 'html') {
+//       return '/_next/static/html.worker.js';
+//     }
+//     if (label === 'typescript' || label === 'javascript') {
+//       return '/_next/static/ts.worker.js';
+//     }
+//     return '/_next/static/editor.worker.js';
+//   },
+// };
+
+export const configureMonacoWorkers = (logger?: Logger) => {
+  useWorkerFactory({
+    workerOverrides: {
+      ignoreMapping: true,
+      workerLoaders: {
+        // TextEditorWorker: () => new Worker(new URL('_next/static/editor.worker.js', import.meta.url), { type: 'module' }),
+        // TextMateWorker: () => new Worker(new URL('@codingame/monaco-vscode-textmate-service-override/worker', import.meta.url), { type: 'module' })
+      }
+    },
+    logger
+  });
+};
+
+const wrapperConfig: WrapperConfig = {
+  $type: 'extended',
+  htmlContainer: document.getElementById('monaco-editor-root')!,
+  logLevel: LogLevel.Debug,
+  editorAppConfig: {
+    
+    codeResources: {
+      modified: {
+        text: "codeText",
+        uri: "codeUri"
+      }
+    },
+    monacoWorkerFactory: configureMonacoWorkers
+  }
+};
+
+const Editor = () => {
+  return (
+    <MonacoEditorReactComp
+      wrapperConfig={wrapperConfig}
+      style={{ 'height': '300px', 'width': '400px' }}
+      onLoad={(wrapper: MonacoEditorLanguageClientWrapper) => {
+        // use the wrapper to get access to monaco-editor or the languageclient
+      }}
+    />
+  );
+}
+
+export default Editor; 

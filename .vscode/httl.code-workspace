@@ -20,6 +20,10 @@
 			"name": "httl-vscode",
 			"path": "../packages/httl-vscode"
 		},
+		{
+			"name": "httl-website",
+			"path": "../packages/httl-website"
+		},
 	],
 	"launch": {
 		"version": "0.2.0",
