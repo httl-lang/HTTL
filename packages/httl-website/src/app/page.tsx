@@ -7,7 +7,17 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <div style={{ width: 400, height: 300 }}>
-            <Editor value="get https://jsonplaceholder.typicode.com/todos/1" />  
+            <Editor
+              value="get https://jsonplaceholder.typicode.com/todos/1"
+              options={{
+                overviewRulerLanes: 0,
+                lineNumbers: 'off',
+                lineDecorationsWidth: 0,
+                glyphMargin: false,
+                folding: false,
+                scrollBeyondLastLine: false,
+              }}
+            />
           </div>
         </div>
       </main>
