@@ -1,5 +1,6 @@
 'use client';
 
+// import '@codingame/monaco-vscode-python-default-extension';
 import "@codingame/monaco-vscode-theme-defaults-default-extension";
 
 import * as monaco from 'monaco-editor';
@@ -11,7 +12,7 @@ import { ConsoleLogger } from 'monaco-languageclient/tools';
 import { LogLevel } from 'vscode/services';
 import { WebSocketMessageReader, WebSocketMessageWriter, toSocket } from 'vscode-ws-jsonrpc';
 import { CloseAction, ErrorAction, MessageTransports } from 'vscode-languageclient/browser.js';
-
+import * as vscode from 'vscode'
 // monaco workers 
 // @ts-ignore
 // import textMateWorker from '@codingame/monaco-vscode-textmate-service-override/worker';
@@ -24,6 +25,7 @@ import getLanguagesServiceOverride from "@codingame/monaco-vscode-languages-serv
 import getThemeServiceOverride from "@codingame/monaco-vscode-theme-service-override";
 import getTextMateServiceOverride from "@codingame/monaco-vscode-textmate-service-override";
 import getConfigurationServiceOverride from "@codingame/monaco-vscode-configuration-service-override";
+import { initialize } from "./httl-extension";
 
 const workerLoaders: Partial<Record<string, () => Worker>> = {
   TextEditorWorker: () => new Worker(new URL('monaco-editor/esm/vs/editor/editor.worker.js', import.meta.url), { type: 'module' }),
@@ -56,7 +58,7 @@ export const initializeMonacoServices = async () => {
       ...getConfigurationServiceOverride(),
       ...getTextMateServiceOverride(),
       ...getThemeServiceOverride(),
-      // ...getLanguagesServiceOverride(),
+      ...getLanguagesServiceOverride(),
       // ...getKeybindingsServiceOverride(),
       // ...getEditorServiceOverride(useOpenEditorStub),
       // ...getViewsServiceOverride(),
@@ -73,87 +75,82 @@ export const initializeMonacoServices = async () => {
     logger: new ConsoleLogger(LogLevel.Debug),
   });
 
-  monaco.languages.register({ id: "httl", extensions: ['.httl'] });
+  await initialize();
 
-  monaco.languages.setLanguageConfiguration("httl", {
-    comments: { "lineComment": "#" },
-    brackets: [["{", "}"], ["[", "]"], ["<", ">"]],
-    autoClosingPairs: [
-      { "open": "{", "close": "}" },
-      { "open": "[", "close": "]" },
-      { "open": "(", "close": ")" },
-      { "open": "'", "close": "'", "notIn": ["string", "comment"] },
-      { "open": "\"", "close": "\"", "notIn": ["string"] },
-      { "open": "`", "close": "`", "notIn": ["string", "comment"] },
-    ],
-    surroundingPairs: [
-      { open: '{', close: '}' },
-      { open: '[', close: ']' },
-      { open: '(', close: ')' },
-      { open: '"', close: '"' },
-      { open: "'", close: "'" }
-    ]
-  });
+  // monaco.languages.register({ id: "httl", extensions: ['.httl'] });
 
-  monaco.languages.setMonarchTokensProvider('httl', {
-    keywords: [
-      'assert', 'as', 'use',
-      'formdata', 'urlencoded', 'bin', 'raw',
-      'true', 'false', 'null'
-    ],
-    tokenizer: {
-      root: [
-        // Comments
-        [/#.*$/, 'comment'],
+  // vscode.languages.setLanguageConfiguration("httl", {
+  //   comments: { "lineComment": "#" },
+  //   brackets: [["{", "}"], ["[", "]"], ["<", ">"]],
+  //   autoClosingPairs: [
+  //     { "open": "{", "close": "}" },
+  //     { "open": "[", "close": "]" },
+  //     { "open": "(", "close": ")" },
+  //     { "open": "'", "close": "'" },
+  //     { "open": "\"", "close": "\"" },
+  //     { "open": "`", "close": "`" },
+  //   ]
+  // });
 
-        // Request methods
-        [/^\s*(get|post|put|delete|patch|head|options|connect|trace|lock|unlock|propfind|proppatch|copy|move|mkcol|mkcalendar|acl|search)\s+/, 'keyword'],
+  // monaco.languages.setMonarchTokensProvider('httl', {
+  //   keywords: [
+  //     'assert', 'as', 'use',
+  //     'formdata', 'urlencoded', 'bin', 'raw',
+  //     'true', 'false', 'null'
+  //   ],
+  //   tokenizer: {
+  //     root: [
+  //       // Comments
+  //       [/#.*$/, 'comment'],
 
-        // Extended HTTP syntax
-        [/^(@)([^\s:]+\s*:)(.*)$/, ['keyword', 'variable', 'string']],
-        [/^([^\s:]+\s*:)(.*)$/, ['variable', 'string']],
+  //       // Request methods
+  //       [/^\s*(get|post|put|delete|patch|head|options|connect|trace|lock|unlock|propfind|proppatch|copy|move|mkcol|mkcalendar|acl|search)\s+/, 'keyword'],
 
-        // Keywords
-        [/\b(assert|as|use)\b/, 'keyword.control'],
-        [/\b(formdata|urlencoded|bin|raw)\b/, 'entity.name.function'],
+  //       // Extended HTTP syntax
+  //       [/^(@)([^\s:]+\s*:)(.*)$/, ['keyword', 'variable', 'string']],
+  //       [/^([^\s:]+\s*:)(.*)$/, ['variable', 'string']],
 
-        // Numbers
-        [/-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/, 'number'],
+  //       // Keywords
+  //       [/\b(assert|as|use)\b/, 'keyword.control'],
+  //       [/\b(formdata|urlencoded|bin|raw)\b/, 'entity.name.function'],
 
-        // Strings
-        [/"([^"\\]|\\.)*$/, 'string.invalid'],  // Non-terminated string
-        [/"/, 'string', '@string'],
+  //       // Numbers
+  //       [/-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/, 'number'],
 
-        // Arrays
-        [/\[/, 'delimiter.array', '@array'],
+  //       // Strings
+  //       [/"([^"\\]|\\.)*$/, 'string.invalid'],  // Non-terminated string
+  //       [/"/, 'string', '@string'],
 
-        // Objects
-        [/\{/, 'delimiter.object', '@object'],
+  //       // Arrays
+  //       [/\[/, 'delimiter.array', '@array'],
 
-        // Constants
-        [/\b(?:true|false|null)\b/, 'constant'],
-      ],
+  //       // Objects
+  //       [/\{/, 'delimiter.object', '@object'],
 
-      string: [
-        [/[^\\"]+/, 'string'],
-        [/\\./, 'string.escape.invalid'],
-        [/"/, 'string', '@pop']
-      ],
+  //       // Constants
+  //       [/\b(?:true|false|null)\b/, 'constant'],
+  //     ],
 
-      array: [
-        [/\]/, 'delimiter.array', '@pop'],
-        [/,/, 'delimiter.array'],
-        { include: 'root' }
-      ],
+  //     string: [
+  //       [/[^\\"]+/, 'string'],
+  //       [/\\./, 'string.escape.invalid'],
+  //       [/"/, 'string', '@pop']
+  //     ],
 
-      object: [
-        [/\}/, 'delimiter.object', '@pop'],
-        [/:/, 'delimiter'],
-        [/,/, 'delimiter'],
-        { include: 'root' }
-      ]
-    }
-  });
+  //     array: [
+  //       [/\]/, 'delimiter.array', '@pop'],
+  //       [/,/, 'delimiter.array'],
+  //       { include: 'root' }
+  //     ],
+
+  //     object: [
+  //       [/\}/, 'delimiter.object', '@pop'],
+  //       [/:/, 'delimiter'],
+  //       [/,/, 'delimiter'],
+  //       { include: 'root' }
+  //     ]
+  //   }
+  // });
 
   initWebSocketAndStartClient('ws://localhost:3000/lsp');
 };
