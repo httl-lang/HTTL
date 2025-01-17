@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@codingame/monaco-vscode-configuration-service-override": "^11.1.2",
+    "@codingame/monaco-vscode-keybindings-service-override": "^11.1.2",
     "@codingame/monaco-vscode-languages-service-override": "^11.1.2",
     "@codingame/monaco-vscode-textmate-service-override": "^11.1.2",
     "@codingame/monaco-vscode-theme-defaults-default-extension": "^11.1.2",
