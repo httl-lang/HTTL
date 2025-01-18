@@ -2,8 +2,12 @@
 
 import Image from "next/image";
 import { HttlEditor } from "../editor";
+import { useState } from "react";
 
 export default function QuickRun() {
+  const [inProgress, setInProgress] = useState(false)
+  const [result, setResult] = useState(null);
+
   return (
     <div style={{ width: 400, height: 300 }}>
       <div style={{ width: 400, height: 300 }}>
@@ -17,10 +21,13 @@ export default function QuickRun() {
             folding: false,
             scrollBeyondLastLine: false,
           }}
+          onExecuting={(status) => setInProgress(status)}
+          onExecuted={(result) => setResult(result)}
         />
       </div>
-      <div style={{ width: 400, height: 300 }}>
-        // REsponse
+      <div>
+        {inProgress && <div>Executing...</div>}
+        {result && <div>Result: {JSON.stringify(result)}</div>}
       </div>
     </div>
   );

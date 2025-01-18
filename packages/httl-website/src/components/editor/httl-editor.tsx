@@ -6,7 +6,12 @@ import { initialize as initializeVScodeServices } from './vscode-services'
 import { activate as activateHttlExtenssion } from './httl-extension'
 import { Editor, EditorProps } from "./editor";
 
-export const HttlEditor = (props: EditorProps) => {
+interface HttlEditorProps extends EditorProps {
+  onExecuting: (status: boolean) => void;
+  onExecuted: (result: any) => void;
+}
+
+export const HttlEditor = (props: HttlEditorProps) => {
   const [ready, setReady] = useState(false);
   const singleRunRef = useRef(false);
 
@@ -18,8 +23,14 @@ export const HttlEditor = (props: EditorProps) => {
       initializeVScodeServices(),
       activateHttlExtenssion(),
     ])
-      .then(() => {
+      .then(([_, httl]) => {
         setReady(true);
+        httl.commands.onExecuting((status) => {
+          props.onExecuting(status);
+        })
+        httl.commands.onExecuted((result) => {
+          props.onExecuted(result);
+        })
       })
   }, []);
 
