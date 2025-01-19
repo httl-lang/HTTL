@@ -1,16 +1,19 @@
 'use client';
 
-import Image from "next/image";
-import { HttlEditor } from "../editor";
 import { useState } from "react";
+
+import { HttlEditor } from "../editor";
+import { ResponseViewer } from "../response-viewer";
+
+import * as s from './quick-run.styles';
 
 export default function QuickRun() {
   const [inProgress, setInProgress] = useState(false)
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState();
 
   return (
-    <div style={{ width: 400, height: 300 }}>
-      <div style={{ width: 400, height: 300 }}>
+    <s.Container>
+      <s.Editor>
         <HttlEditor
           value="get https://jsonplaceholder.typicode.com/todos/1"
           options={{
@@ -20,15 +23,15 @@ export default function QuickRun() {
             glyphMargin: false,
             folding: false,
             scrollBeyondLastLine: false,
+            renderLineHighlight: "none",
           }}
           onExecuting={(status) => setInProgress(status)}
           onExecuted={(result) => setResult(result)}
         />
-      </div>
-      <div>
-        {inProgress && <div>Executing...</div>}
-        {result && <div>Result: {JSON.stringify(result)}</div>}
-      </div>
-    </div>
+      </s.Editor>
+      <s.Response>
+        <ResponseViewer inProgress={inProgress} output={result} />
+      </s.Response>
+    </s.Container>
   );
 }

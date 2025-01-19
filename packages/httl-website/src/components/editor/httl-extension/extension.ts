@@ -3,7 +3,6 @@
 import { registerExtension } from 'vscode/extensions'
 import { HttlLanguageClient } from './httl-language-client';
 import { HttlCommands } from './httl-commands';
-import { connect } from 'http2';
 
 let initialized = false;
 

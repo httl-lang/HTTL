@@ -20,7 +20,7 @@ class CustomResolver {
       // console.log('CustomResolver', request.request);
       // if (request.request.startsWith('gopa')) {
 
-      if((request.request as string).includes('amdX.js')) {
+      if ((request.request as string).includes('amdX.js')) {
         console.log("gopa", request, resolveContext)
       }
 
@@ -39,10 +39,13 @@ class CustomResolver {
       // }
       callback();
     });
-  }
+  } 
 }
 
 const nextConfig: NextConfig = {
+  compiler: {
+    styledComponents: true,
+  },
   webpack(config, { isServer, webpack }) {
     if (!isServer) {
 
@@ -52,38 +55,11 @@ const nextConfig: NextConfig = {
         module: false,
         vm: false,
       }
-      // config.plugins.push(
-      //   new webpack.ContextReplacementPlugin(
-      //     /vscode-oniguruma/, // Match the dynamic require context
-      //     path.resolve(__dirname, 'vscode-oniguruma/release/onig.wasm') // Resolve to specific directory
-      //   )
-      // )
-      // config.plugins.push(
-      //   new webpack.ContextReplacementPlugin(
-      //     /gopa/, // Match the dynamic require context
-      //     path.resolve(__dirname, 'vscode-oniguruma/release/onig.wasm') // Resolve to specific directory
-      //   )
-      // )
       config.resolve.plugins.push(
         // new CustomResolver(),
         // new BundleAnalyzerPlugin()
       );
-      // console.log('webpack', config.resolve); // 5.21.2
-      // config.module.rules.push({
-      //   test: /(\/)?worker(\.js)?$/,
-      //   use: {
-      //     loader: 'worker-loader',
-      //     // options: { inline: true } ,
-      //     options: {
-      //       filename: 'static/[name].worker.js',
-      //       publicPath: '/_next/',
-      //     },
-      //   },
-      // });
     }
-
-    // Enable Web Workers as modules
-    // config.experiments.outputModule = true;
 
     return config;
   },
