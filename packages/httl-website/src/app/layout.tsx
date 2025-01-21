@@ -17,6 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </head>
       <body>
         {children}

@@ -52,19 +52,28 @@ export const HttlResponse = ({ response }: HttlOutputResponseProps) => {
       <s.Response>
         {
           panel === 'body' && (
-            <Viewer value={response.res.data} language={lang} options={{
-              overviewRulerLanes: 0,
-            }} />
+            <Viewer
+              value={response.res.data}
+              language={lang}
+              relayoutAfterValueChange={true}
+              options={{
+                overviewRulerLanes: 0,
+                scrollBeyondLastLine: false,
+              }} />
           )
         }
         {
           panel === 'headers' && (
-            <Viewer value={response.res.headers} language='yaml' options={{
-              lineNumbers: 'off',
-              overviewRulerLanes: 0,
-              folding: false,
-              scrollBeyondLastLine: false,
-            }} />
+            <Viewer
+              value={response.res.headers}
+              language='yaml'
+              relayoutAfterValueChange={true}
+              options={{
+                lineNumbers: 'off',
+                overviewRulerLanes: 0,
+                folding: false,
+                scrollBeyondLastLine: false,
+              }} />
           )
         }
       </s.Response>

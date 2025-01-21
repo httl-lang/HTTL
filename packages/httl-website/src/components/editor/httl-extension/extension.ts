@@ -32,6 +32,11 @@ export async function activate() {
   }
 }
 
+export interface HttlExtensionApi {
+  client: HttlLanguageClient;
+  commands: HttlCommands;
+}
+
 async function registerHttlConfig() {
   const { registerFileUrl, getApi, whenReady } = registerExtension({
     name: 'httl',
@@ -73,13 +78,13 @@ async function registerHttlConfig() {
         {
           "command": "httl.run",
           "key": "f5",
-          "when": "editorTextFocus && editorLangId == 'httl'"
+          "when": "editorLangId == 'httl'"
         },
         {
           "command": "httl.run",
           "key": "ctrl+enter",
           "mac": "cmd+enter",
-          "when": "editorTextFocus && editorLangId == 'httl'"
+          "when": "editorLangId == 'httl'"
         }
       ],
     }

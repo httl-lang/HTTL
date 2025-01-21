@@ -92,7 +92,7 @@ export const Viewer = ({
         // Adjust the height to fit content
         editor.onDidContentSizeChange(() => {
           const contentHeight = editor.getContentHeight();
-          const lineHeight = Math.min(contentHeight + 5, 300); // TODO: hardcoded as of now
+          const lineHeight = Math.min(contentHeight + 5, 500); // TODO: hardcoded as of now
           containerRef.current!.style.height = `${lineHeight}px`;
           editor.layout();
         });

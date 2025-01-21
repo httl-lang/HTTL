@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 
 import type { editor } from "monaco-editor";
 import * as monaco from 'monaco-editor';
@@ -30,14 +30,18 @@ const defaultOptions: editor.IStandaloneEditorConstructionOptions = {
   fontSize: 16,
 };
 
-export const Editor = ({
+export interface EditorRef {
+  focus: () => void;
+}
+
+export const Editor = forwardRef<EditorRef, EditorProps>(({
   value,
   onChange,
   onFocus,
   language = "httl",
   theme = "vs-dark",
   options = defaultOptions,
-}: EditorProps) => {
+}: EditorProps, ref) => {
   const [editorValue, setEditorValue] = useState("");
 
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
@@ -89,7 +93,13 @@ export const Editor = ({
     }
   }, [editorValue]);
 
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      editorRef.current?.focus();
+    }
+  }));
+
   return (
     <div ref={containerRef} style={{ width: "100%", height: "100%" }} />
   );
-};
+});

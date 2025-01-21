@@ -4,11 +4,12 @@ import * as s from './button.styles';
 
 interface ButtonProps {
   onClick: () => void;
+  disabled?: boolean;
 }
 
-const Button: FC<PropsWithChildren<ButtonProps>> = ({ onClick, children }) => {
+const Button = ({ onClick, disabled, children }: PropsWithChildren<ButtonProps>) => {
   return (
-    <s.Button onClick={onClick}>
+    <s.Button onClick={() => !disabled ? onClick() : null}>
       {children as any}
     </s.Button>
   );

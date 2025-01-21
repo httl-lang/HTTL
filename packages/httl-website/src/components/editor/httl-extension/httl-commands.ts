@@ -2,6 +2,9 @@ import type vscode from "vscode"
 import { HttlLanguageClient } from "./httl-language-client";
 
 export class HttlCommands {
+  private onExecutingCallbacks: ((state: boolean) => void)[] = [];
+  private onExecutedCallbacks: ((result: any) => void)[] = [];
+
   constructor(
     private readonly vscodeApi: typeof vscode,
     private readonly client: HttlLanguageClient
@@ -14,19 +17,20 @@ export class HttlCommands {
       );
   }
 
-  private onExecutingCallbacks: ((state: boolean) => void)[] = [];
+  public runScript() {
+    this.vscodeApi.commands.executeCommand('httl.run');
+  }
+
   public onExecuting(ev: (state: boolean) => void) {
     this.onExecutingCallbacks.push(ev);
   }
 
-  private onExecutedCallbacks: ((result: any) => void)[] = [];
   public onExecuted(ev: (result: any) => void) {
     this.onExecutedCallbacks.push(ev);
   }
 
   private onExecuteCommand = async (textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit, args: any) => {
     this.onExecutingCallbacks.forEach(cb => cb(true));
-
     try {
       const { document, selection } = textEditor;
       const text = document.getText();

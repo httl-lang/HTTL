@@ -6,7 +6,7 @@ import { HttlEditor } from '../../../components/editor';
 
 import { QuickRunContext, useQuickRunModel } from './quick-run.model';
 import * as s from './quick-run.styles';
-import LogoSvg from './run.svg';
+import RunSvg from './run.svg';
 
 
 const _QuickRunView: React.FC = () => {
@@ -40,7 +40,7 @@ const _QuickRunView: React.FC = () => {
         <s.Description>
           Quick Run
           <Button onClick={() => model.run(model.script)}>
-            <LogoSvg />
+            <RunSvg />
           </Button>
         </s.Description>
         <s.Editor ref={editorRef} style={{ height: model.size }}>
