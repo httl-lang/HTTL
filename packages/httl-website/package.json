@@ -27,6 +27,7 @@
     "next": "15.1.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "reconnecting-websocket": "^4.4.0",
     "styled-components": "^6.1.14",
     "vscode": "npm:@codingame/monaco-vscode-api@^11.1.2"
   },

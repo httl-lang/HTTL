@@ -37,7 +37,7 @@ export const Viewer = ({
   value,
   onChange,
   language = "json",
-  theme = "vs-dark",
+  theme = "Dark+",
   options = defaultOptions,
   relayoutAfterValueChange = false,
 }: ViewerProps) => {

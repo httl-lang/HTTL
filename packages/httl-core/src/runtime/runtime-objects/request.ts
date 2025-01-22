@@ -74,7 +74,7 @@ export class RequestRt extends RootRuntimeObject<RequestExpression> {
   }
 
   public override async apply(ext: IExtension): Promise<Result<void, string>> {
-    if (ext.applicable !== "request")
+    if (!(Array.isArray(ext.applicable) ? ext.applicable : [ext.applicable]).includes("request"))
       return Err("Invalid extension");
 
     const reqExt = await ext.call() as IRequestExtension;

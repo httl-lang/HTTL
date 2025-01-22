@@ -13,7 +13,7 @@ export async function activate() {
 
   initialized = true;
 
-  const lspUrl = process.env.NEXT_PUBLIC_LSP_URL;
+  const lspUrl = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + window.location.host + '/lsp';
   const lspActivationUrl = process.env.NEXT_PUBLIC_LSP_ACTIVATION_URL;
   if (!lspUrl || !lspActivationUrl) {
     throw new Error('LSP URL or LSP Activation URL is not provided');

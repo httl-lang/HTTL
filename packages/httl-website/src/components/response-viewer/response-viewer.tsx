@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { HttlOutput } from 'httl-core';
 
 import { HttlResponse } from './response';
@@ -17,30 +17,24 @@ export const ResponseViewer = ({ inProgress, output }: ResponseViewerProps) => {
     return null;
 
   return (
-    <>
-      {/* <s.Loader>
-        <LoadingBar ref={ref} color="#f1b019" shadow={true} />
-      </s.Loader> */}
-
-      <s.Container>
-        {
-          output.errors?.length > 0
-            ? <HttlErrors errors={output.errors} />
+    <s.Container>
+      {
+        output.errors?.length > 0
+          ? <HttlErrors errors={output.errors} />
+          : null
+      }
+      {
+        output.result?.length > 0
+          ? (
+            <s.Main>
+              <HttlResponse response={output.result.at(-1)!} />
+            </s.Main>
+          )
+          : !inProgress
+            ? <s.EmptyScript>No Requests to Process</s.EmptyScript>
             : null
-        }
-        {
-          output.result?.length > 0
-            ? (
-              <s.Main>
-                <HttlResponse response={output.result.at(-1)!} />
-              </s.Main>
-            )
-            : !inProgress
-              ? <s.EmptyScript>No Requests to Process</s.EmptyScript>
-              : null
-        }
-      </s.Container>
-    </>
+      }
+    </s.Container>
   );
 };
 

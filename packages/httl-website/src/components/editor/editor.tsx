@@ -28,6 +28,7 @@ const defaultOptions: editor.IStandaloneEditorConstructionOptions = {
   tabSize: 2,
   insertSpaces: true,
   fontSize: 16,
+  wordBasedSuggestions: 'currentDocument',
 };
 
 export interface EditorRef {
@@ -39,7 +40,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(({
   onChange,
   onFocus,
   language = "httl",
-  theme = "vs-dark",
+  theme = "Dark+",
   options = defaultOptions,
 }: EditorProps, ref) => {
   const [editorValue, setEditorValue] = useState("");
