@@ -27,7 +27,7 @@ export default function QuickRun() {
           {/* @ts-ignore  */}
           <ChevronLeftIcon className="block size-6" />
         </Button>
-        <span className="text-slate-500">{examples[exampleIndex].title}</span>
+        <span className="text-slate-500 text-center">{examples[exampleIndex].title}</span>
         <Button onClick={() => setExampleIndex((exampleIndex + 1) % examples.length)}>
           {/* @ts-ignore  */}
           <ChevronRightIcon className="block size-6" />
