@@ -1,17 +1,17 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
-const navigation = [
-  { name: 'Home', href: '#', current: true },
-  { name: 'Docs', href: '#', current: false },
-  { name: 'Tutorials', href: '#', current: false },
-]
+
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function Nav() {
+interface NavProps {
+  navigation: { name: string, href: string, current: boolean }[]
+}
+
+export function Nav({ navigation }: NavProps) {
   return (
     <Disclosure as="nav">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">

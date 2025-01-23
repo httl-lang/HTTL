@@ -8,19 +8,24 @@ import { Nav } from "@/components/nav";
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from "react";
+import { Metadata } from "next";
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
+  { name: 'Home', href: '/', current: true },
+  { name: 'Docs', href: '/docs', current: false },
+  { name: 'Tutorials', href: '#', current: false },
 ]
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "HTTL programming language - Official website",
+};
 
 export default function Home() {
 
   return (
     <div>
-      <Nav />
+      <Nav navigation={navigation} />
       <div className="relative isolate px-6 pt-14 lg:px-8">
         <div
           aria-hidden="true"
