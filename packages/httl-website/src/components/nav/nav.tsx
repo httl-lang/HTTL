@@ -28,7 +28,7 @@ export function Nav({ navigation }: NavProps) {
             <div className="flex shrink-0 items-center">
               <img
                 alt="HTTL"
-                src="./logo.svg"
+                src="/logo.svg"
                 className="h-6 w-auto"
               />
             </div>
@@ -64,7 +64,7 @@ export function Nav({ navigation }: NavProps) {
         </div>
       </div>
 
-      <DisclosurePanel className="sm:hidden">
+      <DisclosurePanel className="sm:hidden relative z-10">
         <div className="space-y-1 px-2 pb-3 pt-2">
           {navigation.map((item) => (
             <DisclosureButton

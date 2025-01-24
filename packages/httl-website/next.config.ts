@@ -22,6 +22,15 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+  async redirects() {
+    return [
+      {
+        source: '/docs',
+        destination: '/docs/introduction/about-httl',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default withNextra(nextConfig);

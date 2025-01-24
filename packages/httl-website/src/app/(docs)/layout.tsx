@@ -13,7 +13,7 @@ const navbar = (
     logo={
       <img
         alt="HTTL"
-        src="./logo-full.svg"
+        src="/logo-full.svg"
         style={{ height: '1rem' }}
       />
     }
@@ -32,7 +32,7 @@ export default async function RootLayout({ children }: any) {
       <body>
         <Layout
           navbar={navbar}
-          pageMap={await getPageMap()}
+          pageMap={await getPageMap('/docs')}
           docsRepositoryBase="https://github.com/httl-lang/HTTL/tree/main/packages/httl-website"
           footer={footer}
         >
