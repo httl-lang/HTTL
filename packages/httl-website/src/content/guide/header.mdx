@@ -1,0 +1,46 @@
+# Header
+
+Header is header as simple as thtat.
+
+HTe overal syntzx is 
+`key: value`
+
+* the header should stay on single line
+* the value will be automatically trimmed at the beggingnin and the end
+
+There are two types of headers in HTTL:
+- Request header
+- Global header
+
+
+## Request header
+
+Partilyy coverd on the Request section. 
+This type of header goes right after request and belong only to this request any blank line will separate this header from the request object ant turn into glboal header
+
+
+## Global header
+
+Global header is a header that will be used in all requests below defined in the file.
+
+it very convinent when you need to define common content type or authorization header etc.
+
+```httl
+@base: https://reqres.in/api
+
+Content-Type: application/json
+Authorization: Bearer token
+
+get /users
+
+post /users {
+  name: "morpheus",
+  job: "leader"
+}
+
+```
+
+
+global heeader can be defined in any palce and can owweride each other
+
+Headers will be sent in lover case in accordance with the HTTP specification, -  link to spec

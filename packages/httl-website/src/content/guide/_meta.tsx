@@ -1,13 +1,16 @@
+import { comments } from "vscode";
+
 export default {
   index: 'The Basics',
-  requests: 'Requests',
+  request: 'Request',
   api: 'API',
-  headers: 'Headers',
-  extensions: 'Extensions',
+  header: 'Header',
+  directives: 'Directives',
   openapi: 'OpenAPI',
   variables: 'Variables',
   'env-vars': 'Environment Variables',
   'multi-requests': 'Multi Requests',
+  comments: 'Comments',
   'project-structure': 'Project Structure',
   testing: 'Testing',
 }

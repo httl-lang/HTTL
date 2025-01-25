@@ -1,3 +1,42 @@
-# Guide
+# The Basics
  
-Hello, world!
+### Enough words, show me the code!
+ 
+```httl filename="advanced.httl"
+    # Comprehensive Example of all HTTL features
+    @base: https://reqres.in/api
+
+    # Getting a bearer token
+    post /login {
+      "email": "eve.holt@reqres.in",
+      "password": "cityslicka",
+    }
+    as auth # Save the json response body to the variable auth
+
+    # Set a global Authorization header wich will be used in all requests below.
+    # Also we can use dot notation to access the properties of the response body. 
+    Authorization: Bearer {auth.token}
+
+    # Create a new user
+    post /users {
+      "name": "rob",
+      "job": "engineer",
+    }
+    as new_user # save the response to the variable new_user
+
+    # Update the user
+    put /users/{new_user.id} {
+      "name": "Robert",
+      "job": "CEO", # not bad for a new user
+    }
+
+    # Delete the user (too much for a new user)
+    delete /users/{new_user.id}
+    # Each request can have an assertion block to validate the status, headers, and body of the response 
+    assert {
+      status: 204,
+      headers: {
+        "Content-Length": "0",
+      }
+    }
+    ```

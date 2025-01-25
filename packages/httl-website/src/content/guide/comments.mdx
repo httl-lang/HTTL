@@ -1,0 +1,71 @@
+# Request
+
+That's alfa and omega, the basic building block. 
+
+
+* only lowercase but will send as upper case
+* verbs
+* verb and path should be on the same line
+* path starts with `/`
+
+## Form 
+
+#### Basic form:
+
+```httl
+get https://reqres.in/api/users
+```
+
+#### Using @base directive:
+
+```httl
+@base: https://reqres.in/api
+
+get /users
+```
+
+#### Using @base directive:
+
+```httl
+@base: https://reqres.in/api
+
+get /users?page=2
+```
+
+
+
+```jsx {1,4-5}
+import 'nextra-theme-docs/style.css'
+
+export default function Nextra({ Component, pageProps }) {
+  const getLayout = Component.getLayout || (page => page)
+  return getLayout(<Component {...pageProps} />)
+}
+```
+
+### Title
+
+````mdx
+```jsx filename="_app.js"
+import 'nextra-theme-docs/style.css'
+
+export default function Nextra({ Component, pageProps }) {
+  const getLayout = Component.getLayout || (page => page)
+  return getLayout(<Component {...pageProps} />)
+}
+```
+````
+
+```jsx filename="_app.js"
+import 'nextra-theme-docs/style.css'
+
+export default function Nextra({ Component, pageProps }) {
+  const getLayout = Component.getLayout || (page => page)
+  return getLayout(<Component {...pageProps} />)
+}
+```
+
+## Supported Languages
+
+You can find a list of supported languages
+[here](https://github.com/shikijs/shiki/blob/main/docs/languages.md).

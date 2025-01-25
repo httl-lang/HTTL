@@ -1,0 +1,90 @@
+# Request
+
+That's alfa and omega, the basic building block. 
+
+
+* only lowercase but will send as upper case
+* verbs
+* verb and path should be on the same line
+* path starts with `/`
+
+## Form 
+
+#### Basic form:
+
+```httl
+get https://reqres.in/api/users
+```
+
+#### Using @base directive:
+
+```httl
+@base: https://reqres.in/api
+
+get /users
+```
+
+#### Using query parameters:
+
+```httl
+@base: https://reqres.in/api
+
+get /users?page=2
+```
+
+#### Using Header:
+
+```httl {4}
+@base: https://reqres.in/api
+
+get /users?page=2
+Content-Type: application/json
+```
+
+
+please be aware that the header should be on the next line after the request, and the header should be in the format `key: value`
+any new blank line will separate this header from the original request object 
+
+* more about header sturcture
+
+#### Using Body:
+
+```httl {4}
+@base: https://reqres.in/api
+
+post /users {
+  name: "morpheus",
+  job: "leader"
+}
+```
+
+* json and JS format of body
+* Diffenret tipe of body josnt etc ...
+
+
+#### Using Header + Body toghether:
+
+```httl {4}
+@base: https://reqres.in/api
+
+post /users 
+Content-Type: application/json
+Authorization: Bearer token
+{
+  "name": "morpheus",
+  "job": "leader"
+}
+```
+
+
+#### Using varaibel:
+
+```httl {4}
+@base: https://reqres.in/api
+
+get /users/1 
+ as user
+```
+more about variable in the next section --> link
+
+
