@@ -1,6 +1,6 @@
 export default {
   'about-httl': 'About HTTL',
-  installation: 'Installation',
+  'get-started': 'Get Started',
   why: 'Why?',
   feedback: 'Feedback',
 }

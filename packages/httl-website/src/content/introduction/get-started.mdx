@@ -1,0 +1,121 @@
+import { Steps } from 'nextra/components'
+import { Tabs } from 'nextra/components'
+
+# Get Started
+
+## Quick Start with HTTL
+
+Due to active development phase, the first version of HTTL is available as Visual Studio Code extension only.\
+But I actively work on the standalone version of HTTL which will be available soon as well as JetBrains plugin. 
+
+
+<Steps>
+### Install HTTL 
+
+<Tabs items={['VS Code', 'JetBrains', 'CLI']}>
+  <Tabs.Tab>
+  Download the latest version of HTTL from the Visual Studio Marketplace:
+
+  [Visual Studio Marketplace Downloads](https://marketplace.visualstudio.com/items?itemName=HTTL.httl-vscode)
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Coming soon
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Coming soon
+  </Tabs.Tab>
+</Tabs>
+
+### Create .httl file
+
+<Tabs items={['VS Code', 'JetBrains', 'CLI']} >
+  <Tabs.Tab>
+  Create a new file with `.httl` extension and start writing your code.
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Coming soon
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Coming soon
+  </Tabs.Tab>
+</Tabs>
+
+### Write a query 
+
+
+<Tabs items={['Basic', 'Advanced']} >
+  <Tabs.Tab>
+    ```httl filename="basic.httl"
+    get https://httpbin.org/anything
+    ```  
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```httl filename="advanced.httl"
+    # Comprehensive Example of all HTTL features
+    @base: https://reqres.in/api
+
+    # Getting a bearer token
+    post /login {
+      "email": "eve.holt@reqres.in",
+      "password": "cityslicka",
+    }
+    as auth # Save the json response body to the variable auth
+
+    # Set a global Authorization header wich will be used in all requests below.
+    # Also we can use dot notation to access the properties of the response body. 
+    Authorization: Bearer {auth.token}
+
+    # Create a new user
+    post /users {
+      "name": "rob",
+      "job": "engineer",
+    }
+    as new_user # save the response to the variable new_user
+
+    # Update the user
+    put /users/{new_user.id} {
+      "name": "Robert",
+      "job": "CEO", # not bad for a new user
+    }
+
+    # Delete the user (too much for a new user)
+    delete /users/{new_user.id}
+    # Each request can have an assertion block to validate the status, headers, and body of the response 
+    assert {
+      status: 204,
+      headers: {
+        "Content-Length": "0",
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+
+### You are good to go! Run the query
+
+<Tabs items={['VS Code', 'JetBrains', 'CLI']} >
+  <Tabs.Tab>
+    Click on the `Run` button to execute the query.\
+    Alternatively, you can use the hotkeys `Ctrl|Cmd + Enter` or `F5`.
+  <br/>    
+    <img src="/images/vscode-run.png" alt="VS Code Run" />
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Coming soon
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Coming soon
+  </Tabs.Tab>
+</Tabs>
+
+### For VS Code only
+
+Alternatively, you can use the `Quick Run` feature to run the query. 
+The query will be saved in the current workspace and you can run it anytime.
+ <br/> 
+<img src="/images/vscode-quick-run.png" alt="VS Code Quick Run" />
+
+</Steps>
+
+
