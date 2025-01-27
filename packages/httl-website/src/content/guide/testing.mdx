@@ -1,3 +1,24 @@
-# Guide
+# Testing
  
-Hello, world!
+Httl provides a simple way to test your API requests. 
+All you need to do it to add `assert`to the end of your request.
+
+
+```httl
+post https://reqres.in/api/login {
+  "email": "eve.holt@reqres.in",
+  "password": "cityslicka",
+}
+assert {
+  status: 200,
+  headers: {
+    "Content-Type": "application/json; charset=utf-8",
+  },
+  body: {
+    token: "QpwL5tke4Pnpja7X4",
+  },
+}
+```
+
+The `assert` block can check the response status, headers, and body.
+NOTE - so far we support only Strict Equality for all elements. But as we grow, we will add more options.

@@ -1,3 +1,20 @@
-# Guide
+# OpenAPI
  
-Hello, world!
+YEs yes and yes, we support OpenAPI specification.
+
+All you need to do is to add `@spec` directive to your openApi json file.
+
+```httl
+@spec https://api.example.com/openapi.json
+
+get <type Ctrl+Space to see the list of available paths>
+```
+
+So far there is support for Swagger 2.x and OpenAPI 3.x
+
+the runtime can autocomplete the paths and autogeenrate body
+
+* show example of autocompletion 
+* and inlining body
+
+add note that there is some caveats 

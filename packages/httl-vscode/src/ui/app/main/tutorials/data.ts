@@ -47,10 +47,10 @@ assert {
   },
 
   {
-    title: 'OpenApi: using @spec extension',
+    title: 'OpenApi: using @spec directive',
     description: 'Shows how to use intelysense with OpenApi schema',
     code:
-      `# Also by default @spec header extension will set the base url to the server url from the OpenApi schema
+      `# Also by default @spec header directive will set the base url to the server url from the OpenApi schema
 @spec: https://httpbin.org/spec.json
 
 Accept: Application/json
@@ -82,7 +82,7 @@ post /anything/user {
 
   {
     title: 'Simple GET request using the @base header',
-    description: 'Demonstrates the use of the @base extension header',
+    description: 'Demonstrates the use of the @base directive header',
     code: '@base: https://jsonplaceholder.typicode.com\n\nget /posts'
   },
 
@@ -139,7 +139,7 @@ raw "raw data"`
   },
 
   {
-    title: 'Using @auth-basic extension',
+    title: 'Using @auth-basic directive',
     description: 'Make a GET request with basic authentication',
     code:
       `get https://httpbin.org/basic-auth/fake-user/fake-password 

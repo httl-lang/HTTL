@@ -11,7 +11,6 @@ import { useState } from "react";
 import { Metadata } from "next";
 
 const navigation = [
-  { name: 'Home', href: '/', current: true },
   { name: 'Docs', href: '/docs', current: false },
   { name: 'Tutorials', href: '#', current: false },
 ]

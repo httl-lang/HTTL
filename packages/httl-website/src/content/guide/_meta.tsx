@@ -9,8 +9,7 @@ export default {
   openapi: 'OpenAPI',
   variables: 'Variables',
   'env-vars': 'Environment Variables',
-  'multi-requests': 'Multi Requests',
   comments: 'Comments',
-  'project-structure': 'Project Structure',
+  use: 'Use',
   testing: 'Testing',
 }

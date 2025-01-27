@@ -1,3 +1,31 @@
-# Guide
- 
-Hello, world!
+# Variables
+
+You can store the response of a query in a variable and use it in subsequent queries. 
+This is useful when you want to use the same response in multiple places.
+
+```httl
+@base: https://reqres.in/api
+
+post /login {
+  "email": "eve.holt@reqres.in",
+  "password": "cityslicka",
+}
+as auth 
+
+Authorization: Bearer {auth.token}
+
+post /users {
+  "name": "rob",
+  "job": "engineer",
+}
+
+```
+
+variable can also be via autocomplete
+the response body is parsed and the properties are available for autocompletion
+
+
+note about response headers
+
+
+

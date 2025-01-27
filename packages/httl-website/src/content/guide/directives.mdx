@@ -1,3 +1,33 @@
 # Directives
  
-Hello, world!
+Let's say we have a simple script like this:
+
+ 
+```httl
+
+get https://api.example.com/data
+post https://api.example.com/data
+
+```
+
+but we don't want to repeat the URL `https://api.example.com` in every request. 
+Sure we can use a globlal header `Host: api.example.com` but it's only about the host, not the full URL.
+
+that why we need something that extends HTTP specification.
+
+like a directive, a way to encapsulate common parts of the request.
+
+ 
+```httl
+
+@base https://api.example.com
+
+get /data
+post /data
+
+```
+
+There are several directives in httl:
+- `@base` - sets the base URL for the current api
+- `@spec` - sets the OpenAPI specification for current api
+- `@auth-basic` - sets the Authentification header for current api
