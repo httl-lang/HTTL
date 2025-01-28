@@ -1,20 +1,29 @@
-# Why Not?
+# What was the motivation behind creating HTTL?
  
-Well, it actually a good question, waht the reason of having a new language for relatively simple thing, elsepical ywhen there are already plenty of good tool/languages.
-The answer is in title ;) why not? As already mention there are buncj of good toll but each of them has their benefits and drawbacks.
-These are the basic driwers behind the HTTL:
+Well, that’s actually a good question: why create a new language for something relatively simple, especially when so many good tools already exist?
+As usual, each tool has its own benefits and drawbacks, and after a long search for the one that best fit my needs, I decided to create my own.
 
-***??like mdx is a combination of markdown and jsx, HTTL is a combination of http and json, with some extra features.
+## Here are the main challenges that this new language aims to address:
 
-- **Simplicity**:  - mostly inspired by Python, each clause each consturction of language needs to be simplified to allow you write less code
-   e,g, you dont need to write conrtucaion like: `get {{baseur}}/api/user` etc. you can define the base path at the top of file and use simple form `get /user`
-- **Flexibility**: I am not a fun to run one request at a time, I prefer to run a bunch of them in one file, so I can write a query to get a token, then use it in the next query, maybe even different api etc. THat's what HTTL is about.
-- **Modularity**: It would be perfect to have a way to reuse the code, so you can define a query in one file and use it in another one.
-- **OpenApi Integration**: oh this is a favorite one - Yes it's about type checking and intellysense, long dream that came tru. finally :)
-- **Extensibility**: The language should be abel to easy to extend, so you can write your own plugins, or use the existing ones.
+- **Simplicity**: Each clause, operator, and language construct should be as streamlined as possible, allowing you to write less code.
+   > For example, you don't need to write something like `get {{baseUrl}}/api/user`. Instead, you can define the base url at the top of your file and simply use `get /user`.
+<br />
+- **Flexibility**: There should be no limit to the number of requests that can be run at once.
+   > For example, you can run multiple requests within a single file and use the results of one request in another—potentially applying data transformations in between, etc.
+<br />
+- **Modularity**: It’s hard to imagine any modern language without the ability to separate code into different files, right?
+   > For example, it’s convenient to define the authentication logic in one file and then import it for use in other files.
+<br />
+- **OpenAPI Integration**: This is my favorite one — there should be an easy way to point to an OpenAPI specification and benefit from built-in type checking and IntelliSense.
+<br />
+- **Testability**: The language should support an easy way to test the output, without requiring any JavaScript inlining or other complex steps.
+<br />
+- **Extensibility**: The language should be easy to extend, allowing you to write your own plugins.
 
-All of this lead me to an idea to create this language, for developers 
+---
 
-I've stoped using Postamnt since beggingin of 2025 (checkout my video how to replace Postman with HTTL **put_link_link**) 
+All of this led me to the idea of creating this language because I believe there's no better tool than code that runs other code.
 
-There is no better tool then a code that runs another code
+> I’ve stopped using Postman since the beginning of 2025.
+
+ (checkout my video how to replace Postman with HTTL **put_link_link**) 

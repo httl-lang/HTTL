@@ -1,3 +1,5 @@
+import { FileTree } from 'nextra/components'
+
 # Use
 
 As any other programming language, HTTL has a module system. 
@@ -40,14 +42,18 @@ Also you will have intellisense for the requests
 
 The module path is resolved relative to the current file. mostly like in Javascript. 
 so let say we have this structure:
+ 
+<FileTree>
+  <FileTree.Folder name="src" defaultOpen>
+    <FileTree.Folder name="modules" defaultOpen>
+      <FileTree.File name="auth.httl" />
+    </FileTree.Folder>
+    <FileTree.Folder name="tests" defaultOpen>
+      <FileTree.File name="user-creation-test.httl" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
 
-```plaintext
-- src
-  - modules
-    - auth.httl
-  - tests
-    - user-creation-test.httl
-```
 
 and in the `user-creation-test.httl` file you want to import the `auth.httl` module you can do it like this:
 

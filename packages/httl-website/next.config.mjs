@@ -33,13 +33,11 @@ const nextConfig = {
       }
     }
 
-    config.module.rules.unshift({
-      test: /\.mjs$/,
-      include: /node_modules/,
-      type: "javascript/auto"
-    });
-
-    // console.log(config.module.rules)
+    // config.module.rules.unshift({
+    //   test: /\.mjs$/,
+    //   include: /node_modules/,
+    //   type: "javascript/auto"
+    // });
 
     return config;
   },
