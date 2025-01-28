@@ -32,18 +32,18 @@ Create a new file with a `.httl` extension.
 
 <Tabs items={['Basic', 'Advanced']} >
   <Tabs.Tab>
-    ```httl filename="basic.httl"
+    ```httl filename="basic.httl" copy
     get https://httpbin.org/anything
     ```  
   </Tabs.Tab>
   <Tabs.Tab>
-    ```httl filename="advanced.httl"
+    ```httl filename="advanced.httl" copy
     @base: https://reqres.in/api
 
     # Getting a bearer token
     post /login {
-      "email": "eve.holt@reqres.in",
-      "password": "cityslicka",
+      email: "eve.holt@reqres.in",
+      password: "cityslicka",
     }
     as auth # Save the json response body to the variable auth
 
@@ -53,15 +53,15 @@ Create a new file with a `.httl` extension.
 
     # Create a new user
     post /users {
-      "name": "rob",
-      "job": "engineer",
+      name: "rob",
+      job: "engineer",
     }
     as new_user # save the response to the variable new_user
 
     # Update the user
     put /users/{new_user.id} {
-      "name": "Robert",
-      "job": "CEO",
+      name: "Robert",
+      job: "CEO",
     }
 
     # Delete the user

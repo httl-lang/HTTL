@@ -1,14 +1,15 @@
 # The Basics
  
-### Enough words, show me the code!
+### Enough talk — show me the code!
  
-```httl filename="advanced.httl"
-    # Comprehensive Example of all HTTL features
+```httl copy
+    # Define a base URL for all requests
     @base: https://reqres.in/api
 
     # Getting a bearer token
     post /login {
-      "email": "eve.holt@reqres.in",
+      # You are free to use both JSON and JS styles for key-value pairs
+      email: "eve.holt@reqres.in",
       "password": "cityslicka",
     }
     as auth # Save the json response body to the variable auth
@@ -19,18 +20,18 @@
 
     # Create a new user
     post /users {
-      "name": "rob",
-      "job": "engineer",
+      name: "rob",
+      job: "engineer",
     }
     as new_user # save the response to the variable new_user
 
     # Update the user
     put /users/{new_user.id} {
-      "name": "Robert",
-      "job": "CEO", # not bad for a new user
+      name: "Robert",
+      job: "CEO",
     }
 
-    # Delete the user (too much for a new user)
+    # Delete the user
     delete /users/{new_user.id}
     # Each request can have an assertion block to validate the status, headers, and body of the response 
     assert {
@@ -40,3 +41,5 @@
       }
     }
     ```
+
+I hope the code is self-explanatory. We’ll cover each section in detail on the following pages.

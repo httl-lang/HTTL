@@ -1,92 +1,265 @@
 # Request
 
-That's alfa and omega, the basic building block. 
+Request is a basic building block of HTTL. The syntax is mostly dicated by the HTTP protocol, but with some additional features to make it more readable and easy to use.
 
+Let's start with this full request form and break it down:  
 
-* only lowercase but will send as upper case
-* verbs
-* verb and path should be on the same line
-* path starts with `/`
-
-## Form 
-
-#### Basic form:
-
-```httl
-get https://reqres.in/api/users
+```httl showLineNumbers
+post https://httl.dev/api/users
+Content-Type: application/json
+{
+  name: "morpheus",
+  job: "leader"
+}
+as user
+assert {
+  status: 201,
+  headers: {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  body: {
+    name: "morpheus",
+    job: "leader"
+  }
+}
 ```
 
-#### Using @base directive:
 
-```httl
-@base: https://reqres.in/api
+## Request line
 
+This defines the request’s action. Verb and path should be on the same line.
+
+The verb should be on the same line as the path. For simplicity all verbs are lowercase but will be sent as uppercase\
+The lsit of all the verbs are supported by HTTL:\
+`get`, `post`, `put`, `delete`, `patch`, `head`, `options`, `connect`, `trace`, `lock`, `unlock`, `propfind`, `proppatch`, `copy`, `move`, `mkcol`, `mkcalendar`, `acl`, `search`
+
+The path can be a full URL or a relative path:
+
+```httl 
+# Full URL
+get https://httl.dev/api/users
+
+# Relative path
+@base: https://httl.dev/api
 get /users
 ```
 
-#### Using query parameters:
+## Headers
+
+HTTP Headers are defined on the next line after the request line. Headers are optional. 
+Overal synax doen not differ from the HTTP specification. The header should be in the format `key: value`.
+
+> [!NOTE]
+>
+> For now we don't support multi-line headers.
+
+Any blank line will separate the header from the original request object.
+
+```httl 
+# `Authorization` will be sent as a header
+get /users
+Authorization: Bearer token
+
+# `Authorization` header does not belongs to the request anymore and became a global header
+get /users # this request will fail
+
+Authorization: Bearer token
+
+# this request will be successful because the `Authorization` header is a global header now
+get /users 
+```
+
+More about global headers in [the next section](/docs/guide/header).
+
+
+## Body
+The body goes after the headers or directly after the request line if there are no headers. The body is optional.
+HTTP specification requires body to be sseparated from headers by a lbnk line, but we don't require that.
+ more over you can use the body at the same line with the request line.
 
 ```httl
-@base: https://reqres.in/api
-
-get /users?page=2
-```
-
-#### Using Header:
-
-```httl {4}
-@base: https://reqres.in/api
-
-get /users?page=2
-Content-Type: application/json
-```
-
-
-please be aware that the header should be on the next line after the request, and the header should be in the format `key: value`
-any new blank line will separate this header from the original request object 
-
-* more about header sturcture
-
-#### Using Body:
-
-```httl {4}
-@base: https://reqres.in/api
-
-post /users {
+get /users {
   name: "morpheus",
   job: "leader"
 }
 ```
 
-* json and JS format of body
-* Diffenret tipe of body josnt etc ...
+> [!TIP]
+>
+> Yes, HTTL supporttra for body for all the verbs including `GET` and `DELETE`.\
+> 
 
+#### Body types:
 
-#### Using Header + Body toghether:
+- ###### **JSON**
+  This is the default body type, unless  modificators are specified.\
+  HTTL support both JSON and JS format of body.\
 
-```httl {4}
-@base: https://reqres.in/api
+  Also, Request will be automatically updated with `Content-Type: application/json` header.\
 
-post /users 
-Content-Type: application/json
-Authorization: Bearer token
-{
-  "name": "morpheus",
-  "job": "leader"
+  ```httl
+  post /users {
+    # valid
+    "name": "morpheus",
+    # also valid
+    job: "leader"
+  }
+  ```
+- ###### **URL-Encoded**
+  In order to send the body as `application/x-www-form-urlencoded`, you need to add the `urlencoded` modificator.\
+  It will aslo update the `Content-Type` header to `application/x-www-form-urlencoded`.\
+
+  For example this body 
+
+  ```httl /urlencoded/
+  post /users 
+  urlencoded {
+    "name": "John Doe",
+    "age": 30
+  }
+  ```
+
+  will be sent as
+  
+  ```http
+  POST /users HTTP/1.1
+  content-type: application/x-www-form-urlencoded
+
+  name=John+Doe&age=30
+  ```
+
+- ###### **Form-Data**
+  In order to send the body as `multipart/form-data`, you need to add the `formdata` modificator.\
+  Same as above `Content-Type` will be updated to `multipart/form-data`.
+
+  For example this body 
+
+  ```httl /formdata/
+  post /users 
+  formdata {
+    "name": "John Doe",
+    "age": 30
+  }
+  ```
+
+  will be sent as
+  
+  ```http
+  POST /users HTTP/1.1
+  content-type: content-type: multipart/form-data; boundary=--------------------------752187623518149651908118
+
+  ----------------------------752187623518149651908118
+  Content-Disposition: form-data; name="name"
+
+  John Doe
+  ----------------------------752187623518149651908118
+  Content-Disposition: form-data; name="age"
+
+  30
+  ```
+
+- ###### **Binary**
+  In order to send the body as binary, you need to add the `bin` modificator.\
+  Same as above `Content-Type` will be updated to `application/octet-stream`.
+
+  For example this body 
+
+  ```httl /bin/
+  post /users 
+  bin "path/to/file"
+  ```
+
+  will be sent as
+  
+  ```http
+  POST /users HTTP/1.1
+  content-type: application/octet-stream
+
+  <binary data>
+  ```
+
+- ###### **Raw**
+  In order to send the body as raw, you need to add the `raw` modificator.\
+  Same as above `Content-Type` will be updated to `text/plain`.
+
+  For example this body 
+
+  ```httl /raw/
+  post /users 
+  raw "some data"
+  ```
+
+  will be sent as
+  
+  ```http
+  POST /users HTTP/1.1
+
+  some data
+  ```
+
+## Variables
+
+You can store the response of a query in a variable and use it in subsequent queries.
+
+This is useful when you want to use the same response in multiple places.
+
+```httl
+post /login {
+  user: "user"
+  password: "password",
+}
+as auth
+
+Authorization: Bearer {auth.token}
+
+post /users {
+  "name": "rob",
+  "job": "engineer",
 }
 ```
 
+More about variable read in the [Variables page](/docs/guide/variables).
 
-#### Using varaibel:
+## Assert
 
-```httl {4}
-@base: https://reqres.in/api
+Assert is a way to validate the response of a query.\
+It can be used to check the status code, headers, and body of the response.
 
-get /users/1 
- as user
+```httl
+get /users/1
+assert {
+  status: 200,
+  headers: {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  body: {
+    name: "morpheus",
+    job: "leader"
+  }
+}
 ```
-more about variable in the next section --> link
+
+More about variable read in the [Testing page](/docs/guide/testing).
 
 
+## Multi requests
 
-**** add multi-requests
+It might sounds obvious, but you can have multiple requests in a single file.\
+Each of request will be executed in order they are defined. 
+HTTL will wait for the response of the previous request before sending the next one.
+In teh output you will see the response of each request in the order they were defined.
+
+```httl
+@base: https://httl.dev/api 
+get /users
+
+post /users {
+  name: "morpheus",
+  job: "leader"
+}
+
+get /users/1
+
+delete /users/1
+
+```
