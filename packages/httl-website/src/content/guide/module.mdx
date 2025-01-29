@@ -1,5 +1,54 @@
 import { FileTree } from 'nextra/components'
 
+# Api Object
+
+HTTL introduces the concept of the `API` object — a virtual entity that acts as a centralized container for global headers, directives, and variables defined within a file.
+
+> [!NOTE]
+>
+> A default API object is automatically created when a file begins processing.
+>
+
+All global-level headers, directives, and variable declarations are inherently associated with this default API object, serving as the foundational configuration context for subsequent requests.
+
+For example, if you specify a global header in a file, it is automatically linked to the default API object and will be applied to all requests within that file.
+
+**Example:**
+
+```httl
+# Authorization header is applied to the all requests below
+Authorization: Bearer token
+
+get /users
+
+post /users {
+  name: "morpheus",
+  job: "leader"
+}
+
+delete /users/1
+```
+
+Also, any api elements can be overridden within the file by redefining them.
+
+```httl {6}
+@base: https://httl.dev/api
+
+get /users # https://httl.dev/api/users
+
+# @base is overridden
+@base: https://httl.dev/api/v2
+
+get /users # https://httl.dev/api/v2/users
+```
+
+## Import
+
+When you import a file, the API object of the imported file is merged with the current API object.
+
+We will cover this in more detail on the [Use page](./use)
+
+
 # Use
 
 As any other programming language, HTTL has a module system. 
@@ -60,5 +109,3 @@ and in the `user-creation-test.httl` file you want to import the `auth.httl` mod
 ```httl
 use '../modules/auth.httl'
 ```
-
-

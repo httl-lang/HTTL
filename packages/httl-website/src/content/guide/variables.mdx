@@ -1,33 +1,53 @@
 # Variables
 
-You can store the response of a query in a variable and use it in subsequent queries. 
-This is useful when you want to use the same response in multiple places.
+It's hard to imagine a programming language without being able to use variables. \
+In HTTL, you can store the response of a query in a variable and use it in subsequent queries. 
 
-```httl
-@base: https://reqres.in/api
+### Example
 
+```httl /auth/
 post /login {
-  "email": "eve.holt@reqres.in",
-  "password": "cityslicka",
+  email: "email",
+  password: "password",
 }
 as auth 
 
 Authorization: Bearer {auth.token}
 
 post /users {
-  "name": "rob",
-  "job": "engineer",
+  name: "rob",
+  job: "engineer",
 }
-
 ```
 
-variable can also be via autocomplete
-the response body is parsed and the properties are available for autocompletion
+> [!NOTE]
+>
+> HTTL stores the response body in a variable instead of the entire response object.
+> This design choice keeps the language simple and easy to use.
+> Future releases will include more advanced features for working with the response object.
 
+### Usage
 
-note about response headers
+You can use variables in the following places:
+- Headers:
+  ```httl /auth.token/
+  Authorization: Bearer {auth.token}
+  ```
 
-to mention - string interpolation
+- Query parameters:
+  ```httl /auth.token/
+  get /users?token={auth.token}
+  # or
+  get /{auth.url}?token={auth.token}
+  ```
 
+- Request body: 
+  ```httl /auth.token/
+  
+  post /users { 
+    name: "rob",
+    token: auth.token, # you don't need to use curly braces here
+    audit: "Token used {auth.token}" # string interpolation is supported
+  }
 
-
+  ```

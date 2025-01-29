@@ -3,7 +3,7 @@ import { comments } from "vscode";
 export default {
   index: 'The Basics',
   request: 'Request',
-  api: 'Api',
+  module: 'Module System',
   header: 'Header',
   directives: 'Directives',
   openapi: 'OpenAPI',

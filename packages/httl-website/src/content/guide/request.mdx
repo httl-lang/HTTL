@@ -105,6 +105,13 @@ get /users {
     job: "leader"
   }
   ```
+
+  > [!NOTE]
+  >
+  > HTTL does not currently support single quotes for strings; only double quotes are allowed.
+  > We are working on adding support for single quotes.
+
+
 - #### **URL-Encoded**
   For a URL-encoded body, you need to specify the `urlencoded` modifier.\
   This automatically updates the `Content-Type` header to `application/x-www-form-urlencoded`.

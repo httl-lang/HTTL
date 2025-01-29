@@ -1,11 +1,14 @@
 # Comments
 
-Of course, you can add comments to your code, as of now thres one typ e of comment 
+Of course, you can add comments to your code.
 
+```httl {1,4} /# inline comment/
+# line comment
+get /users
 
-```httl
-# one line comment
-
+# another line comment
+post /users {
+  name: "morpheus", # inline comment
+  job: "leader"
+}
 ```
-
-But since moving forward we will add more types of comments, like multi-line comments, etc.
