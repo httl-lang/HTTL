@@ -12,7 +12,7 @@
       email: "eve.holt@reqres.in",
       "password": "cityslicka",
     }
-    as auth # Save the json response body to the variable auth
+    as auth # Store the JSON response body in the `auth` variable
 
     # Set a global Authorization header wich will be used in all requests below.
     # Also we can use dot notation to access the properties of the response body. 
@@ -23,7 +23,7 @@
       name: "rob",
       job: "engineer",
     }
-    as new_user # save the response to the variable new_user
+    as new_user # Store the response in the `new_user` variable 
 
     # Update the user
     put /users/{new_user.id} {

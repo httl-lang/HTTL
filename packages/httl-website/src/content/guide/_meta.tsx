@@ -11,5 +11,6 @@ export default {
   'env-vars': 'Environment Variables',
   comments: 'Comments',
   use: 'Use',
+  'dot-httl': '.httl',
   testing: 'Testing',
 }

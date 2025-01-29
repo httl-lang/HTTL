@@ -1,0 +1,64 @@
+import { FileTree } from 'nextra/components'
+
+# Use
+
+As any other programming language, HTTL has a module system. 
+You can import modules and use their functions in your queries.
+
+let's say you have a module called `auth.httl` with the following content:
+
+```httl filename="auth.httl"
+@spec: https://httl.dev/api/spec.json
+@auth-basic: admin admin
+
+post /auth 
+ as auth
+
+Authorization: Bearer {auth.token}
+
+```
+
+now you can import this module in your query like this:
+
+```httl filename="user-creation-test.httl" {1}
+use './auth.httl'
+
+put /users/1 {
+	username: "jdoe_admin",
+  email: "jdoe_admin@example.com",
+  firstName: "John Admin",
+  lastName: "Doe Admin",
+	admin: true
+}
+
+delete /users/1 
+
+```
+
+by using `use './auth.httl'` noth `put` and `delete` requests will have the `Authorization` header set to `Bearer {auth.token}` that was defined in the `auth.httl` module.
+Also you will have intellisense for the requests 
+
+### Module resolution
+
+The module path is resolved relative to the current file. mostly like in Javascript. 
+so let say we have this structure:
+ 
+<FileTree>
+  <FileTree.Folder name="src" defaultOpen>
+    <FileTree.Folder name="modules" defaultOpen>
+      <FileTree.File name="auth.httl" />
+    </FileTree.Folder>
+    <FileTree.Folder name="tests" defaultOpen>
+      <FileTree.File name="user-creation-test.httl" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+
+and in the `user-creation-test.httl` file you want to import the `auth.httl` module you can do it like this:
+
+```httl
+use '../modules/auth.httl'
+```
+
+

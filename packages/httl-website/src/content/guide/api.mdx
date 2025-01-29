@@ -1,8 +1,38 @@
-# Api
- 
-For better anology you we can take Class and its Method relation 
-Requst is a menthod and API is a class.
+# Api Object
 
-THe empty files has an api by default, so any directive any global header will be attached to the default api and will be used in the requests below.
+HTTL introduces API object – virtual entity which acts as centralized container for global headers, directives, and variables defined within a file. 
+A default API object is automatically created when a file begins processing. 
+All global-level headers, directives, and variable declarations are inherently associated with this default API object, serving as the foundational configuration context for the next requests.
 
-Stay tuned this feature will have significant evolvment and and impact on the Word. ;)
+For example, if we specify a global header in a file, it is automatically associated with the default API object and will be applied to all requests within the file.
+
+```httl
+Authorization: Bearer token
+
+# Authorization header is applied to all requests below
+get /users
+
+post /users {
+  name: "morpheus",
+  job: "leader"
+}
+
+delete /users/1
+```
+
+Api elements can be overridden within the file.
+
+```httl
+@base: https://httl.dev/api
+
+get /users # https://httl.dev/api/users
+
+@base: https://httl.dev/api/v2
+
+get /users # https://httl.dev/api/v2/users
+```
+
+When you import a file, the API object of the imported file is merged with the current API object.
+
+more about import functionality [here](./use)
+
