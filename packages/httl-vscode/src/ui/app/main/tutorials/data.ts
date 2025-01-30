@@ -55,7 +55,7 @@ assert {
 
 Accept: Application/json
 
-# Press (Ctrl|Cmd)+Space to see the OpenApi shema
+# Press Ctrl+Space | Option+Esc to see the OpenApi shema
 post /anything/user {
   "name": "John Doe",
   "age": 30

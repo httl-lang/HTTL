@@ -3,7 +3,7 @@ export const examples = [
     title: 'GET request using OpenAPI spec',
     code: `@spec: ${window.location.origin}/api/spec.json
 
-# Press Ctrl|Cmd+Space to see available paths and methods
+# Press Ctrl+Space | Option+Esc to see available paths and methods
 get /users/1`
   },
   {
