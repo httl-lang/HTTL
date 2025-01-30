@@ -10,8 +10,7 @@ get /users/1`
     title: 'PUT request using OpenAPI spec',
     code: `@spec: ${window.location.origin}/api/spec.json
 
-# You can generate a body by selecting the 'body' item from the IntelliSense dropdown.
-# The IntelliSense inside the body is not yet supported, but it's coming soon.
+# You can generate a request body by selecting the body item from the IntelliSense dropdown.
 post /users {
   "id": 123,
   "username": "string_example",
@@ -33,9 +32,9 @@ Authorization: Bearer {auth.token}
 
 put /users/1 {
 	username: "jdoe_admin",
-    email: "jdoe_admin@example.com",
-    firstName: "John Admin",
-    lastName: "Doe Admin",
+  email: "jdoe_admin@example.com",
+  firstName: "John Admin",
+  lastName: "Doe Admin",
 	admin: true
 }`
   },

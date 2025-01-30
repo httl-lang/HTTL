@@ -1,9 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* --background: #0a0a0a; */
   --background: #101010;
-  /* --background: #262626; */
   --foreground: #ededed;
 }
 
@@ -17,9 +15,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 
   line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  /* font-family: 'Poppins', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-    'Droid Sans', 'Helvetica Neue', sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
