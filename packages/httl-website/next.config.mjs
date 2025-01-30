@@ -1,4 +1,3 @@
-// import type { NextConfig } from "next";
 import nextra from 'nextra'
 import { createHighlighter, } from 'shiki'
 import httlGrammars from './src/components/editor/httl-extension/language/grammars.json' assert { type: 'json' };
@@ -32,12 +31,6 @@ const nextConfig = {
         vm: false,
       }
     }
-
-    // config.module.rules.unshift({
-    //   test: /\.mjs$/,
-    //   include: /node_modules/,
-    //   type: "javascript/auto"
-    // });
 
     return config;
   },

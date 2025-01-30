@@ -2,8 +2,7 @@
 
 import React, { useRef, useState } from "react";
 
-import { HttlEditor, HttlEditorRef } from "../editor";
-import { ResponseViewer } from "../response-viewer";
+import { HttlEditorRef } from "../editor";
 import styles from './loader.module.css';
 
 export default function Loader() {
