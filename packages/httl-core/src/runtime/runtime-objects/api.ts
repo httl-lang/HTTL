@@ -60,7 +60,7 @@ export class ApiRt extends RootRuntimeObject<UseExpression> {
   }
 
   public override async apply(_ext: IExtension) {
-    if (_ext.applicable !== "api")
+    if (!(Array.isArray(_ext.applicable) ? _ext.applicable : [_ext.applicable]).includes("api"))
       return Err("Invalid extension");
 
     const ext = await _ext.call() as IApiExtension;

@@ -1,0 +1,164 @@
+import { FileTree } from 'nextra/components'
+
+# Module System
+
+Like any other programming language, HTTL has a module system.
+You can import modules and utilize their context within your files.
+
+There are two main components in the module system:
+- [API Object](#api-object)
+- [Use statement](#use)
+
+## Api Object
+
+HTTL introduces the concept of the `API` object — a virtual entity that acts as a centralized container for global headers, directives, and variables defined within a file.
+
+> [!NOTE]
+>
+> A default API object is automatically created when a file begins processing.
+>
+
+All global-level headers, directives, and variable declarations are inherently associated with this default API object, serving as the foundational configuration context for subsequent requests.
+
+For example, if you specify a global header in a file, it is automatically linked to the default API object and will be applied to all requests within that file.
+
+**Example:**
+
+```httl
+# Authorization header is applied to the all requests below
+Authorization: Bearer token
+
+get /users
+
+post /users {
+  name: "morpheus",
+  job: "leader"
+}
+
+delete /users/1
+```
+
+Also, any api elements can be overridden within the file by redefining them.
+
+```httl {6}
+@base: https://httl.dev/api
+
+get /users # https://httl.dev/api/users
+
+# @base is overridden
+@base: https://httl.dev/api/v2
+
+get /users # https://httl.dev/api/v2/users
+```
+
+## Use
+
+Now, let's move from the virtual to the real.  
+You can import another module using the `use` keyword.
+
+Suppose you have a module named `auth.httl` with the following content:
+
+```httl filename="auth.httl"
+@spec: https://httl.dev/api/spec.json
+@auth-basic: admin admin
+
+post /auth 
+ as auth
+
+Authorization: Bearer {auth.token}
+
+```
+
+Now you can import this module in your file like this:
+
+```httl filename="user-creation-test.httl" {1}
+use './auth.httl'
+
+put /users/1 {
+	username: "jdoe_admin",
+  email: "jdoe_admin@example.com",
+  firstName: "John Admin",
+  lastName: "Doe Admin",
+	admin: true
+}
+
+delete /users/1 
+```
+
+**Note:** Both `PUT` and `DELETE` requests require the `Authorization` header.
+
+Because we import the `auth.httl` file, the API object from that file is merged with the current API object, and `Authorization: Bearer {auth.token}` becomes part of your global headers.  
+It's as if you copy-pasted the content of the `auth.httl` file into the `user-creation-test.httl` file.
+
+> [!TIP]
+>
+> It's good practice to keep your authorization and other preparatory requests in a separate file, keeping your main module clean and easy to read.
+>
+
+
+### Module resolution
+
+The module path is resolved relative to the current file, much like in JavaScript.  
+So, let's say we have the following structure:
+ 
+<FileTree>
+  <FileTree.Folder name="src" defaultOpen>
+    <FileTree.Folder name="modules" defaultOpen>
+      <FileTree.File name="auth.httl" />
+    </FileTree.Folder>
+    <FileTree.Folder name="tests" defaultOpen>
+      <FileTree.File name="user-creation-test.httl" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+
+To import the `auth.httl` module in the `user-creation-test.httl` file, you can do it like this:
+
+```httl
+use '../modules/auth.httl'
+```
+
+## Default .httl file
+
+Remember that the main idea of the language is simplicity and readability.
+That's why we have a feature called the default `.httl` file.
+
+This file will be imported into every file by default.
+
+<FileTree>
+  <FileTree.Folder name="src" defaultOpen>
+    <FileTree.Folder name="modules" defaultOpen>
+      <FileTree.File name="auth.httl" />
+    </FileTree.Folder>
+    <FileTree.Folder name="tests" defaultOpen>
+      <FileTree.File name="user-creation-test.httl" />
+    </FileTree.Folder>
+    <FileTree.File name=".httl" active />
+  </FileTree.Folder>
+</FileTree>
+
+It's a great place to put your global headers, directives, and variables that you want to apply to all your files.
+
+```httl filename=".httl"
+@spec: https://httl.dev/api/spec.json
+@auth-basic: admin admin
+
+post /auth 
+ as auth
+
+Authorization: Bearer {auth.token}
+```
+
+Now, every file will have the `@spec` and `Authorization: Bearer {auth.token}` by default.
+
+```httl filename="user-creation-test.httl"
+put /users/1 {
+  username: "jdoe_admin",
+  firstName: "John Admin",
+  lastName: "Doe Admin",
+  admin: true
+}
+
+delete /users/1
+```

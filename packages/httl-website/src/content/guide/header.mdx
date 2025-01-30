@@ -1,0 +1,76 @@
+# Headers in HTTL
+
+Headers follow a simple `key: value` syntax.
+
+## Syntax Rules:
+
+```httl
+Content-Type: application/json
+```
+- **Single-line requirement**: Headers must be declared on a single line.
+- **Automatic trimming**: Leading/trailing whitespace in the value is automatically removed.
+
+## Header Types:
+
+1. **Request Headers**
+    - Apply to a specific HTTP request.
+    - Defined within a request block.
+
+
+2. **Global Headers**
+    - Apply to all requests in the file.
+    - Declared outside of any request block.
+
+---
+
+### Request header
+
+<br/>
+<i>(Partially covered in the Request section)</i>
+
+Request headers are declared immediately after a request declaration and apply only to that specific request.
+
+Example:
+
+```httl {2-4}
+get /users
+Authorization: Bearer token
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+---
+
+### Global header
+
+Global headers are automatically applied to all subsequent requests within the file.
+
+These are particularly useful for defining:
+
+- Authentication headers (e.g., `Authorization: Bearer <token>`)
+- Common content types (e.g., `Content-Type: application/json`)
+- API-wide configurations (e.g., `X-API-Version: 2.1`)
+
+Example:
+
+```httl
+@base: https://reqres.in/api
+
+Content-Type: application/json
+Authorization: Bearer token
+
+get /users
+
+post /users {
+  name: "morpheus",
+  job: "leader"
+}
+
+```
+
+---
+
+> [!NOTE]
+> 
+> Headers are sent in lowercase in accordance with the [HTTP specification](https://datatracker.ietf.org/doc/html/rfc7540#section-8.1.2).
+>

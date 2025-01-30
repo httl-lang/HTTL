@@ -1,0 +1,64 @@
+# OpenAPI
+ 
+Yes, yes and yes, HTTL supports the OpenAPI specification.
+
+> [!NOTE]
+>
+> HTTL supports Swagger 2.x and OpenAPI 3.x specifications.
+>
+
+To integrate an OpenAPI specification file, simply add the @spec directive with the URL pointing to your OpenAPI specification.
+
+### Syntax
+
+```httl
+@spec: <url>
+```
+
+### Example
+
+```httl
+@spec: https://httl.dev/api/spec.json
+
+get <type '/' or press CMD|Ctrl+Space to see the list of available paths>
+```
+
+### IntelliSense
+
+HTTL can autocomplete the paths and methods from the OpenAPI specification file.
+<br />
+
+<img src="/images/vscode-openapi-path-autocomplete.png" alt="OpenAPI Autocomplete" />
+
+---
+
+HTTL can automatically generate the request body based on the OpenAPI specification.
+
+To utilize this feature:
+- Press the spacebar after the URL.
+- HTTL will generate the request body.
+- Accept the generated body by pressing the Tab key.
+
+<br />
+
+<img src="/images/vscode-openapi-body-inline.png" alt="OpenAPI Autocomplete" />
+
+---
+
+You can also use `CMD|Ctrl+Space` to see the list of available body schema.
+
+> [!TIP]
+>
+> This feature is particularly useful when the IDE's IntelliSense conflicts with other plugins, especially Copilot's autogeneration.
+> 
+
+<br />
+
+<img src="/images/vscode-openapi-body-autocomplete.png" alt="OpenAPI Autocomplete" />
+
+---
+
+> [!NOTE]
+>
+> There is no IntelliSense for the body shema yet but it's coming soon.
+> 

@@ -1,0 +1,294 @@
+# Request
+
+The **Request** is a fundamental building block of HTTL, no surprise there ;).
+While the syntax is largely dictated by the HTTP protocol, the goal was to make it more human-friendly rather than purely protocol-centric.
+
+Let's start with a complete request form and break it down step by step:
+
+```httl showLineNumbers
+post https://httl.dev/api/users
+Authorization: Bearer token
+{
+  name: "morpheus",
+  job: "leader"
+}
+as user
+assert {
+  status: 201,
+  headers: {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  body: {
+    name: "morpheus",
+    job: "leader"
+  }
+}
+```
+
+## Request line
+The first line combines the verb and the path — again, no surprise there.
+Both the verb and path should appear on the same line. For simplicity, all verbs are written in lowercase in HTTL but are sent in uppercase.
+
+Below is the list of all verbs supported by HTTL:
+`get`, `post`, `put`, `delete`, `patch`, `head`, `options`, `connect`, `trace`, `lock`, `unlock`, `propfind`, `proppatch`, `copy`, `move`, `mkcol`, `mkcalendar`, `acl`, `search`
+
+The path can be either a full URL or a relative path:
+
+```httl 
+# Full URL
+get https://httl.dev/api/users
+
+# Relative path
+@base: https://httl.dev/api
+get /users
+```
+
+## Headers
+
+HTTP headers are defined on the line following the request line, and they are optional.
+The overall syntax does not differ from the HTTP specification. Each header should follow the `key: value` format.
+
+> [!NOTE]
+>
+> For now we don't support multi-line headers.
+
+Any blank line will separate the header from the original request object.
+
+```httl 
+# `Authorization` will be sent as a header
+get /users
+Authorization: Bearer token
+
+# `Authorization` header does not belongs to the request anymore and became a global header
+get /users # this request will fail
+
+Authorization: Bearer token
+
+# this request will be successful because the `Authorization` header is a global header now
+get /users 
+```
+
+More about global headers on the [Header page](./header).
+
+
+## Body
+
+The body follows the headers, or it can directly follow the request line if there are no headers.
+The body is optional. Although the HTTP specification requires a blank line separating the body from the headers, HTTL does not strictly enforce this.
+Moreover, you can place the body on the same line as the request line.
+
+```httl
+get /users {
+  name: "morpheus",
+  job: "leader"
+}
+```
+
+> [!TIP]
+>
+> Yes, HTTL supports a request body for all HTTP verbs, including `GET` and `DELETE`.
+> 
+
+### Body types:
+
+- #### **JSON**
+  This is the default body type unless other modifiers are specified.\
+  HTTL supports both JSON and JavaScript formats for the body.
+
+  Additionally, the request is automatically updated with the `Content-Type: application/json` header.
+  
+  ```httl
+  post /users {
+    # valid
+    "name": "morpheus",
+    # also valid
+    job: "leader"
+  }
+  ```
+
+  > [!NOTE]
+  >
+  > HTTL does not currently support single quotes for strings; only double quotes are allowed.
+  > We are working on adding support for single quotes.
+
+
+- #### **URL-Encoded**
+  For a URL-encoded body, you need to specify the `urlencoded` modifier.\
+  This automatically updates the `Content-Type` header to `application/x-www-form-urlencoded`.
+
+  For example, the body:
+
+  ```httl /urlencoded/
+  post /users 
+  urlencoded {
+    name: "John Doe",
+    age: 30
+  }
+  ```
+
+  will be sent as:
+  
+  ```http
+  POST /users
+  content-type: application/x-www-form-urlencoded
+
+  name=John+Doe&age=30
+  ```
+
+  As you can see, `urlencoded { name: "John Doe", age: 30 }` is more human-friendly than `name=John+Doe&age=30`.
+
+  This is especially beneficial because, on the backend, the body model is typically represented by a class with corresponding fields.
+  It’s more natural to work with these fields rather than raw body.
+
+- #### **Form-Data**
+  Similarly, you just need to specify the `formdata` modifier, and the body will be converted to `form-data`. 
+  Additionally, the `Content-Type` header will be updated to `multipart/form-data`.
+
+  The body:
+
+  ```httl /formdata/
+  post /users 
+  formdata {
+    name: "John Doe",
+    age: 30
+  }
+  ```
+
+  will be sent as
+  
+  ```http
+  POST /users
+  content-type: content-type: multipart/form-data; boundary=--------------------------752187623518149651908118
+
+  ----------------------------752187623518149651908118
+  Content-Disposition: form-data; name="name"
+
+  John Doe
+  ----------------------------752187623518149651908118
+  Content-Disposition: form-data; name="age"
+
+  30
+  ```
+
+  Imagine how much time you could save by not having to write this manually :)
+
+  > [!NOTE]
+  >
+  > For now, we are working to add support for files in the `formdata` body.
+  > 
+
+- #### **Binary**
+  For scenarios where you need to send a binary body, you can use the `bin` modifier.\
+  The `Content-Type` header will be automatically updated to `application/octet-stream`.
+
+  The body:
+
+  ```httl /bin/
+  post /users 
+  bin "path/to/file"
+  ```
+
+  will be sent as
+  
+  ```http
+  POST /users
+  content-type: application/octet-stream
+
+  <binary data>
+  ```
+
+- #### **Raw**
+  And if none of the above suits your needs, you can send the body as raw.\
+  To do so, specify the `raw` modifier.\
+  In this case, no headers will be added to the request.
+
+  The body:
+
+  ```httl /raw/
+  post /users 
+  raw "some data"
+  ```
+
+  will be sent as
+  
+  ```http
+  POST /users
+
+  some data
+  ```
+
+## Variables
+
+The entire request response can be stored in a variable using the `as` keyword.
+This is useful when you want to use the response in subsequent requests.
+
+```httl
+post /login {
+  user: "user"
+  password: "password",
+}
+as auth
+
+Authorization: Bearer {auth.token}
+
+post /users {
+  "name": "rob",
+  "job": "engineer",
+}
+```
+
+More about variable on the [Variables page](./variables).
+
+## Assert
+
+The `assert` block is optional and can be used to validate the response of a request.
+This feature will be appreciated by those who write a lot of tests for APIs.
+
+It can be used to check the status code, headers, and body of the response.
+
+> [!NOTE]
+>
+> It'a already in the roadmap to add more features to the `assert` block.
+>
+
+```httl
+get /users/1
+assert {
+  status: 200,
+  headers: {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  body: {
+    name: "morpheus",
+    job: "leader"
+  }
+}
+```
+
+More about variable on the [Testing page](./testing).
+
+## Multiple Requests
+
+It might sound obvious, but to state it directly: you can include multiple requests in a single file.
+
+Each request is executed in the order it is defined. 
+HTTL waits for the response of each request before sending the next one. 
+In the output, you will see the responses of each request in the sequence they were defined.
+
+```httl
+@base: https://httl.dev/api 
+
+get /users
+
+post /users {
+  name: "morpheus",
+  job: "leader"
+}
+
+get /users/1
+
+delete /users/1
+
+```
+
+In the end, you will see 4 responses, one for each request.

@@ -1,0 +1,35 @@
+# Testing
+ 
+HTTL provides a simple way to test your API requests.
+
+**Note:** This feature is still in development, and we will be adding more functionalities in the future.
+
+All you need to do is add `assert` to the end of your request.
+
+
+```httl
+post https://reqres.in/api/login {
+  "email": "eve.holt@reqres.in",
+  "password": "cityslicka",
+}
+assert {
+  status: 200,
+  headers: {
+    "Content-Type": "application/json; charset=utf-8",
+  },
+  body: {
+    token: "QpwL5tke4Pnpja7X4",
+  },
+}
+```
+
+There are three main elements in the `assert` block:
+
+- `status`
+- `headers`
+- `body`
+
+
+> [!NOTE]
+>
+> So far, we support only strict equality for all elements. However, as we continue to grow, we will add more comparison options.

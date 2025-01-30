@@ -1,0 +1,66 @@
+# Directives
+ 
+Directives aim to extend the HTTP specification with additional features.
+
+For instance, let's say you have numerous requests to the same API, such as: 
+
+```httl
+get https://httl.dev/api/users
+
+post https://httl.dev/api/users {
+  name: "morpheus",
+  job: "leader"
+}
+
+delete https://httl.dev/api/users/1
+```
+
+The standard HTTP specification doesn't provide a way to encapsulate common parts of a request. 
+While we can use a global header like `Host: httl.dev`, it only specifies the host, not the full URL. 
+
+That's why we need something that extends HTTP specification.
+
+This is where directives come in handy.
+
+ 
+```httl {1}
+@base https://httl.dev/api
+
+get /users
+
+post /users {
+  name: "morpheus",
+  job: "leader"
+}
+
+delete /users/1
+```
+
+That's much better, isn't it?
+
+## Types of directives
+
+There are several directives in httl:
+- ### `@base`
+  Sets the base URL for the current Api object
+
+  ```httl 
+  @base https://httl.dev/api
+  ```
+
+
+- ### `@spec`
+  Sets the OpenAPI specification for current Api object
+
+  ```httl 
+  @spec: https://httl.dev/api/spec.json
+  ```
+
+- ### `@auth-basic`
+  Experimental directive that sets the Basic Authentification header for current Api object
+  
+  ```httl 
+  @auth-basic: username password
+  ```
+
+  will be transformed to `Authorization: Basic base64(username:password)`

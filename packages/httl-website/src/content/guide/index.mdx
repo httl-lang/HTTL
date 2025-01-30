@@ -1,0 +1,45 @@
+# The Basics
+ 
+### Enough talk — show me the code!
+ 
+```httl copy
+    # Define a base URL for all requests
+    @base: https://reqres.in/api
+
+    # Getting a bearer token
+    post /login {
+      # You are free to use both JSON and JS styles for key-value pairs
+      email: "eve.holt@reqres.in",
+      "password": "cityslicka",
+    }
+    as auth # Store the JSON response body in the `auth` variable
+
+    # Set a global Authorization header wich will be used in all requests below.
+    # Also we can use dot notation to access the properties of the response body. 
+    Authorization: Bearer {auth.token}
+
+    # Create a new user
+    post /users {
+      name: "rob",
+      job: "engineer",
+    }
+    as new_user # Store the response in the `new_user` variable 
+
+    # Update the user
+    put /users/{new_user.id} {
+      name: "Robert",
+      job: "CEO",
+    }
+
+    # Delete the user
+    delete /users/{new_user.id}
+    # Each request can have an assertion block to validate the status, headers, and body of the response 
+    assert {
+      status: 204,
+      headers: {
+        "Content-Length": "0",
+      }
+    }
+    ```
+
+I hope the code is self-explanatory. We’ll cover each section in detail on the following pages.

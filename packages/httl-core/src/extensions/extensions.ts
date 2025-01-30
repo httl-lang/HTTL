@@ -20,7 +20,7 @@ export const extensions: Record<string, IExtension> = {
     }
   },
   "auth-basic": {
-    applicable: 'request',
+    applicable: ['request', 'api'],
     call: async (username: string, password: string) => {
       const str = `${username}:${password}`;
       const uint8Array = new TextEncoder().encode(str);

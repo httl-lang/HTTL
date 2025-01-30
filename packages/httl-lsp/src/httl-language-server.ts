@@ -8,6 +8,11 @@ import {
   _Connection,
 } from 'vscode-languageserver/node';
 
+import {
+  WebSocketMessageReader,
+  WebSocketMessageWriter,
+} from 'vscode-ws-jsonrpc';
+
 import Httl from 'httl-core';
 import { HttlCompletionProvider } from './providers/httl-completion-provider';
 import { HttlDocumentsProvider } from './providers/httl-documents-provider';
@@ -16,7 +21,7 @@ import { HttlCommandsExecutor } from './providers/httl-commands-executor';
 import { HttlFormattingProvider } from './providers/httl-formatting-provider';
 
 
-export class HttlLanguageServer {
+export default class HttlLanguageServer {
   public readonly connection: _Connection;
 
   public declare httl: Httl;
@@ -32,8 +37,8 @@ export class HttlLanguageServer {
   private hasDiagnosticRelatedInformationCapability = false;
   private workdir!: string;
 
-  constructor() {
-    this.connection = createConnection(ProposedFeatures.all);
+  constructor(reader?: WebSocketMessageReader, writer?: WebSocketMessageWriter) {
+    this.connection = createConnection(ProposedFeatures.all, reader, writer);
 
     this.connection.onInitialize(this.handleInitialize);
     this.connection.onInitialized(() => {
