@@ -1,4 +1,4 @@
-export const apiToken = 'WDBuWlWi7z';
+import { apiToken } from "../_constants";
 
 export async function POST(request: Request) {
   const authorization = request.headers.get('authorization')?.replace('Basic ', '');

@@ -3,15 +3,6 @@ import type { Socket } from 'net'
 import type { Server as HTTPServer } from 'http'
 import { WebSocketServer } from 'ws';
 import HttlLanguageServer from 'httl-lsp';
-// import {
-//   createConnection,
-//   ProposedFeatures,
-//   TextDocuments,
-//   InitializeParams,
-//   ServerCapabilities,
-//   InitializeResult,
-//   TextDocumentSyncKind,
-// } from 'vscode-languageserver/node';
 
 import {
   IWebSocket,
@@ -19,7 +10,6 @@ import {
   WebSocketMessageWriter,
   toSocket
 } from 'vscode-ws-jsonrpc';
-// import { TextDocument } from 'vscode-languageserver-textdocument';
 
 interface SocketWithServer extends Socket {
   server?: HTTPServer & {

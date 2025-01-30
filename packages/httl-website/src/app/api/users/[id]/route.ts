@@ -1,4 +1,4 @@
-import { apiToken } from '../../auth/route';
+import { apiToken } from '../../_constants';
 import data from '../data.json'
 
 export async function GET(
