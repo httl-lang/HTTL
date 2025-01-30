@@ -48,7 +48,7 @@ export class HttpClient {
 
           if (options.rejectUnauthorized === false && res.socket instanceof tls.TLSSocket) {
             const cert = res.socket.getPeerCertificate();
-            if (cert.subject.CN === cert.issuer.CN) {
+            if (cert && !!cert.subject?.CN && (cert.subject?.CN === cert.issuer?.CN)) {
               warnings.push({
                 message: "Self-signed certificate detected",
                 code: HttpWarningCode.SELF_SIGNED_CERTIFICATE,
