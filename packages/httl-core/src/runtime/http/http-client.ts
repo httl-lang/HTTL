@@ -71,6 +71,7 @@ export class HttpClient {
           });
 
           res.on('close', () => {
+            client.globalAgent.removeAllListeners();
             resolve(
               HttpResponse.ok(
                 res,
@@ -94,16 +95,10 @@ export class HttpClient {
           socket.once('secureConnect', () => {
             timings.setTlsHandshake()
           })
-          // socket.on('timeout', () => {
-          //   req.abort()
-
-          //   // const err = new Error('ETIMEDOUT')
-          //   // err.code = 'ETIMEDOUT'
-          //   // callback(err)
-          // })
         });
 
         req.on('timeout', (e) => {
+          client.globalAgent.removeAllListeners();
           reject(
             HttpResponse.error(
               'Request timeout',
@@ -115,6 +110,7 @@ export class HttpClient {
         });
 
         req.on('error', (error: any) => {
+          client.globalAgent.removeAllListeners();
           timings.end();
           const message = error instanceof AggregateError
             ? error.errors.at(0).message

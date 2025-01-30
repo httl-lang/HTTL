@@ -13,8 +13,8 @@ const navigation = [
 ]
 
 export const metadata: Metadata = {
-  title: "Home",
-  description: "HTTL programming language - Official website",
+  title: "HTTL",
+  description: "HTTL Programming Language - Official website",
 };
 
 export default function Home() {
