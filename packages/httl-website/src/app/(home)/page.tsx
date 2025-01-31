@@ -14,7 +14,7 @@ const navigation = [
 
 export const metadata: Metadata = {
   title: "HTTL",
-  description: "HTTL Programming Language - Official website",
+  description: "HTTL programming language, simplify HTTP calls, lightweight HTTP tools, HTTL language, REST client, HTTP client, HTTP request, HTTP response, HTTP headers, HTTP status code, HTTP methods, HTTP status codes, HTTP headers, HTTP request headers, HTTP response headers, HTTP request methods, HTTP response status codes",
 };
 
 export default function Home() {

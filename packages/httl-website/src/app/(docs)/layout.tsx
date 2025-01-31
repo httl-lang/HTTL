@@ -2,6 +2,7 @@ import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
+import { HttlHead } from '@/components/head'
 
 export const metadata = {
 
@@ -26,8 +27,7 @@ export default async function RootLayout({ children }: any) {
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning    >
       <Head>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <HttlHead />
       </Head>
       <body>
         <Layout

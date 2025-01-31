@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
+import { HttlHead } from "@/components/head";
 
 export const metadata: Metadata = {
   title: "HTTL Website",
@@ -15,8 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <HttlHead />
       </head>
       <body>
         {children}
