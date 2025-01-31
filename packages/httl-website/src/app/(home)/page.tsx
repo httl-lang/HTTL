@@ -14,7 +14,7 @@ const navigation = [
 
 export const metadata: Metadata = {
   title: "HTTL",
-  description: "HTTL programming language, simplify HTTP calls, lightweight HTTP tools, HTTL language, REST client, HTTP client, HTTP request, HTTP response, HTTP headers, HTTP status code, HTTP methods, HTTP status codes, HTTP headers, HTTP request headers, HTTP response headers, HTTP request methods, HTTP response status codes",
+  description: "HTTP programming language, simplify HTTP calls, lightweight HTTP tools, HTTL language, REST client, HTTP client, HTTP request, HTTP response, HTTP headers, HTTP status code, HTTP methods, HTTP status codes, HTTP headers, HTTP request headers, HTTP response headers, HTTP request methods, HTTP response status codes",
 };
 
 export default function Home() {
@@ -40,7 +40,7 @@ export default function Home() {
           </div>
           <div className="text-center">
             <h1 className="mt-14 font-display text-5xl font-semibold text-white">
-              Lightweight programming language
+              First HTTP programming language
             </h1>
             <p className="mt-8 text-3xl text-sky-300">
               Designed to simplify and streamline HTTP calls
