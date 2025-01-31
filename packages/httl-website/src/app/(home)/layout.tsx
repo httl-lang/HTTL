@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 import { HttlHead } from "@/components/head";
+import { HttlAnalytics } from "@/components/analytics";
 
 export const metadata: Metadata = {
   title: "HTTL Website",
@@ -21,6 +22,7 @@ export default function RootLayout({
       <body>
         {children}
       </body>
+      <HttlAnalytics />
     </html>
   );
 }

@@ -3,6 +3,7 @@ import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
 import { HttlHead } from '@/components/head'
+import { HttlAnalytics } from '@/components/analytics'
 
 export const metadata = {
 
@@ -39,6 +40,7 @@ export default async function RootLayout({ children }: any) {
           {children}
         </Layout>
       </body>
+      <HttlAnalytics />
     </html>
   )
 }

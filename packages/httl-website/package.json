@@ -21,6 +21,7 @@
     "@codingame/monaco-vscode-yaml-default-extension": "^11.1.2",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "@next/third-parties": "^15.1.6",
     "httl-lsp": "^0.1.0",
     "monaco-editor": "npm:@codingame/monaco-vscode-editor-api@^11.1.2",
     "monaco-languageclient": "^9.1.0",
