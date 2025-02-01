@@ -1,8 +1,10 @@
 <br />
 
-<center>
-  <img src="docs/images/logo.png" width="80"/>
-</center>
+<div align="center">
+  <a href="https://httl.dev" />
+    <img alt="httl" src="docs/images/logo.png" width="100px"/>
+  </a>
+</div>
 
 <br />
 
