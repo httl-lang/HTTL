@@ -17,6 +17,10 @@
 			"path": "../packages/httl-lsp"
 		},
 		{
+			"name": "httl-cli",
+			"path": "../packages/httl-cli"
+		},
+		{
 			"name": "httl-vscode",
 			"path": "../packages/httl-vscode"
 		},
