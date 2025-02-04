@@ -4,21 +4,25 @@
 provides rich language support for the
 [HTTL programming language](https://httl.dev/).
 
-## Why HTTL? Here’s the Short Story
+## What is HTTL?
 
-Let’s face it: clicking through a UI to call an API isn’t exactly my idea of a good time. 🤷‍♂️ <br />
-Why deal with all that when you can write code that talks to other code? Sounds way cooler, right? 😎
+If you ask ChatGPT — or, back in the day, Google — 'What is an HTTP programming language?' they respond that HTTP is not a programming language.
 
-So, I set out to create something different — a language that’s:
+But wait — while it's true that HTTP itself isn't a programming language, why don't they suggest a language that can be used for writing HTTP requests? Consider how SQL allows you to retrieve data from a database or how Terraform lets you write infrastructure code without worrying about specific details.
 
-- Simple and intuitive (no PhD in programming required). <br />
-- Smart enough to offer IntelliSense for OpenAPI. <br />
-- Flexible — you can save responses as variables and use them like building blocks for headers or body content in follow-up requests. <br />
+**Imagine a language that:**
 
-And just like that, HTTL was born! 🎉 <br />
+- Is simple and intuitive.
+- Is smart enough to offer IntelliSense for OpenAPI.
+- Is flexible — you can save responses as variables and use them as building blocks for headers or body content in follow-up requests.
+- Provides a native way to write test scenarios without mixing in JavaScript or Python.
+
 <br />
-HTTL is here to shake things up and bridge the gap left by UI-based API tools like Postman, Insomnia, and the rest of the crew. <br />
-<br />
+
+🚀🚀🚀 **Introducing HTTL** 🎉
+
+This is the first HTTP programming language that allows you to write code to query and test web APIs, replacing the need for UI tools like Postman or Insomnia.
+
 Ready to code smarter? Let’s dive in! 🚀 <br />
 
 
