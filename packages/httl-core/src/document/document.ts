@@ -14,6 +14,7 @@ export class HttlDocument {
   constructor(
     public readonly filePath: string,
     private readonly context: IHttlContext,
+    private readonly content?: string,
   ) { }
 
   public sync(text?: string): HttlDocument {
