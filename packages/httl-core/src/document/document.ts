@@ -15,7 +15,9 @@ export class HttlDocument {
     public readonly filePath: string,
     private readonly context: IHttlContext,
     private readonly content?: string,
-  ) { }
+  ) { 
+    this.text = content;
+  }
 
   public sync(text?: string): HttlDocument {
     this.text = text || fs.readFileSync(this.filePath, 'utf-8');

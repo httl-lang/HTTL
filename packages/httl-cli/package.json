@@ -1,21 +1,19 @@
 {
   "name": "httl-cli",
   "version": "0.1.7",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "source": "src/index.ts",
+  "author": "Evgen Mykhailenko",
+  "license": "HTTL License",
+  "description": "HTTL Command Line Interface",
   "bin": {
-    "get": "dist/index.js"
+    "httl": "dist/index.js"
   },
   "scripts": {
     "dev": "node dist/index.js",
+    "build-dev": "webpack --mode development",
     "build": "webpack --mode production",
     "test": "jest",
-    "tsc-watch": "webpack --watch"
+    "tsc-watch": "webpack --mode development --watch"
   },
-  "author": "Evgen Mykhailenko",
-  "license": "HTTL License",
-  "description": "HTTL CLI",
   "devDependencies": {
     "@types/node": "^22.13.1",
     "ts-loader": "^9.5.2",
@@ -26,7 +24,12 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
-    "commander": "^13.1.0",
-    "httl-core": "^0.1.0"
+    "chalk": "^5.4.1",
+    "cli-spinners": "^3.2.0",
+    "httl-core": "^0.1.0",
+    "ora": "^8.2.0"
+  },
+  "engines": {
+    "node": ">= 16.14"
   }
 }

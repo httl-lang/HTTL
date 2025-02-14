@@ -20,6 +20,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "declarationMap": true,
     "esModuleInterop": true,
     "composite": true,
@@ -27,9 +28,9 @@
     // "strict": true //TODO
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
   ],
   "exclude": [
     "dist"
-  ]
+  ],
 }

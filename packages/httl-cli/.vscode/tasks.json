@@ -6,13 +6,11 @@
       "script": "tsc-watch",
       "group": "build",
       "label": "tsc: watch",
-      "problemMatcher": [
-        "$tsc-watch"
-      ],
+      "problemMatcher": "$ts-webpack-watch",
       "runOptions": {
         "runOn": "folderOpen"
       },
-      "isBackground": true
-    },
+      "isBackground": true,
+    }
   ]
 }

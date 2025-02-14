@@ -1,4 +1,4 @@
-import { Json } from "../../common";
+import { Json, Yaml } from "../../common";
 import { HttpClient } from "../../runtime/http";
 import { ApiEndpoint } from "./api-endpoint";
 import { IOpenApiVersionAdapter } from "./api-version-adapter";
@@ -22,12 +22,15 @@ export class ApiSpec {
       throw new Error('Empty spec');
     }
 
-    const dataRes = Json.safeParse(response.res.data);
-    if (dataRes.isErr()) {
+    let specRes = Yaml.isYaml(response.res.data)
+      ? Yaml.safeParse(response.res.data)
+      : Json.safeParse(response.res.data);
+
+    if (specRes.isErr()) {
       throw new Error('Failed to parse spec');
     }
 
-    const spec = ApiSpec.parseSpec(dataRes.unwrap());
+    const spec = ApiSpec.parseSpec(specRes.unwrap());
     return new ApiSpec(new URL(url), spec);
   }
 
