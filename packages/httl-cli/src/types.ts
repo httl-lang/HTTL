@@ -1,11 +1,13 @@
 export interface ProgramArgs {
   nodePath: string;
   scriptPath: string;
-  args: string[];
+  arguments: string[];
+  options: Record<string, any>;
 }
-
 
 export interface IProgramCommand {
-  test(args: ProgramArgs): boolean;
-  run(...args: any[]): Promise<void>;
+  parse(args: ProgramArgs): CommandProps;
+  run(props: Record<string, any>): Promise<void>;
 }
+
+export type CommandProps = undefined | Record<string, any>;

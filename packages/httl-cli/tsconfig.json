@@ -28,7 +28,7 @@
     // "strict": true //TODO
   },
   "include": [
-    "src/**/*",
+    "src/**/*" 
   ],
   "exclude": [
     "dist"

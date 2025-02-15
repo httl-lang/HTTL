@@ -12,7 +12,7 @@
     "build-dev": "webpack --mode development",
     "build": "webpack --mode production",
     "test": "jest",
-    "tsc-watch": "webpack --mode development --watch"
+    "tsc-watch": "webpack --mode development --watch --profile --progress"
   },
   "devDependencies": {
     "@types/node": "^22.13.1",

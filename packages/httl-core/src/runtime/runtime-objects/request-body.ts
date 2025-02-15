@@ -60,7 +60,6 @@ export class FormBodyRt extends RequestBodyRt<JsonExpression> {
 
     const bodyRes = await rt.execute();
 
-
     if (bodyRes.isErr()) {
       return Err(bodyRes.unwrapErr());
     }
@@ -70,7 +69,7 @@ export class FormBodyRt extends RequestBodyRt<JsonExpression> {
 
     for (const key in json) {
       if (json.hasOwnProperty(key)) {
-        formBody.append(key, json[key]);
+        formBody.append(key, JSON.stringify(json[key]));
       }
     }
 

@@ -4,7 +4,7 @@ import { IProgramCommand, ProgramArgs } from './types';
 
 export class Program {
   private readonly args: ProgramArgs;
-  private readonly commands = [
+  private readonly commands: IProgramCommand[] = [
     new RunCommand(),
     new RequestCommand(),
   ]
@@ -12,21 +12,38 @@ export class Program {
   constructor(
     args: string[],
   ) {
+    const cliArgs = {
+      arguments: [],
+      options: {}
+    }
+
+    for (let i = 2; i < args.length; i++) {
+      const argument = args[i];
+      if (argument.startsWith("-")) {
+        cliArgs.options[argument.slice(1)] = args[++i];
+      } else {
+        cliArgs.arguments.push(argument);
+      }
+    }
+
     this.args = {
       nodePath: args[0],
       scriptPath: args[1],
-      args: args.slice(2),
+      ...cliArgs,
     }
   }
 
   async parse() {
-    const command = this.commands.find(command => command.test(this.args)) as IProgramCommand;
-    if (!command) {
-      console.log(`Command not found for ${this.args}`);
-      process.exit(1);
+    for (const command of this.commands) {
+      const parsed = command.parse(this.args) as IProgramCommand;
+      if (parsed !== undefined) {
+        await command.run(parsed);
+        return;
+      }
     }
 
-    await command.run(...this.args.args);
+    console.log(`Command not found for ${this.args}`);
+    process.exit(1);
   }
 }
 

@@ -2,10 +2,14 @@ import path from "path";
 // import nodeExternals from "webpack-node-externals";
 import webpack from "webpack";
 
-export default {
+export default (env, argv) => ({
   entry: "./src/index.ts",
   target: "node",
-  mode: process.env.NODE_ENV === "production" ? "production" : "development",
+  mode: argv.mode || "development",
+  devtool: argv.mode === 'development' ? 'source-map' : false,
+  optimization: {
+    minimize: argv.mode === 'production'
+  },
   output: {
     path: path.resolve(__dirname, "dist"),
     // path: path.resolve(import.meta.dirname, "dist"),
@@ -64,11 +68,11 @@ export default {
       {
         test: /\.ts$/,
         use: "ts-loader",
-        exclude: /node_modules/,
+        exclude: /node_modules|dist/,
       },
     ],
   },
-  devtool: process.env.NODE_ENV === "production" ? false : "source-map",
+
   externals: [
     // nodeExternals({ allowlist: ["chalk", "ora", "cli-cursor"] }),
   ],
@@ -79,4 +83,12 @@ export default {
       raw: true,
     }),
   ],
-};
+  watchOptions: {
+    ignored: [
+      '**/node_modules',
+      '**/dist',
+    ],
+    aggregateTimeout: 1000,
+    poll: 1000,
+  }
+});
