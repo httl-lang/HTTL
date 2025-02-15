@@ -46,13 +46,3 @@ export class Program {
     process.exit(1);
   }
 }
-
-
-
-
-// export const cli = program
-//   .version(packageJson.version)
-//   .description(packageJson.description)
-
-// setRunCommand(cli);
-// setRequestCommand(cli);

@@ -9,6 +9,10 @@
 			"path": "../mock"
 		},
 		{
+			"name": "httl-common",
+			"path": "../packages/httl-common"
+		},
+		{
 			"name": "httl-core",
 			"path": "../packages/httl-core"
 		},

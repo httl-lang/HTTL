@@ -4,6 +4,7 @@ import ora from "ora";
 import cliSpinners from 'cli-spinners';
 import { CommandProps, IProgramCommand, ProgramArgs } from "../../types";
 import { exit } from "process";
+import { JsonFormater } from "./json-formater";
 
 interface RequestCommandOptions {
   json: string;
@@ -85,8 +86,10 @@ export class RequestCommand implements IProgramCommand {
   }
 
   public async run({ method, url, headers, body, format }): Promise<void> {
-    // console.log(chalk.blue("gopa", headers, body));
-    const spinner = ora({ spinner: cliSpinners.dotsCircle, text: chalk.dim(" Loading...") }).start();
+    const spinner = ora({
+      spinner: cliSpinners.dotsCircle,
+      text: chalk.dim(" Loading...")
+    }).start();
 
     try {
       const httl = new Httl({
@@ -103,6 +106,7 @@ export class RequestCommand implements IProgramCommand {
         .run();
 
       const output = result.toOutput();
+
       if (output.errors.length) {
         console.error(JSON.stringify(output.errors, null, 2));
         process.exit(1);
@@ -110,7 +114,32 @@ export class RequestCommand implements IProgramCommand {
 
       spinner.stop();
 
-      console.log(output.result.at(-1).res.data);
+      const response = output.result.at(-1);
+
+      console.log(chalk.bgCyan(`HTTP/${response.httpVersion} ${response.statusCode} ${response.statusMessage}`));
+
+      response.res.headers.forEach(([key, value]) => {
+        process.stdout.write(chalk.green(`${key}: `));
+        process.stdout.write(`${value}\n`);
+      });
+
+      if (response.res.headers.length > 0) {
+        process.stdout.write("\n");
+      }
+
+      const lang =
+        response.res.headers.some(([key, value]) => key.toLowerCase() === 'content-type' && value.includes('xml'))
+          ? 'xml'
+          : response.res.headers.some(([key, value]) => key.toLowerCase() === 'content-type' && value.includes('html'))
+            ? 'html'
+            : 'json';
+
+      if (lang === 'json') {
+        // walkJSON2(JSON.parse(response.res.data));
+        JsonFormater.format(sample);
+      } else {
+        console.log(chalk.cyan(`${response.res.data}`));
+      }
     } catch (error) {
       spinner.stop();
       console.error(error);
@@ -118,3 +147,36 @@ export class RequestCommand implements IProgramCommand {
     }
   }
 }
+
+const sample = {
+  "args": {},
+  "data": [1, 2, 4],
+  "files": [
+    {
+      "field": "file",
+      "name": "file.txt",
+      "type": "text/plain",
+      "value": "file content"
+    },
+    {
+      "field": "file",
+      "name": "file2.txt",
+      "type": "text/plain",
+      "value": "file content"
+    }
+  ],
+  "form": {},
+  "headers": {
+    "Accept": "application/json, */*;q=0.5",
+    "Accept-Encoding": "gzip, deflate",
+    "Content-Length": "36",
+    "Content-Type": "application/json",
+    "Gopa": "sysya",
+    "Gopa2": "pysa gopovna",
+    "Host": "httpbin.org",
+    "User-Agent": "HTTPie/3.2.2",
+    "X-Amzn-Trace-Id": "Root=1-67afbfd1-0b8f327e6d7426703256ae83"
+  },
+  "origin": "135.23.178.105",
+  "url": "http://httpbin.org/delay/1"
+};
