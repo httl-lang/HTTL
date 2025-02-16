@@ -4,7 +4,9 @@ import ora from "ora";
 import cliSpinners from 'cli-spinners';
 import { CommandProps, IProgramCommand, ProgramArgs } from "../../types";
 import { exit } from "process";
-import { JsonFormater } from "./json-formater";
+import { JsonFormater } from "../../common/json-formater";
+import { Printer } from "../../common/printer";
+import { Input } from "../../common/input";
 
 interface RequestCommandOptions {
   json: string;
@@ -76,6 +78,15 @@ export class RequestCommand implements IProgramCommand {
       }
     }
 
+    if (Input.hasRedirection()) {
+      if (body) {
+        console.error(`Multiple body is not allowed`);
+        process.exit(1);
+      }
+
+      body = null;
+    }
+
     return {
       method: args.arguments[0],
       url: args.arguments[1],
@@ -96,8 +107,23 @@ export class RequestCommand implements IProgramCommand {
         workdir: process.cwd()
       });
 
+      let actualBody = body;
+
+      if (Input.hasRedirection()) {
+        actualBody = await Input.capture();
+        if (!format) {
+          try {
+            JSON.parse(actualBody);
+            format = 'json';
+          } catch {
+            format = 'raw';
+            actualBody = `"${actualBody}"`;
+          }
+        }
+      }
+
       const headersString = Object.entries(headers).map(([key, value]) => `${key}: ${value}`).join("\n");
-      const bodyString = format ? `${format} ${body}` : body;
+      const bodyString = format ? `${format} ${actualBody}` : actualBody;
 
       const script = `${method} ${url}\n${headersString}\n${bodyString}`;
 
@@ -116,30 +142,8 @@ export class RequestCommand implements IProgramCommand {
 
       const response = output.result.at(-1);
 
-      console.log(chalk.bgCyan(`HTTP/${response.httpVersion} ${response.statusCode} ${response.statusMessage}`));
+      Printer.print(response);
 
-      response.res.headers.forEach(([key, value]) => {
-        process.stdout.write(chalk.green(`${key}: `));
-        process.stdout.write(`${value}\n`);
-      });
-
-      if (response.res.headers.length > 0) {
-        process.stdout.write("\n");
-      }
-
-      const lang =
-        response.res.headers.some(([key, value]) => key.toLowerCase() === 'content-type' && value.includes('xml'))
-          ? 'xml'
-          : response.res.headers.some(([key, value]) => key.toLowerCase() === 'content-type' && value.includes('html'))
-            ? 'html'
-            : 'json';
-
-      if (lang === 'json') {
-        // walkJSON2(JSON.parse(response.res.data));
-        JsonFormater.format(sample);
-      } else {
-        console.log(chalk.cyan(`${response.res.data}`));
-      }
     } catch (error) {
       spinner.stop();
       console.error(error);
@@ -147,36 +151,3 @@ export class RequestCommand implements IProgramCommand {
     }
   }
 }
-
-const sample = {
-  "args": {},
-  "data": [1, 2, 4],
-  "files": [
-    {
-      "field": "file",
-      "name": "file.txt",
-      "type": "text/plain",
-      "value": "file content"
-    },
-    {
-      "field": "file",
-      "name": "file2.txt",
-      "type": "text/plain",
-      "value": "file content"
-    }
-  ],
-  "form": {},
-  "headers": {
-    "Accept": "application/json, */*;q=0.5",
-    "Accept-Encoding": "gzip, deflate",
-    "Content-Length": "36",
-    "Content-Type": "application/json",
-    "Gopa": "sysya",
-    "Gopa2": "pysa gopovna",
-    "Host": "httpbin.org",
-    "User-Agent": "HTTPie/3.2.2",
-    "X-Amzn-Trace-Id": "Root=1-67afbfd1-0b8f327e6d7426703256ae83"
-  },
-  "origin": "135.23.178.105",
-  "url": "http://httpbin.org/delay/1"
-};

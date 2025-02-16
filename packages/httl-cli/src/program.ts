@@ -19,8 +19,8 @@ export class Program {
 
     for (let i = 2; i < args.length; i++) {
       const argument = args[i];
-      if (argument.startsWith("-")) {
-        cliArgs.options[argument.slice(1)] = args[++i];
+      if (argument.startsWith("--")) {
+        cliArgs.options[argument.slice(2)] = args[++i];
       } else {
         cliArgs.arguments.push(argument);
       }

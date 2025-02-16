@@ -69,7 +69,12 @@ export class FormBodyRt extends RequestBodyRt<JsonExpression> {
 
     for (const key in json) {
       if (json.hasOwnProperty(key)) {
-        formBody.append(key, JSON.stringify(json[key]));
+        const value = json[key];
+        const formValue = typeof value === 'string'
+          ? value
+          : JSON.stringify(value);
+
+        formBody.append(key, formValue);
       }
     }
 
@@ -108,7 +113,12 @@ export class UrlEncodedBodyRt extends RequestBodyRt<JsonExpression> {
     const params = new URLSearchParams();
     for (const key in json) {
       if (json.hasOwnProperty(key)) {
-        params.append(key, json[key]);
+        const value = json[key];
+        const actualValue = typeof value === 'object'
+          ? JSON.stringify(value)
+          : value;
+
+        params.append(key, actualValue);
       }
     }
 
