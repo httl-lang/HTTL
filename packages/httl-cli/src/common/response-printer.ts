@@ -1,8 +1,8 @@
 import { HttpResponse } from "httl-core";
-import { JsonFormater } from "./json-formater";
+import { JsonPrinter } from "./json-printer";
 import chalk from "chalk";
 
-export class Printer {
+export class ResponsePrinter {
 
   public static print(response: HttpResponse) {
     const CODE_COLORS = {
@@ -35,7 +35,7 @@ export class Printer {
           : 'json';
 
     if (lang === 'json') {
-      JsonFormater.format(JSON.parse(response.res.data));
+      JsonPrinter.print(JSON.parse(response.res.data));
     } else {
       console.log(chalk.cyan(`${response.res.data}`));
     }

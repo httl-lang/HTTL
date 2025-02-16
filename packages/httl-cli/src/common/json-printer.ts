@@ -1,8 +1,8 @@
 import chalk from "chalk";
 
-export class JsonFormater {
+export class JsonPrinter {
 
-  public static format(obj: any, depth = 0) {
+  public static print(obj: any, depth = 0) {
     if (obj === null) {
       process.stdout.write(chalk.blueBright(`null`));
     } else if (typeof obj === 'object') {
@@ -48,7 +48,7 @@ export class JsonFormater {
         process.stdout.write(chalk.white(': '));
       }
 
-      this.format(actualValue, depth);
+      this.print(actualValue, depth);
 
       if (index < entries.length - 1) {
         process.stdout.write(",");

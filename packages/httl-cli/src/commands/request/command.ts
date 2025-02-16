@@ -2,11 +2,11 @@ import chalk from "chalk";
 import Httl from "httl-core";
 import ora from "ora";
 import cliSpinners from 'cli-spinners';
-import { CommandProps, IProgramCommand, ProgramArgs } from "../../types";
+import { CommandProps, IProgramCommand } from "../../types";
 import { exit } from "process";
-import { JsonFormater } from "../../common/json-formater";
-import { Printer } from "../../common/printer";
+import { ResponsePrinter } from "../../common/response-printer";
 import { Input } from "../../common/input";
+import { Option, Param, ProgramArgs } from "../../common/program-args";
 
 interface RequestCommandOptions {
   json: string;
@@ -15,88 +15,124 @@ interface RequestCommandOptions {
   raw: string;
 }
 
-export class RequestCommand implements IProgramCommand {
-  private static headerRegexp = /^([\w-]+):\s*(.*)$/
-
-  private static bodyFormats = [
+class RequestCommandArgs {
+  public static bodyFormats = [
     'json', 'formdata', 'urlencoded', 'raw'
   ];
 
-  private static methods = [
+  public static methods = [
     'get', 'post', 'put', 'delete', 'patch', 'head', 'options',
     'connect', 'trace', 'lock', 'unlock', 'propfind', 'proppatch',
     'copy', 'move', 'mkcol', 'mkcalendar', 'acl', 'search'
   ];
 
-  public parse(args: ProgramArgs): CommandProps {
-    if (!RequestCommand.methods.includes(args.arguments[0].toLowerCase()))
-      return undefined;
+  public headers: { key: string, value: string }[] = [];
+  public options: Option[] = [];
+  public body: string;
+  public format: string;
 
-    const requestArgs = args.arguments.slice(2);
+  constructor(
+    public readonly method: string,
+    public readonly url: string,
+    public readonly hasRedirection: boolean
+  ) { }
 
-    const headers = requestArgs.filter(arg => RequestCommand.headerRegexp.test(arg)).reduce((acc, curr) => {
-      const [key, value] = curr.split(":");
-      acc[key] = value;
-      return acc;
-    }, {});
+  public addHeader(key: string, value: string) {
+    this.headers.push({ key, value });
+  }
 
-    const restArgs = requestArgs.filter(arg => !RequestCommand.headerRegexp.test(arg));
+  public setBody(value: any) {
+    if (value === undefined) {
+      return;
+    }
 
-    if (restArgs.length > 1) {
-      console.error(`Invalid arguments: ${restArgs.join(" ")}`);
+    if (this.body !== undefined) {
+      console.error('Cannot set body multiple times');
       process.exit(1);
     }
 
-    let body = restArgs[0];
-    let format = undefined;
+    this.body = value;
 
-    const options = Object.entries(args.options);
-    if (options.length > 1) {
-      console.error(`Invalid multiple options: ${Object.keys(args.options).join(" ")}`);
-      process.exit(1);
-    }
-
-    if (options.length === 1) {
-      const [key, value] = options[0];
-
-      if (body) {
-        console.error(`Invalid multiple body: ${body} and ${key} ${value}`);
-        process.exit(1);
-      }
-
-      if (!RequestCommand.bodyFormats.includes(key)) {
-        console.error(`Invalid body format: ${key}`);
-        process.exit(1);
-      }
-
-      format = key;
-
-      if (format === 'raw') {
-        body = `"${value}"`;
-      } else {
-        body = value;
+    if (this.format === undefined) {
+      try {
+        JSON.parse(value);
+      } catch {
+        this.format = 'raw';
       }
     }
 
-    if (Input.hasRedirection()) {
-      if (body) {
-        console.error(`Multiple body is not allowed`);
-        process.exit(1);
-      }
-
-      body = null;
-    }
-
-    return {
-      method: args.arguments[0],
-      url: args.arguments[1],
-      headers,
-      body,
-      format
+    if (this.format === 'raw') {
+      this.body = `"${value.replace(/"/g, '\\"')}"`;
     }
   }
 
-  public async run({ method, url, headers, body, format }): Promise<void> {
+  public setOption(key: string, value: string) {
+    if (RequestCommandArgs.bodyFormats.includes(key)) {
+      this.format = key;
+      this.setBody(value);
+      return;
+    }
+
+    console.error(`Invalid option: --${key}`);
+    process.exit(1);
+  }
+}
+
+export class RequestCommand implements IProgramCommand {
+  private static headerRegexp = /^([\w-]+):\s*(.*)$/
+
+  public async parse(args: ProgramArgs): Promise<CommandProps> {
+    const programArgs = args.clone();
+
+    const method = programArgs.consume();
+    if (!RequestCommandArgs.methods.includes(method.value.toLowerCase()))
+      return undefined;
+
+    const url = programArgs.consume();
+    if (url === undefined) {
+      console.error(`Invalid URL: ${url}`);
+      process.exit(1);
+    }
+
+    const commandArgs = new RequestCommandArgs(
+      method.value,
+      url.value,
+      Input.hasRedirection()
+    );
+
+    programArgs.consumeEach(arg => {
+      if (arg instanceof Param) {
+        if (RequestCommand.headerRegexp.test(arg.value)) {
+          const [key, value] = arg.value.split(":");
+          commandArgs.addHeader(key, value);
+          return;
+        }
+
+        if (commandArgs.body === undefined) {
+          commandArgs.setBody(arg.value);
+          return;
+        }
+      }
+
+      if (arg instanceof Option) {
+        commandArgs.setOption(arg.key.toLowerCase(), arg.value);
+        return;
+      }
+
+      console.error(`Invalid argument: \`${arg.value}\``);
+      process.exit(1);
+    });
+
+    if (Input.hasRedirection()) {
+      commandArgs.setBody(
+        await Input.read()
+      );
+    }
+
+    return commandArgs;
+  }
+
+  public async run({ method, url, headers, body, format }: RequestCommandArgs): Promise<void> {
     const spinner = ora({
       spinner: cliSpinners.dotsCircle,
       text: chalk.dim(" Loading...")
@@ -107,22 +143,10 @@ export class RequestCommand implements IProgramCommand {
         workdir: process.cwd()
       });
 
-      let actualBody = body;
+      let actualBody = body ?? '';
+     
 
-      if (Input.hasRedirection()) {
-        actualBody = await Input.capture();
-        if (!format) {
-          try {
-            JSON.parse(actualBody);
-            format = 'json';
-          } catch {
-            format = 'raw';
-            actualBody = `"${actualBody}"`;
-          }
-        }
-      }
-
-      const headersString = Object.entries(headers).map(([key, value]) => `${key}: ${value}`).join("\n");
+      const headersString = headers.map(({ key, value }) => `${key}: ${value}`).join("\n");
       const bodyString = format ? `${format} ${actualBody}` : actualBody;
 
       const script = `${method} ${url}\n${headersString}\n${bodyString}`;
@@ -142,8 +166,7 @@ export class RequestCommand implements IProgramCommand {
 
       const response = output.result.at(-1);
 
-      Printer.print(response);
-
+      ResponsePrinter.print(response);
     } catch (error) {
       spinner.stop();
       console.error(error);

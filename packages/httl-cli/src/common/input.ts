@@ -4,7 +4,7 @@ export class Input {
     return !process.stdin.isTTY;
   }
 
-  public static async capture() {
+  public static async read() {
     return new Promise<string>((resolve, reject) => {
       let data = '';
       process.stdin.on('data', (chunk) => {

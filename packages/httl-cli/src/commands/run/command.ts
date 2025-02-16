@@ -2,17 +2,18 @@ import chalk from "chalk";
 import Httl from "httl-core";
 import ora from "ora";
 import cliSpinners from 'cli-spinners';
-import { CommandProps, IProgramCommand, ProgramArgs } from "../../types";
+import { CommandProps, IProgramCommand } from "../../types";
+import { ProgramArgs } from "../../common/program-args";
 
 
 export class RunCommand implements IProgramCommand {
 
-  public parse(args: ProgramArgs): CommandProps {
-    if (args.arguments.length !== 1)
+  public async parse(args: ProgramArgs): Promise<CommandProps> {
+    if (args.args.length !== 1)
       return undefined;
 
     return {
-      file: args.arguments[0],
+      file: args.args[0],
     }
   }
 

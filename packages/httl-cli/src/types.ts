@@ -1,12 +1,7 @@
-export interface ProgramArgs {
-  nodePath: string;
-  scriptPath: string;
-  arguments: string[];
-  options: Record<string, any>;
-}
+import { ProgramArgs } from "./common/program-args";
 
 export interface IProgramCommand {
-  parse(args: ProgramArgs): CommandProps;
+  parse(args: ProgramArgs): Promise<CommandProps>;
   run(props: Record<string, any>): Promise<void>;
 }
 
