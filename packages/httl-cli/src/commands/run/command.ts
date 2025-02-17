@@ -4,46 +4,66 @@ import ora from "ora";
 import cliSpinners from 'cli-spinners';
 import { CommandProps, IProgramCommand } from "../../types";
 import { ProgramArgs } from "../../common/program-args";
+import { ResponsePrinter } from "../../common/response-printer";
+import { exit } from "process";
+import { Input } from "../../common/input";
 
 
 export class RunCommand implements IProgramCommand {
 
-  public async parse(args: ProgramArgs): Promise<CommandProps> {
-    if (args.args.length !== 1)
-      return undefined;
+  public async parse(programArgs: ProgramArgs): Promise<CommandProps> {
+    if (programArgs.paramLength === 1) {
+      return {
+        file: programArgs.consume().value,
+      };
+    }
 
-    return {
-      file: args.args[0],
+    if (programArgs.paramLength === 0 && Input.hasRedirection()) {
+      return {
+        script: await Input.read(),
+      };
     }
   }
 
-  public async run({ file }): Promise<void> {
-    const spinner = ora({ spinner: cliSpinners.dotsCircle, text: chalk.dim(" Loading...") }).start();
+  public async run({ file, script }): Promise<void> {
+    const spinner = ora({
+      spinner: cliSpinners.dotsCircle,
+      text: chalk.dim(" Loading...")
+    }).start();
 
-    // // console.log(chalk.blue("gopa", headersAndBody));
-    // const httl = new Httl({
-    //   workdir: process.cwd()
-    // });
+    try {
+      const httl = new Httl({
+        workdir: process.cwd()
+      });
 
-    // const result = await httl
-    //   .createDocument(`${method} ${url}`)
-    //   .run();
+      const httDoc = file
+        ? httl.load(file).sync()
+        : script
+          ? httl.createDocument(script)
+          : null;
 
-    // const output = result.toOutput();
-    // if (output.errors.length) {
-    //   console.error(JSON.stringify(output.errors, null, 2));
-    //   process.exit(1);
-    // }
+      if (!httDoc) {
+        throw new Error("Invalid input file");
+      }
 
-    setTimeout(() => {
+      const result = await httDoc.run();
+
+      const output = result.toOutput();
+
+      if (output.errors.length) {
+        console.error(JSON.stringify(output.errors, null, 2));
+        process.exit(1);
+      }
+
       spinner.stop();
-    }, 1000);
 
+      const response = output.result.at(-1);
 
-    // process.stdout.write('\x1Bc');
-    // process.stdout.moveCursor(0, -1); // Move cursor up one line
-    // process.stdout.clearLine(1);   
-
-    // console.log(output.result.at(-1).res.data);
+      ResponsePrinter.print(response);
+    } catch (error) {
+      spinner.stop();
+      console.error(error);
+      exit(1);
+    }
   }
 }

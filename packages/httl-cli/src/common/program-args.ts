@@ -7,7 +7,7 @@ export class Param {
 export class Option {
   constructor(
     public readonly key: string,
-    public readonly value: string
+    public readonly value?: string
   ) { }
 }
 
@@ -23,18 +23,18 @@ export class ProgramArgs {
     for (let i = 2; i < args.length; i++) {
       const argument = args[i];
 
-
       if (argument.startsWith("--")) {
         const nextArgument = args[i + 1];
 
-        if (nextArgument?.startsWith("--")) {
-          programArgs.args.push(
-            new Option(argument.slice(2), undefined)
-          );
-        } else {
-          programArgs.args.push(
-            new Option(argument.slice(2), nextArgument)
-          );
+        const argValue = nextArgument?.startsWith("--")
+          ? undefined
+          : nextArgument
+
+        programArgs.args.push(
+          new Option(argument.slice(2), argValue)
+        );
+
+        if (argValue) {
           i++;
         }
       } else {
@@ -60,6 +60,11 @@ export class ProgramArgs {
       this.args.slice()
     );
   }
+
+  public get paramLength(): number {
+    return this.args.filter(arg => arg instanceof Param).length;
+  }
+
 
   public consume(): Argument | undefined {
     return this.args.shift();

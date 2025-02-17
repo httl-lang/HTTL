@@ -1,3 +1,4 @@
+import { HelpCommand } from "./commands/help";
 import { RequestCommand } from "./commands/request";
 import { RunCommand } from "./commands/run";
 import { ProgramArgs } from "./common/program-args";
@@ -8,6 +9,7 @@ export class Program {
   private readonly args: ProgramArgs;
 
   private readonly commands: IProgramCommand[] = [
+    new HelpCommand(),
     new RunCommand(),
     new RequestCommand(),
   ]
@@ -19,7 +21,7 @@ export class Program {
 
   public async start() {
     for (const command of this.commands) {
-      const parsed = await command.parse(this.args);
+      const parsed = await command.parse(this.args.clone());
       if (parsed !== undefined) {
         await command.run(parsed);
         return;

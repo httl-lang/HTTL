@@ -1,6 +1,11 @@
 import chalk from "chalk";
 
 export class JsonPrinter {
+  private static bracketColorPerLevel = [
+    chalk.yellowBright,
+    chalk.magenta,
+    chalk.blue,
+  ]
 
   public static print(obj: any, depth = 0) {
     if (obj === null) {
@@ -18,13 +23,11 @@ export class JsonPrinter {
     } else if (typeof obj === 'boolean') {
       process.stdout.write(chalk.magentaBright(`${obj}`));
     }
-  }
 
-  private static bracketColorPerLevel = [
-    chalk.yellowBright,
-    chalk.magenta,
-    chalk.blue,
-  ]
+    if (depth === 0) {
+      process.stdout.write("\n");
+    }
+  }
 
   private static formatObject(entries: any[], array: boolean, depth = 0) {
     const [open, close] = array ? ['[', ']'] : ['{', '}'];

@@ -7,83 +7,12 @@ import { exit } from "process";
 import { ResponsePrinter } from "../../common/response-printer";
 import { Input } from "../../common/input";
 import { Option, Param, ProgramArgs } from "../../common/program-args";
-
-interface RequestCommandOptions {
-  json: string;
-  formdata: string;
-  urlencoded: string;
-  raw: string;
-}
-
-class RequestCommandArgs {
-  public static bodyFormats = [
-    'json', 'formdata', 'urlencoded', 'raw'
-  ];
-
-  public static methods = [
-    'get', 'post', 'put', 'delete', 'patch', 'head', 'options',
-    'connect', 'trace', 'lock', 'unlock', 'propfind', 'proppatch',
-    'copy', 'move', 'mkcol', 'mkcalendar', 'acl', 'search'
-  ];
-
-  public headers: { key: string, value: string }[] = [];
-  public options: Option[] = [];
-  public body: string;
-  public format: string;
-
-  constructor(
-    public readonly method: string,
-    public readonly url: string,
-    public readonly hasRedirection: boolean
-  ) { }
-
-  public addHeader(key: string, value: string) {
-    this.headers.push({ key, value });
-  }
-
-  public setBody(value: any) {
-    if (value === undefined) {
-      return;
-    }
-
-    if (this.body !== undefined) {
-      console.error('Cannot set body multiple times');
-      process.exit(1);
-    }
-
-    this.body = value;
-
-    if (this.format === undefined) {
-      try {
-        JSON.parse(value);
-      } catch {
-        this.format = 'raw';
-      }
-    }
-
-    if (this.format === 'raw') {
-      this.body = `"${value.replace(/"/g, '\\"')}"`;
-    }
-  }
-
-  public setOption(key: string, value: string) {
-    if (RequestCommandArgs.bodyFormats.includes(key)) {
-      this.format = key;
-      this.setBody(value);
-      return;
-    }
-
-    console.error(`Invalid option: --${key}`);
-    process.exit(1);
-  }
-}
+import { RequestCommandArgs } from "./command-args";
 
 export class RequestCommand implements IProgramCommand {
   private static headerRegexp = /^([\w-]+):\s*(.*)$/
 
-  public async parse(args: ProgramArgs): Promise<CommandProps> {
-    const programArgs = args.clone();
-
+  public async parse(programArgs: ProgramArgs): Promise<CommandProps> {
     const method = programArgs.consume();
     if (!RequestCommandArgs.methods.includes(method.value.toLowerCase()))
       return undefined;
