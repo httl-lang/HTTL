@@ -1,14 +1,19 @@
 import React, { FC, PropsWithChildren, useEffect, useRef, useState } from 'react';
 import * as s from './popup.styles';
 import { Commutator } from '../../services/commutator';
+import Button from '../button';
+import { VscClose } from 'react-icons/vsc';
 
-interface PopupProps {
+export interface PopupProps {
   show: boolean;
+  showCloseButton?: boolean;
+  closeOnEscape?: boolean;
   onClose?: () => void;
   style?: React.CSSProperties;
+  className?: string;
 }
 
-const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, onClose }) => {
+const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, showCloseButton, closeOnEscape = true, onClose, className }) => {
   const hostRef = useRef<HTMLDivElement>(null);
   const [showState, setShowState] = useState(show);
 
@@ -17,6 +22,10 @@ const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, onClo
   }, [show]);
 
   useEffect(() => {
+    if (!closeOnEscape) {
+      return;
+    }
+
     const onClick = (event: MouseEvent) => {
       if (showState && !hostRef.current?.contains(event.target as any)) {
         setShowState(false);
@@ -48,13 +57,19 @@ const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, onClo
       window.removeEventListener('message', onMessage);
       // document.removeEventListener('mouseleave', onDocMouseleave);
     };
-  }, [showState]);
-
-
+  }, [showState, closeOnEscape]);
 
   return (
-    <s.Host ref={hostRef} show={+showState}>
-      <s.Popup style={style}>
+    <s.Host ref={hostRef} show={+showState} >
+      <s.Popup style={style} className={className}>
+        {showCloseButton && (
+          <s.Controls>
+            <Button onClick={() => { setShowState(false); onClose?.(); }} >
+              <VscClose />
+            </Button>
+          </s.Controls>
+        )}
+
         {children}
       </s.Popup>
     </s.Host>

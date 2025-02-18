@@ -26,15 +26,15 @@ export class HelpCommand implements IProgramCommand {
   public async run(): Promise<void> {
     console.log(chalk.white(`Welcome to HTTL v${packageJson.version}`));
     process.stdout.write(`HTTP client for the terminal, powered by HTTL engine, learn more at `);
-    console.log(chalk.blue(`https://httl.dev`));
+    console.log(chalk.blueBright(`https://httl.dev`));
     console.log();
     console.log(chalk.white.bold(`Usage:`));
     console.log();
 
     process.stdout.write(chalk.white(`· `));
     process.stdout.write(`httl `);
-    process.stdout.write(chalk.green.bold(`method `));
-    process.stdout.write(chalk.yellowBright.bold(`url `));
+    process.stdout.write(chalk.green.bold(`<method> `));
+    process.stdout.write(chalk.yellowBright.bold(`<url> `));
     process.stdout.write(chalk.blueBright.bold(`[headers] `));
     process.stdout.write(chalk.cyanBright.bold(`[body_format] `));
     console.log(chalk.magentaBright.bold(`[body]`));
@@ -68,7 +68,7 @@ export class HelpCommand implements IProgramCommand {
     console.log();
     console.log(chalk.gray('    Simple GET request with a basic .httl file with content: `@base: https://httl.dev/api`'));
     process.stdout.write(chalk.gray(`    (more about the default .httl file at `));
-    process.stdout.write(chalk.blue(`https://httl.dev/docs/guide/module#default-httl-file`));
+    process.stdout.write(chalk.blueBright(`https://httl.dev/docs/guide/module#default-httl-file`));
     console.log(chalk.gray(`)`));
     console.log(chalk.white(`     httl get users`));
     console.log();
@@ -97,7 +97,7 @@ export class HelpCommand implements IProgramCommand {
 
     process.stdout.write(chalk.white(`· `));
     process.stdout.write(`httl `);
-    console.log(chalk.yellowBright.bold(`file_path`));
+    console.log(chalk.yellowBright.bold(`<file_path>`));
     console.log();
     console.log(chalk.white(`   Run a HTTL file`));
     console.log();
@@ -119,6 +119,6 @@ export class HelpCommand implements IProgramCommand {
     console.log();
 
     process.stdout.write('More information at ');
-    console.log(chalk.blue(`https://httl.dev/docs`));
+    console.log(chalk.blueBright(`https://httl.dev/docs`));
   }
 }

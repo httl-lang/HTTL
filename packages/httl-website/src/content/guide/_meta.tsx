@@ -1,4 +1,3 @@
-import { comments } from "vscode";
 
 export default {
   index: 'The Basics',

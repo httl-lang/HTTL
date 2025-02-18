@@ -43,12 +43,6 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
         return;
       }
 
-      case 'save-state': {
-        const { global, state: { key, value } } = messagefromUI.payload;
-        this.context.saveState(`ui.main.${key}`, value, global);
-        return;
-      }
-
       case 'set-focus': {
         await this.responseView.changeActiveEditor(constants.QUICK_RUN_DOCUMENT_NAME);
         return;

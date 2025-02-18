@@ -3,20 +3,6 @@ import vscode from 'vscode';
 import { AppData, HttlExtensionContext, UIMessage } from '../../common';
 import { Lang } from 'httl-core';
 import { HttlBaseViewProvider } from './base-view';
-// TODO: Preload webview
-// const preloadedWebview = vscode.window.createWebviewPanel(
-//   HttlResponseViewProvider.viewType,
-//   'My Preloaded Webview',
-//   { viewColumn: vscode.ViewColumn.Active, preserveFocus: false },
-//   {
-//     enableScripts: true,
-//     retainContextWhenHidden: true,
-//   }
-// );
-
-// preloadedWebview.webview.html = this.getHtmlForWebview(preloadedWebview.webview);
-// preloadedWebview.dispose();
-
 
 export class HttlResponseViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlResponseView';

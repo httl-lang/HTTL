@@ -1,0 +1,66 @@
+# Run a query from the command line
+
+To run an HTTL query from the command line, use the following command:
+
+```bash
+ httl < method > < url > [headers] [body_format] [body]
+```
+
+Where: 
+-  **`method`** - one of the HTTP methods from [the list](/docs/guide/request#request-line)
+
+-  **`url`** - the URL to make the request, can be absolute or relative if you use along with a [default .httl file](/docs/guide/module#default-httl-file)
+
+-  **`headers`** - headers in the format `key:value` separated by space, example: `Authorization:token`
+
+-  **`body_format`** - body format, one of `--json` (default), `--formdata`, `--urlencoded`, `--raw`, `--bin`
+
+-  **`body`** - body content, example: `{ name: "John" }`
+
+## Examples
+
+### Simple GET request
+
+```bash
+httl get https://httl.dev/api/users
+```
+
+### Simple GET request with a basic .httl file with content: `@base: https://httl.dev/api`
+```bash
+httl get users
+```
+
+### GET request with headers
+```bash
+httl get https://httl.dev/api/users Authorization:"Bearer token" Cache-Control:private
+```
+
+### POST request with a JSON body
+```bash
+httl post https://httpbin.org/anything '{ name: "John" }'
+```
+
+### PUT request with form data; JSON payload will be converted to form data
+```bash
+httl put https://httpbin.org/anything --formdata '{ name: "John" }'
+```
+
+### POST request with a URL-encoded body
+```bash
+httl post https://httpbin.org/anything --urlencoded '{ name: "John" }'
+```
+
+### POST request with a raw body
+```bash
+httl post https://httpbin.org/anything 'name=John&age=30'
+```
+
+### POST request with a binary file
+```bash
+httl post https://httpbin.org/anything --bin ./file.bin
+```
+
+### POST request with a payload from the input stream; HTTP will automatically detect the content type.
+```bash
+httl post https://httpbin.org/anything < ./payload.json
+```
