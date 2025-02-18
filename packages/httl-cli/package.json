@@ -1,9 +1,36 @@
 {
-  "name": "httl-cli",
+  "name": "httl",
   "version": "0.1.7",
   "author": "Evgen Mykhailenko",
   "license": "HTTL License",
   "description": "HTTL Command Line Interface",
+  "homepage": "https://httl.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/httl-lang/HTTL"
+  },
+  "keywords": [
+    "http",
+    "cli",
+    "http-client",
+    "terminal",
+    "command-line",
+    "api",
+    "rest",
+    "fetch",
+    "request",
+    "httl",
+    "curl-alternative",
+    "http-utility",
+    "web",
+    "json",
+    "post",
+    "get",
+    "automation",
+    "devtools",
+    "http-requests"
+  ],
+  "main": "dist/index.js",
   "bin": {
     "httl": "dist/index.js"
   },
