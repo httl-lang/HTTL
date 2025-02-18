@@ -19,3 +19,7 @@ All notable changes to the "HTTL" extension will be documented in this file.
 - Added XML and HTML responses display options
 - Add handling for self cert responses
 
+[0.1.7] 2025-02-13
+
+- Introdcuing CLI
+- Added a support of YAML OpenAPI spec 

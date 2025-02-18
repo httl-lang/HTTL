@@ -3,6 +3,7 @@ import { Outlet } from 'react-router';
 
 import { ResponseContext, useResponseModel } from './response.model';
 import * as s from './response.styles';
+import News from './news';
 
 const _ResponseView: React.FC = () => {
   const model = useResponseModel(({ isQuickRunResponse }) => ({ isQuickRunResponse }));
@@ -15,6 +16,7 @@ const _ResponseView: React.FC = () => {
         )
       }
       <Outlet />
+      <News />
     </s.Container>
   );
 };

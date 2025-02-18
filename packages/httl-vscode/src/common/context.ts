@@ -2,8 +2,6 @@ import * as vscode from 'vscode';
 import { Logger } from './logger';
 
 export class HttlExtensionContext {
-
-
   private _context: vscode.ExtensionContext;
   private _logger: Logger;
 

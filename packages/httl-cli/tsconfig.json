@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "types": [
+      "node",
+      "jest"
+    ],
+    "module": "CommonJS",
+    "target": "ES5",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "incremental": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "composite": true,
+    "allowJs": true,
+    // "strict": true //TODO
+  },
+  "include": [
+    "src/**/*" 
+  ],
+  "exclude": [
+    "dist"
+  ],
+}

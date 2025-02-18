@@ -1,0 +1,10 @@
+src/
+tests/
+.vscode/
+webpack.*.ts
+tsconfig*.json
+.gitignore
+.eslintrc
+.prettierrc
+*.log
+*.tgz

@@ -1,7 +1,8 @@
 import { fileURLToPath } from 'url';
 import path from 'path';
-import { Guard } from './guard';
+import yaml from 'yaml'
 import { Err, Ok, Result } from 'oxide.ts';
+import { Guard } from './guard';
 import { Symbols } from './constants';
 
 
@@ -137,5 +138,20 @@ export class Json {
 export class Id {
   public static generate(): string {
     return Math.random().toString(36).substring(2, 15);
+  }
+}
+
+export class Yaml {
+  private static yamlPattern = /^[\s\w-]+:\s.*$/m;
+  public static isYaml(content) {
+    return this.yamlPattern.test(content);
+  }
+
+  public static safeParse(data: any): Result<any, Error> {
+    try {
+      return Ok(yaml.parse(data));
+    } catch (err) {
+      return Err(err);
+    }
   }
 }

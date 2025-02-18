@@ -1,7 +1,7 @@
 import { HttlRuntime } from "./runtime";
 import { HttlCompiler } from "./compiler";
 import { HttlDocument } from "./document";
-import { Lang, Path } from "./common";
+import { Id, Lang, Path } from "./common";
 import fs from "fs";
 import dotenv from 'dotenv'
 
@@ -66,6 +66,14 @@ export default class Httl implements IHttlContext {
       doc = new HttlDocument(absolutePath, this);
       this.documents.set(absolutePath, doc);
     }
+
+    return doc;
+  }
+
+  public createDocument(script: string): HttlDocument {
+    this.env.refresh();
+    const absolutePath = Path.toAbsolutePath(this.workdir, Id.generate() + ".httl");
+    const doc = new HttlDocument(absolutePath, this, script);
 
     return doc;
   }

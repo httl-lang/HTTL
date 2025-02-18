@@ -1,0 +1,23 @@
+{
+  "name": "httl-common",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "source": "src/index.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "rebuild": "rm ./tsconfig.tsbuildinfo && rm -rf dist && tsc --build",
+    "test": "jest",
+    "tsc-watch": "tsc --watch"
+  },
+  "author": "Evgen Mykhailenko",
+  "license": "HTTL License",
+  "description": "HTTL common package",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.13",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  }
+}

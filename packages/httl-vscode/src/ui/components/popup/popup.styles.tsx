@@ -17,3 +17,13 @@ export const Popup = styled.div`
     padding: 7px;
     width: 100%;
 `;
+
+export const Controls = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    gap: 5px;
+    z-index: 100;
+    padding: 2px;
+`;

@@ -3,23 +3,19 @@ import { Tabs } from 'nextra/components'
 
 # Installation
 
-> [!NOTE]
-> 
-> Due to the active development phase, the first version of HTTL is available only as a Visual Studio Code extension.
-> However, We are actively working on a CLI version of HTTL, which will be available soon, along with a JetBrains plugin.
-
-
 ## Quick Start with HTTL
 
 <Steps>
 ### Install HTTL 
 
-<Tabs items={['VS Code', 'JetBrains', 'CLI']}>
+<Tabs items={['VS Code', 'CLI', 'JetBrains']}>
   <Tabs.Tab>
-  Download the latest version of HTTL from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=HTTL.httl-vscode)
+    Download the latest version of HTTL from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=HTTL.httl-vscode)
   </Tabs.Tab>
   <Tabs.Tab>
-    Coming soon
+    ```bash
+    npm install httl -g
+    ```
   </Tabs.Tab>
   <Tabs.Tab>
     Coming soon
@@ -81,7 +77,7 @@ Create a new file with a `.httl` extension.
 
 ### You are good to go! Run the query
 
-<Tabs items={['VS Code', 'JetBrains', 'CLI']} >
+<Tabs items={['VS Code', 'CLI', 'JetBrains']} >
   <Tabs.Tab>
     Click the `Run` button to execute your query.\
     Alternatively, you can use the shortcut keys `Ctrl|Cmd + Enter`, or press `F5`.
@@ -89,7 +85,11 @@ Create a new file with a `.httl` extension.
     <img src="/images/vscode-run.png" alt="VS Code Run" />
   </Tabs.Tab>
   <Tabs.Tab>
-    Coming soon
+     ```bash
+    httl get https://httl.dev/api/users
+    ```
+    <br/>    
+    <img src="/images/cli-example.png" alt="CLI Example" />
   </Tabs.Tab>
   <Tabs.Tab>
     Coming soon

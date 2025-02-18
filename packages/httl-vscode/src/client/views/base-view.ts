@@ -52,6 +52,11 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
             }
             return;
           }
+          case 'save-state': {
+            const { global, state: { key, value } } = message.payload;
+            await this.context.saveState(`ui.${this.appData.view}.${key}`, value, global);
+            return;
+          }
         }
 
         await this.handleUIMessages(message);
@@ -60,10 +65,12 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
       this.context.ext.subscriptions
     );
 
-    const state = this.context.getState(`ui.${this.appData.view}`);
+    const globalState = this.context.getState(`ui.${this.appData.view}`, true);
+    const workspaceState = this.context.getState(`ui.${this.appData.view}`);
     const appData = {
       ...this.appData,
-      ...state,
+      ...globalState,
+      ...workspaceState,
     };
 
     webviewView.webview.html = this.getHtmlForWebview(webviewView.webview, appData);

@@ -31,11 +31,11 @@ post /auth
 Authorization: Bearer {auth.token}
 
 put /users/1 {
-	username: "jdoe_admin",
+  username: "jdoe_admin",
   email: "jdoe_admin@example.com",
   firstName: "John Admin",
   lastName: "Doe Admin",
-	admin: true
+  admin: true
 }`
   },
 

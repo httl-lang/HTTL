@@ -1,0 +1,64 @@
+{
+  "name": "httl-cli",
+  "version": "0.1.8",
+  "author": "Evgen Mykhailenko",
+  "license": "HTTL License",
+  "description": "HTTL Command Line Interface",
+  "homepage": "https://httl.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/httl-lang/HTTL"
+  },
+  "keywords": [
+    "http",
+    "cli",
+    "http-client",
+    "terminal",
+    "command-line",
+    "api",
+    "rest",
+    "fetch",
+    "request",
+    "httl",
+    "curl-alternative",
+    "http-utility",
+    "web",
+    "json",
+    "post",
+    "get",
+    "automation",
+    "devtools",
+    "http-requests"
+  ],
+  "main": "dist/index.js",
+  "bin": {
+    "httl": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "node dist/index.js",
+    "build-dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "test": "jest",
+    "tsc-watch": "webpack --mode development --watch --profile --progress",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "httl-core": "^0.1.0",
+    "@types/node": "^22.13.1",
+    "terser-webpack-plugin": "^5.3.11",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "cli-spinners": "^3.2.0",
+    "ora": "^8.2.0"
+  },
+  "engines": {
+    "node": ">= 16.14"
+  }
+}
