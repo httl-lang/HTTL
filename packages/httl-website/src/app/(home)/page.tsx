@@ -11,6 +11,7 @@ import styles from './page.module.css';
 const navigation = [
   { name: 'Docs', href: '/docs', current: false },
   { name: 'VS Code Extension', href: 'https://marketplace.visualstudio.com/items?itemName=HTTL.httl-vscode', current: false },
+  { name: 'CLI', href: 'https://www.npmjs.com/package/httl', current: false },
 ]
 
 export const metadata: Metadata = {
