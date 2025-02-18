@@ -22,6 +22,7 @@ const News: FC = () => {
 
 What's new: 
 - [Added HTTL CLI](https://httl.dev/docs/cli)
+- Added support for YAML OpenAPI spec
 
 Bugfix:
 - Fixed form data not being sent correctly`
