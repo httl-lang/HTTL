@@ -1,8 +1,6 @@
-# HTTL v0.1.7
+# HTTL CLI
 
-## HTTP Client for the Terminal
-
-HTTL is a powerful and flexible HTTP client designed for the command line. It leverages the HTTL engine to provide a simple yet robust way to make HTTP requests from the terminal.
+HTTL CLI is a powerful and flexible HTTP client designed for the command line. It leverages the HTTL engine to provide a simple yet robust way to make HTTP requests from the terminal.
 
 [Learn more at httl.dev](https://httl.dev)
 
@@ -11,7 +9,7 @@ HTTL is a powerful and flexible HTTP client designed for the command line. It le
 To install HTTL via npm, run:
 
 ```sh
-npm install -g httl
+npm install -g httl-cli
 ```
 
 ## Usage
