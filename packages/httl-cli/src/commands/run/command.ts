@@ -1,12 +1,10 @@
-import chalk from "chalk";
 import Httl from "httl-core";
-import ora from "ora";
-import cliSpinners from 'cli-spinners';
 import { CommandProps, IProgramCommand } from "../../types";
 import { ProgramArgs } from "../../common/program-args";
 import { ResponsePrinter } from "../../common/response-printer";
 import { exit } from "process";
 import { Input } from "../../common/input";
+import { Spinner } from "../../common/spinner";
 
 
 export class RunCommand implements IProgramCommand {
@@ -26,10 +24,7 @@ export class RunCommand implements IProgramCommand {
   }
 
   public async run({ file, script }): Promise<void> {
-    const spinner = ora({
-      spinner: cliSpinners.dotsCircle,
-      text: chalk.dim(" Loading...")
-    }).start();
+    const spinner = Spinner.start();
 
     try {
       const httl = new Httl({

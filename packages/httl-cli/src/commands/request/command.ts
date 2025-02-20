@@ -1,13 +1,11 @@
-import chalk from "chalk";
 import Httl from "httl-core";
-import ora from "ora";
-import cliSpinners from 'cli-spinners';
 import { CommandProps, IProgramCommand } from "../../types";
 import { exit } from "process";
 import { ResponsePrinter } from "../../common/response-printer";
 import { Input } from "../../common/input";
 import { Option, Param, ProgramArgs } from "../../common/program-args";
 import { RequestCommandArgs } from "./command-args";
+import { Spinner } from "../../common/spinner";
 
 export class RequestCommand implements IProgramCommand {
   private static headerRegexp = /^([\w-]+):\s*(.*)$/
@@ -62,10 +60,7 @@ export class RequestCommand implements IProgramCommand {
   }
 
   public async run({ method, url, headers, body, format }: RequestCommandArgs): Promise<void> {
-    const spinner = ora({
-      spinner: cliSpinners.dotsCircle,
-      text: chalk.dim(" Loading...")
-    }).start();
+    const spinner = Spinner.start();
 
     try {
       const httl = new Httl({
@@ -73,7 +68,7 @@ export class RequestCommand implements IProgramCommand {
       });
 
       let actualBody = body ?? '';
-     
+
 
       const headersString = headers.map(({ key, value }) => `${key}: ${value}`).join("\n");
       const bodyString = format ? `${format} ${actualBody}` : actualBody;

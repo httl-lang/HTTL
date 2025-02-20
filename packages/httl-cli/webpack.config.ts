@@ -1,10 +1,7 @@
 import path from "path";
-// import nodeExternals from "webpack-node-externals";
-import webpack from "webpack";
 import TerserPlugin from 'terser-webpack-plugin';
 
 export default (env, argv) => {
-
 
   const optimization = {
     minimize: true,
@@ -19,6 +16,7 @@ export default (env, argv) => {
       }),
     ],
   };
+
   const tsLoaderOptions = {
     configFile: 'tsconfig.prod.json',
     transpileOnly: true,
@@ -41,10 +39,6 @@ export default (env, argv) => {
     },
     resolve: {
       extensions: [".ts", ".js"],
-      // alias: {
-      //   "httl-core": require.resolve("httl-core"),
-      // },
-      // symlinks: false,
     },
     module: {
       rules: [
@@ -65,17 +59,6 @@ export default (env, argv) => {
         },
       ],
     },
-    externals: [
-      // nodeExternals({ allowlist: ["chalk", "ora", "cli-cursor"] }),
-      // /^(?!(httl-core)\/).+$/
-    ],
-    cache: false,
-    plugins: [
-      new webpack.BannerPlugin({
-        banner: "#!/usr/bin/env node",
-        raw: true,
-      }),
-    ],
     watchOptions: {
       ignored: [
         '**/node_modules',

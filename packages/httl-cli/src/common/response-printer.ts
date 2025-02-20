@@ -1,6 +1,7 @@
 import { HttpResponse } from "httl-core";
 import { JsonPrinter } from "./json-printer";
 import chalk from "chalk";
+import { Json } from "httl-common";
 
 export class ResponsePrinter {
 
@@ -34,7 +35,7 @@ export class ResponsePrinter {
           ? 'html'
           : 'json';
 
-    if (lang === 'json') {
+    if (lang === 'json' && Json.isValid(response.res.data)) {
       JsonPrinter.print(JSON.parse(response.res.data));
     } else {
       console.log(chalk.cyan(`${response.res.data}`));

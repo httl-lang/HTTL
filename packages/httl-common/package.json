@@ -4,6 +4,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./polyfills": "./dist/polyfills.js"
+  },
   "scripts": {
     "build": "tsc --build",
     "rebuild": "rm ./tsconfig.tsbuildinfo && rm -rf dist && tsc --build",
@@ -13,8 +17,7 @@
   "author": "Evgen Mykhailenko",
   "license": "HTTL License",
   "description": "HTTL common package",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/ws": "^8.5.13",
     "ts-node": "^10.9.1",
