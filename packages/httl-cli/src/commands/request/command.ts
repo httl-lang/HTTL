@@ -6,6 +6,8 @@ import { Input } from "../../common/input";
 import { Option, Param, ProgramArgs } from "../../common/program-args";
 import { RequestCommandArgs } from "./command-args";
 import { Spinner } from "../../common/spinner";
+import chalk from "chalk";
+import { HttlExecutionError } from "../../common/errors";
 
 export class RequestCommand implements IProgramCommand {
   private static headerRegexp = /^([\w-]+):\s*(.*)$/
@@ -82,8 +84,7 @@ export class RequestCommand implements IProgramCommand {
       const output = result.toOutput();
 
       if (output.errors.length) {
-        console.error(JSON.stringify(output.errors, null, 2));
-        process.exit(1);
+        throw new HttlExecutionError(output.errors);
       }
 
       spinner.stop();
@@ -93,7 +94,7 @@ export class RequestCommand implements IProgramCommand {
       ResponsePrinter.print(response);
     } catch (error) {
       spinner.stop();
-      console.error(error);
+      console.log(chalk.redBright(error.message));
       exit(1);
     }
   }

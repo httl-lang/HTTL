@@ -1,0 +1,10 @@
+@base: http://localhost:3000/api/v1
+
+Authorization: ApiKey 641bbc8eed048b3aab6a51bed3eb8b37
+
+#post /workflows {
+#    name: "my workflow"
+#}
+post /actions {
+    name: "my workflow"
+}
