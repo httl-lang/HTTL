@@ -8,6 +8,7 @@ import { HttpResponse } from '../http/http-response';
 import { HttlDocument } from "../../document";
 import { ProgramRt } from "../runtime-objects/program";
 import { CodeMap } from "../../code/code-map";
+import { HttlUrl } from "../../common/url";
 
 export class RuntimeExecutor implements IRuntimeExecutor {
   protected readonly runtimeObjects = new Map<string, RuntimeObjectBase>();
@@ -91,7 +92,7 @@ export class RuntimeExecutor implements IRuntimeExecutor {
     return VAR.has(name, this.variables) || this.runtime.context.env.has(name);
   }
 
-  public async httpRequest(url: URL, options: HttpRequestOptions): Promise<HttpResponse> {
+  public async httpRequest(url: HttlUrl, options: HttpRequestOptions): Promise<HttpResponse> {
     return await HttpClient.request(url, options);
   }
 

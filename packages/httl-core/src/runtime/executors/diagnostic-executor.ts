@@ -6,6 +6,7 @@ import { ApiRt } from "../runtime-objects";
 import { HttpRequestOptions } from "../http/http-client";
 import { HttpResponse } from '../http/http-response';
 import { HttlDocument } from "../../document";
+import { HttlUrl } from "../../common/url";
 
 export class DiagnosticExecutor extends RuntimeExecutor {
   constructor(
@@ -38,7 +39,7 @@ export class DiagnosticExecutor extends RuntimeExecutor {
       throw new Error(`Variable ${name} not found`);
   }
 
-  public override httpRequest(url: URL, options: HttpRequestOptions): Promise<HttpResponse> {
+  public override httpRequest(url: HttlUrl, options: HttpRequestOptions): Promise<HttpResponse> {
     return Promise.resolve({
       [Symbols.DIAGNOSTIC_OBJECT]: true,
     } as unknown as HttpResponse);

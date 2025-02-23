@@ -172,7 +172,7 @@ export class RequestRt extends RootRuntimeObject<RequestExpression> {
     const url = apiRt.composeUrl(urlRes.unwrap());
 
     if (!headers["host"]) {
-      headers["host"] = url.host;
+      headers["host"] = url.hostname;
     }
 
     this._response = await this.executor.httpRequest(url, {

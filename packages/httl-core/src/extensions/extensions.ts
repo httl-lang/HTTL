@@ -1,3 +1,4 @@
+import { HttlUrl } from "../common/url";
 import { ApiSpec } from "./api-spec/api-spec";
 
 export type ApplicableType = 'api' | 'request';
@@ -36,7 +37,7 @@ export const extensions: Record<string, IExtension> = {
   spec: {
     applicable: 'api',
     call: async (url: string) => {
-      const apiSpec = await ApiSpec.fromUrl(url)
+      const apiSpec = await ApiSpec.fromUrl(HttlUrl.parse(url));
 
       return {
         baseUrl: apiSpec.getBasePath(),

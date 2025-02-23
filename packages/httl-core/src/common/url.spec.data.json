@@ -66,12 +66,6 @@
     }]
   ],
   "with_paths": [
-    ["/api", {
-      "protocol": "http",
-      "hostname": "localhost",
-      "port": null,
-      "path": "/api"
-    }],
     ["example.com/api", {
       "protocol": "https",
       "hostname": "example.com",
@@ -125,6 +119,14 @@
       "hostname": "api.example.com",
       "port": null,
       "path": "/#fragment"
+    }]
+  ],
+  "relative_only": [
+    ["/users", {
+      "protocol": null,
+      "hostname": null,
+      "port": null,
+      "path": "/users"
     }]
   ],
   "with_authentication": [
