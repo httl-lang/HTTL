@@ -12,11 +12,14 @@ export const extensions: Record<string, IExtension> = {
   base: {
     applicable: 'api',
     call: async (url: string) => {
-      // Validate
-      new URL(url);
+      const httlUrl = HttlUrl.parse(url);
+
+      if (httlUrl === HttlUrl.INVALID) {
+        throw new Error(`Invalid URL: ${url}`);
+      }
 
       return {
-        baseUrl: url,
+        baseUrl: httlUrl,
       }
     }
   },

@@ -45,6 +45,20 @@
       "path": null
     }]
   ],
+  "localhost_short_form": [
+    [":", {
+      "protocol": "http",
+      "hostname": "localhost",
+      "port": null,
+      "path": null
+    }],
+    [":/users", {
+      "protocol": "http",
+      "hostname": "localhost",
+      "port": null,
+      "path": "/users"
+    }]
+  ],
   "with_ports": [
     [":8080", {
       "protocol": "http",
@@ -105,6 +119,18 @@
       "hostname": "api.example.com",
       "port": null,
       "path": "?query=test&page=1"
+    }],
+    [":?query=test&page=1", {
+      "protocol": "http",
+      "hostname": "localhost",
+      "port": null,
+      "path": "?query=test&page=1"
+    }],
+    [":/?query=test&page=1", {
+      "protocol": "http",
+      "hostname": "localhost",
+      "port": null,
+      "path": "/?query=test&page=1"
     }]
   ],
   "with_fragment": [

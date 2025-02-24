@@ -12,13 +12,16 @@ export interface HttlUrlParams {
 export class HttlUrl {
   public static readonly INVALID = new HttlUrl({ isAbsolute: false });
   private static readonly urlRegex =
-    /^(?:(?<protocol>https?):\/\/)?(?:(?:(?<auth>[\w.-]+(?::[^@]*)?)@)?(?<host>(?:\[[0-9a-fA-F:]+\])|(?:\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(?:[a-zA-Z0-9.-]+))?(?::(?<port>\d{1,5}))?)?(?<path>\/[^\s?#]*)?(?:\?(?<query>[^#\s]+))?(?:#(?<fragment>[^\s]+))?$/;
+    /^(?:(?<protocol>https?):\/\/)?(?:(?:(?<auth>[\w.-]+(?::[^@]*)?)@)?(?<host>(?:\[[0-9a-fA-F:]+\])|(?:\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(?:[a-zA-Z0-9.-]+))?(?::(?<port>\d{0,5}))?)?(?<path>\/[^\s?#]*)?(?:\?(?<query>[^#\s]+))?(?:#(?<fragment>[^\s]+))?$/;
 
   public static parse(rawUrl: string): HttlUrl {
     try {
-      const { groups } = rawUrl.trim().match(this.urlRegex);
+      const match = rawUrl.trim().match(this.urlRegex);
+      if (!match) {
+        return HttlUrl.INVALID;
+      }
 
-      let { protocol, auth, host, port: portStr, path, query, fragment } = groups
+      let { protocol, auth, host, port: portStr, path, query, fragment } = match.groups
 
       const isAbsolute = host !== undefined || portStr !== undefined;
       if (isAbsolute) {

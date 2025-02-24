@@ -20,8 +20,8 @@ interface IRequestExtension {
 
 class ResponseVar {
 
-  public static fromHttpResponse(response: HttpResponse): ResponseVar {
-    const responseVar = new ResponseVar();
+  public static fromHttpResponse(response: HttpResponse, name: string): ResponseVar | string {
+    const responseVar = new ResponseVar(name);
 
     if (response[Symbols.DIAGNOSTIC_OBJECT]) {
       return responseVar;
@@ -40,7 +40,13 @@ class ResponseVar {
     }
   }
 
-  private constructor() { }
+  private constructor(
+    public readonly name: string
+  ) { }
+
+  public toString() {
+    return `{${this.name}}`;
+  }
 }
 
 export class RequestRt extends RootRuntimeObject<RequestExpression> {
@@ -203,7 +209,7 @@ export class RequestRt extends RootRuntimeObject<RequestExpression> {
         return Err(varRes.unwrapErr());
       }
 
-      const varResponse = ResponseVar.fromHttpResponse(this._response);
+      const varResponse = ResponseVar.fromHttpResponse(this._response, this.variable.name);
       varRes.unwrap().set(varResponse);
     }
 
