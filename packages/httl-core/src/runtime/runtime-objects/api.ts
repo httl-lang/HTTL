@@ -1,5 +1,5 @@
 import { Err, Ok, Result } from "oxide.ts";
-import { EmptyExpression, HttlDiagnostic, RootRuntimeObject, Url } from "../../common";
+import { EmptyExpression, HttlDiagnostic, RootRuntimeObject } from "../../common";
 import { UseExpression, VariableExpression } from "../../compiler/expressions";
 import { IRuntimeExecutor } from "../executors";
 import { FileRt } from "./file";
@@ -8,9 +8,10 @@ import { IExtension } from "../../extensions";
 import { ApiSpec } from "../../extensions/api-spec";
 import { KeywordRt } from "./keyword";
 import { VariableRt } from "./var";
+import { HttlUrl } from "../../common/url";
 
 export interface IApiExtension {
-  baseUrl: string;
+  baseUrl: HttlUrl;
   spec: ApiSpec;
   headers: { [key: string]: string }
   body: { [key: string]: string }
@@ -18,7 +19,7 @@ export interface IApiExtension {
 
 export class ApiRt extends RootRuntimeObject<UseExpression> {
   private readonly _headers = new Map<string, string>();
-  private _baseUrl?: string;
+  private _baseUrl?: HttlUrl;
   public spec?: ApiSpec;
 
   constructor(
@@ -66,7 +67,7 @@ export class ApiRt extends RootRuntimeObject<UseExpression> {
     const ext = await _ext.call() as IApiExtension;
 
     if (ext.baseUrl) {
-      this._baseUrl = ext.baseUrl;
+      this._baseUrl = ext.baseUrl
     }
 
     if (ext.headers) {
@@ -90,12 +91,12 @@ export class ApiRt extends RootRuntimeObject<UseExpression> {
     return Object.fromEntries(this._headers.entries());
   }
 
-  public composeUrl(urlRt: UrlRt): URL {
-    const completeUrl = !urlRt.isAbsolute
-      ? Url.join(this.baseUrl, urlRt.url)
+  public composeUrl(urlRt: UrlRt): HttlUrl {
+    const completeUrl = !urlRt.url.isAbsolute && this.baseUrl
+      ? this.baseUrl.join(urlRt.url)
       : urlRt.url;
 
-    return new URL(completeUrl);
+    return completeUrl;
   }
 
   public get baseUrl() {

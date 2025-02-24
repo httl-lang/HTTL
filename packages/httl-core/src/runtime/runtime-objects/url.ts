@@ -4,10 +4,10 @@ import { HttlDiagnostic, RuntimeObject } from "../../common";
 import { UrlExpression } from "../../compiler/expressions";
 import { IRuntimeExecutor } from "../executors";
 import { StringRt } from "./string";
+import { HttlUrl } from "../../common/url";
 
 export class UrlRt extends RuntimeObject<UrlExpression> {
-  private _url: string;
-  private _isAbsolute: boolean = false;
+  private _url: HttlUrl;
 
   constructor(
     public readonly string: StringRt,
@@ -16,10 +16,6 @@ export class UrlRt extends RuntimeObject<UrlExpression> {
   ) {
     super(executor, expr);
     string.setParent(this);
-  }
-
-  public get isAbsolute() {
-    return this._isAbsolute;
   }
 
   public get url() {
@@ -32,13 +28,18 @@ export class UrlRt extends RuntimeObject<UrlExpression> {
       return Err(urlRes.unwrapErr());
     }
 
-    this._url = urlRes.unwrap().result;
-    this._isAbsolute = this.checkIfComplete(this._url);
+    const url = HttlUrl.parse(urlRes.unwrap().result);
+    if (url === HttlUrl.INVALID) {
+      return Err(
+        HttlDiagnostic.fromError(
+          new Error(`Invalid URL: ${urlRes.unwrap().result}`),
+          this.string.expr.range
+        )
+      );
+    }
+
+    this._url = url;
 
     return Ok(this);
-  }
-
-  private checkIfComplete(url: string): boolean {
-    return url.startsWith("http://") || url.startsWith("https://");
   }
 }

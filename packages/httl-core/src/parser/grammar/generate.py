@@ -56,7 +56,7 @@ def generate_debug_grammar(debug_file: str):
 
 
 if gen_mode == "--debug":
-    debug_file = sys.argv[2] if len(sys.argv) > 2 else "../../samples/sample.httl"
+    debug_file = sys.argv[2] if len(sys.argv) > 2 else "../../../../../../../../../debug_samples/sample.httl"
     generate_debug_grammar(debug_file)
     sys.exit(0)
 

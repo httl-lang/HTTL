@@ -23,10 +23,13 @@
     "esModuleInterop": true,
     "composite": true,
     "allowJs": true,
+    "resolveJsonModule": true,
     // "strict": true //TODO
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "src/**/*.json"
+
   ],
   "exclude": [
     "dist"

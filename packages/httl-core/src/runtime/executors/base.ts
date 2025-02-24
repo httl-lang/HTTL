@@ -7,6 +7,7 @@ import { HttpResponse } from '../http/http-response';
 import { ProgramRt } from "../runtime-objects/program";
 import { CodeMap } from "../../code/code-map";
 import { HttlDocument } from "../../document";
+import { HttlUrl } from "../../common/url";
 
 export enum ErrorBehavior {
   Continue,
@@ -34,7 +35,7 @@ export interface IRuntimeExecutor {
   $requests: RequestRt[];
   $variables: VariableRt[];
 
-  httpRequest(url: URL, options: HttpRequestOptions): Promise<HttpResponse>;
+  httpRequest(url: HttlUrl, options: HttpRequestOptions): Promise<HttpResponse>;
   loadApi(path: string): Promise<Result<ApiRt, string>>;
   isAlreadyImported(path: string): boolean
 

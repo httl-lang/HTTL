@@ -6,16 +6,6 @@ import { Guard } from './guard';
 import { Symbols } from './constants';
 
 
-export class Url {
-  public static join(...parts: string[]): string {
-    const fixedParts = parts = parts.filter(x => !!x).map(part => part.replace(/^\/|\/$/g, ""));
-    if (fixedParts.length !== parts.length) {
-      throw new Error(`Invalid url components: ${JSON.stringify(parts)}`);
-    }
-
-    return fixedParts.join("/");
-  }
-}
 
 export class Path {
   public static isAbsolute(path: string): boolean {

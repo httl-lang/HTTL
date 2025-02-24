@@ -1,0 +1,220 @@
+{
+  "basic_domains": [
+    ["localhost", {
+      "protocol": "http",
+      "hostname": "localhost",
+      "port": null,
+      "path": null
+    }],
+    ["example.com", {
+      "protocol": "https",
+      "hostname": "example.com",
+      "port": null,
+      "path": null
+    }],
+    ["api.example.com", {
+      "protocol": "https",
+      "hostname": "api.example.com",
+      "port": null,
+      "path": null
+    }],
+    ["sub.api.example.com", {
+      "protocol": "https",
+      "hostname": "sub.api.example.com",
+      "port": null,
+      "path": null
+    }]
+  ],
+  "with_protocols": [
+    ["http://localhost", {
+      "protocol": "http",
+      "hostname": "localhost",
+      "port": null,
+      "path": null
+    }],
+    ["https://localhost", {
+      "protocol": "https",
+      "hostname": "localhost",
+      "port": null,
+      "path": null
+    }],
+    ["http://example.com", {
+      "protocol": "http",
+      "hostname": "example.com",
+      "port": null,
+      "path": null
+    }]
+  ],
+  "localhost_short_form": [
+    [":", {
+      "protocol": "http",
+      "hostname": "localhost",
+      "port": null,
+      "path": null
+    }],
+    [":/users", {
+      "protocol": "http",
+      "hostname": "localhost",
+      "port": null,
+      "path": "/users"
+    }]
+  ],
+  "with_ports": [
+    [":8080", {
+      "protocol": "http",
+      "hostname": "localhost",
+      "port": 8080,
+      "path": null
+    }],
+    ["localhost:8080", {
+      "protocol": "http",
+      "hostname": "localhost",
+      "port": 8080,
+      "path": null
+    }],
+    ["example.com:8080", {
+      "protocol": "https",
+      "hostname": "example.com",
+      "port": 8080,
+      "path": null
+    }]
+  ],
+  "with_paths": [
+    ["example.com/api", {
+      "protocol": "https",
+      "hostname": "example.com",
+      "port": null,
+      "path": "/api"
+    }],
+    ["http://example.com/api", {
+      "protocol": "http",
+      "hostname": "example.com",
+      "port": null,
+      "path": "/api"
+    }]
+  ],
+  "with_parameters": [
+    ["example.com/users/{id}", {
+      "protocol": "https",
+      "hostname": "example.com",
+      "port": null,
+      "path": "/users/{id}"
+    }],
+    ["api.example.com/users/{id}/posts/{postId}", {
+      "protocol": "https",
+      "hostname": "api.example.com",
+      "port": null,
+      "path": "/users/{id}/posts/{postId}"
+    }]
+  ],
+  "with_query_strings": [
+    ["example.com?query=test", {
+      "protocol": "https",
+      "hostname": "example.com",
+      "port": null,
+      "path": "?query=test"
+    }],
+    ["api.example.com?query=test&page=1", {
+      "protocol": "https",
+      "hostname": "api.example.com",
+      "port": null,
+      "path": "?query=test&page=1"
+    }],
+    [":?query=test&page=1", {
+      "protocol": "http",
+      "hostname": "localhost",
+      "port": null,
+      "path": "?query=test&page=1"
+    }],
+    [":/?query=test&page=1", {
+      "protocol": "http",
+      "hostname": "localhost",
+      "port": null,
+      "path": "/?query=test&page=1"
+    }]
+  ],
+  "with_fragment": [
+    ["example.com#fragment", {
+      "protocol": "https",
+      "hostname": "example.com",
+      "port": null,
+      "path": "#fragment"
+    }],
+    ["api.example.com/#fragment", {
+      "protocol": "https",
+      "hostname": "api.example.com",
+      "port": null,
+      "path": "/#fragment"
+    }]
+  ],
+  "relative_only": [
+    ["/users", {
+      "protocol": null,
+      "hostname": null,
+      "port": null,
+      "path": "/users"
+    }]
+  ],
+  "with_authentication": [
+    ["user@example.com", {
+      "protocol": "https",
+      "hostname": "user@example.com",
+      "port": null,
+      "path": null
+    }],
+    ["user:pass@example.com", {
+      "protocol": "https",
+      "hostname": "user:pass@example.com",
+      "port": null,
+      "path": null
+    }],
+    ["http://user:pass@example.com", {
+      "protocol": "http",
+      "hostname": "user:pass@example.com",
+      "port": null,
+      "path": null
+    }]
+  ],
+  "complex_combinations": [
+    ["http://user:pass@api.example.com:8080/v1/users/{id}/posts/{postId}?query=test&page=1", {
+      "protocol": "http",
+      "hostname": "user:pass@api.example.com",
+      "port": 8080,
+      "path": "/v1/users/{id}/posts/{postId}?query=test&page=1"
+    }],
+    ["https://user:pass@sub.api.example.com:8080/v2/users/{id}/posts/{postId}?query=test&page=1", {
+      "protocol": "https",
+      "hostname": "user:pass@sub.api.example.com",
+      "port": 8080,
+      "path": "/v2/users/{id}/posts/{postId}?query=test&page=1"
+    }]
+  ],
+  "ipv4_addresses": [
+    ["127.0.0.1", {
+      "protocol": "http",
+      "hostname": "127.0.0.1",
+      "port": null,
+      "path": null
+    }],
+    ["127.0.0.1:8080", {
+      "protocol": "http",
+      "hostname": "127.0.0.1",
+      "port": 8080,
+      "path": null
+    }]
+  ],
+  "ipv6_addresses": [
+    ["[::1]", {
+      "protocol": "http",
+      "hostname": "[::1]",
+      "port": null,
+      "path": null
+    }],
+    ["[::1]:8080", {
+      "protocol": "http",
+      "hostname": "[::1]",
+      "port": 8080,
+      "path": null
+    }]
+  ]
+}

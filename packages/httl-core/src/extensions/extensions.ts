@@ -1,3 +1,4 @@
+import { HttlUrl } from "../common/url";
 import { ApiSpec } from "./api-spec/api-spec";
 
 export type ApplicableType = 'api' | 'request';
@@ -11,11 +12,14 @@ export const extensions: Record<string, IExtension> = {
   base: {
     applicable: 'api',
     call: async (url: string) => {
-      // Validate
-      new URL(url);
+      const httlUrl = HttlUrl.parse(url);
+
+      if (httlUrl === HttlUrl.INVALID) {
+        throw new Error(`Invalid URL: ${url}`);
+      }
 
       return {
-        baseUrl: url,
+        baseUrl: httlUrl,
       }
     }
   },
@@ -36,7 +40,7 @@ export const extensions: Record<string, IExtension> = {
   spec: {
     applicable: 'api',
     call: async (url: string) => {
-      const apiSpec = await ApiSpec.fromUrl(url)
+      const apiSpec = await ApiSpec.fromUrl(HttlUrl.parse(url));
 
       return {
         baseUrl: apiSpec.getBasePath(),

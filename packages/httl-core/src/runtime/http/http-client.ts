@@ -6,6 +6,7 @@ import tls from 'tls';
 import { constants } from '../../common/constants';
 import { HttpTimings } from './http-timings';
 import { HttpResponse, HttpWarning, HttpWarningCode } from './http-response';
+import { HttlUrl } from '../../common/url';
 
 export interface HttpRequestOptions {
   method: string;
@@ -16,14 +17,17 @@ export interface HttpRequestOptions {
 
 export class HttpClient {
 
-  public static request(url: URL | string, options: HttpRequestOptions): Promise<HttpResponse> {
-    const finalURL = typeof url === 'string'
-      ? new URL(url)
+  public static async request(url: HttlUrl | string, options: HttpRequestOptions): Promise<HttpResponse> {
+    const httlUrl = typeof url === 'string'
+      ? HttlUrl.parse(url)
       : url;
+
+    const finalURL = httlUrl.toNodeUrl();
 
     const reqOptions = {
       method: options.method.toUpperCase(),
       protocol: finalURL.protocol,
+      family: 4, // IPv4 - (https://github.com/httl-lang/HTTL/issues/10)
       headers: {
         ...options.headers,
         'User-Agent': constants.HTTP_AGENT_NAME,

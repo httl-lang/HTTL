@@ -1,4 +1,5 @@
 import { Json, Yaml } from "../../common";
+import { HttlUrl } from "../../common/url";
 import { HttpClient } from "../../runtime/http";
 import { ApiEndpoint } from "./api-endpoint";
 import { IOpenApiVersionAdapter } from "./api-version-adapter";
@@ -12,7 +13,7 @@ export interface IApiEndpointFilter {
 
 export class ApiSpec {
 
-  public static async fromUrl(url: string): Promise<ApiSpec> {
+  public static async fromUrl(url: HttlUrl): Promise<ApiSpec> {
     const response = await HttpClient.request(url, { method: 'GET', headers: {}, rejectUnauthorized: false });
     if (response.statusCode !== 200) {
       throw new Error('Failed to fetch spec');
@@ -31,7 +32,7 @@ export class ApiSpec {
     }
 
     const spec = ApiSpec.parseSpec(specRes.unwrap());
-    return new ApiSpec(new URL(url), spec);
+    return new ApiSpec(url, spec);
   }
 
   public static parseSpec(json: any) {
@@ -47,15 +48,15 @@ export class ApiSpec {
   private readonly endpoints: ApiEndpoint[] = [];
 
   private constructor(
-    private readonly specUrl: URL,
+    private readonly specUrl: HttlUrl,
     private readonly spec: IOpenApiVersionAdapter
   ) {
 
     this.endpoints = spec.getEndpoints();
   }
 
-  public getBasePath() {
-    return this.spec.getBasePath() || this.specUrl.origin;
+  public getBasePath(): HttlUrl {
+    return HttlUrl.parse(this.spec.getBasePath() || this.specUrl.origin);
   }
 
   public getEndpoints(filter?: IApiEndpointFilter): ApiEndpoint[] {
