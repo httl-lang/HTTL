@@ -9,7 +9,7 @@ export const data = [
     title: 'End-to-End Example',
     description: 'Comprehensive Example of all HTTL features',
     code:
-      `@base: https://reqres.in/api
+      `@base: reqres.in/api
 
 # Getting a bearer token
 post /login {
@@ -51,7 +51,7 @@ assert {
     description: 'Shows how to use intelysense with OpenApi schema',
     code:
       `# Also by default @spec header directive will set the base url to the server url from the OpenApi schema
-@spec: https://httpbin.org/spec.json
+@spec: httpbin.org/spec.json
 
 Accept: Application/json
 
@@ -65,31 +65,31 @@ post /anything/user {
   {
     title: 'Simple GET request',
     description: 'Make a simple GET request wiothout any headers',
-    code: 'get https://jsonplaceholder.typicode.com/todos/1'
+    code: 'get jsonplaceholder.typicode.com/todos/1'
   },
 
   {
     title: 'GET request with the headers',
     description: 'Make a simple GET request with a request header',
-    code: 'get https://jsonplaceholder.typicode.com/posts\nAccept: application/json'
+    code: 'get jsonplaceholder.typicode.com/posts\nAccept: application/json'
   },
 
   {
     title: 'GET request with global headers',
     description: 'Make a simple GET request with a global request header',
-    code: 'Accept: application/json\n\nget https://jsonplaceholder.typicode.com/posts'
+    code: 'Accept: application/json\n\nget jsonplaceholder.typicode.com/posts'
   },
 
   {
     title: 'Simple GET request using the @base header',
     description: 'Demonstrates the use of the @base directive header',
-    code: '@base: https://jsonplaceholder.typicode.com\n\nget /posts'
+    code: '@base: jsonplaceholder.typicode.com\n\nget /posts'
   },
 
   {
     title: 'POST request with a JSON body',
     description: 'Shows how to make a POST request with a JSON body',
-    code: `@base: https://jsonplaceholder.typicode.com
+    code: `@base: jsonplaceholder.typicode.com
 
 Content-type: application/json; charset=UTF-8
 
@@ -104,7 +104,7 @@ post /posts {
     title: 'POST request with a form-data body',
     description: 'Demonstrates how to make a POST request with a form-data body using formdata keyword',
     code:
-      `post https://httpbin.org/anything/user 
+      `post httpbin.org/anything/user 
 formdata {
   "name": "John Doe",
   "age": 30
@@ -115,7 +115,7 @@ formdata {
     title: 'POST request with a form-urlencoded body',
     description: 'Demonstrates how to make a POST request with a form-urlencoded body using urlencoded keyword',
     code:
-      `post https://httpbin.org/anything/user 
+      `post httpbin.org/anything/user 
 urlencoded {
   "name": "John Doe",
   "age": 30
@@ -126,7 +126,7 @@ urlencoded {
     title: 'POST request with a binary body',
     description: 'Demonstrates how to make a POST request with a binary body using bin keyword',
     code:
-      `post https://httpbin.org/anything/report 
+      `post httpbin.org/anything/report 
 bin "< path to a file >" # e.g. bin "C:/Users/JohnDoe/Documents/report.pdf"`
   },
 
@@ -134,7 +134,7 @@ bin "< path to a file >" # e.g. bin "C:/Users/JohnDoe/Documents/report.pdf"`
     title: 'POST request with a raw body',
     description: 'Demonstrates how to make a POST request with a raw body using raw keyword',
     code:
-      `post https://httpbin.org/anything/raw 
+      `post httpbin.org/anything/raw 
 raw "raw data"`
   },
 
@@ -142,7 +142,7 @@ raw "raw data"`
     title: 'Using @auth-basic directive',
     description: 'Make a GET request with basic authentication',
     code:
-      `get https://httpbin.org/basic-auth/fake-user/fake-password 
+      `get httpbin.org/basic-auth/fake-user/fake-password 
 @auth-basic: fake-user fake-password`
   },
 
@@ -150,7 +150,7 @@ raw "raw data"`
     title: 'Using .env file',
     description: 'Demonstrates how to use global environment variables or the ones from the .env file',
     code:
-      `post https://reqres.in/api/login {
+      `post reqres.in/api/login {
   "email": "eve.holt@reqres.in",
   "password": password, # Add a new variable 'password' with value 'cityslicka' to the .env file or global OS variables in a format 'HTTL_VAR_password=cityslicka'
 }`
@@ -159,7 +159,7 @@ raw "raw data"`
     title: 'Response assertions',
     description: 'Shows how to assert the response status, headers, and body',
     code:
-      `post https://reqres.in/api/login {
+      `post reqres.in/api/login {
   "email": "eve.holt@reqres.in",
   "password": "cityslicka",
 }

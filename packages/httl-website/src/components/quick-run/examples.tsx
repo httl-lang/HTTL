@@ -1,14 +1,14 @@
 export const examples = [
   {
     title: 'GET request using OpenAPI spec',
-    code: `@spec: ${window.location.origin}/api/spec.json
+    code: `@spec: ${window.location.host}/api/spec.json
 
 # Press Ctrl+Space | Option+Esc to see available paths and methods
 get /users/1`
   },
   {
     title: 'PUT request using OpenAPI spec',
-    code: `@spec: ${window.location.origin}/api/spec.json
+    code: `@spec: ${window.location.host}/api/spec.json
 
 # You can generate a request body by selecting the body item from the IntelliSense dropdown.
 post /users {
@@ -22,7 +22,7 @@ post /users {
 
   {
     title: 'Storing response in a variable for use in subsequent requests',
-    code: `@spec: ${window.location.origin}/api/spec.json
+    code: `@spec: ${window.location.host}/api/spec.json
 @auth-basic: admin admin
 
 post /auth 
@@ -41,6 +41,6 @@ put /users/1 {
 
   {
     title: 'Simple GET request',
-    code: `get ${window.location.origin}/api/users`
+    code: `get ${window.location.host}/api/users`
   }
 ]

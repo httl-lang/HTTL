@@ -2,6 +2,7 @@
 export default {
   index: 'The Basics',
   request: 'Request',
+  url: 'URL',
   module: 'Module System',
   header: 'Header',
   directives: 'Directives',

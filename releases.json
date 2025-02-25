@@ -1,0 +1,29 @@
+[
+  {
+    "date": "2025-02-25",
+    "packages": {
+      "httl": {
+        "version": "0.1.1",
+        "changes": [
+          {
+            "title": "Added support for the short URL format",
+            "description": "Now you can use the short URL format: \n ```bash \nget :3000/api/user # get http://localhost:3000/api/user \nget :/api/user # get http://localhost/api/user \nget localhost # get http://localhost \nget httl.dev # get https://httl.dev \n ```",
+            "type": "feature"
+          },
+          {
+            
+            "title": "IPv4 is now the default for requests to localhost",
+            "description": "[https://github.com/httl-lang/HTTL/issues/10](https://github.com/httl-lang/HTTL/issues/10)",
+            "type": "fix"
+          }
+        ]
+      },
+      "cli": {
+        "version": "0.1.11"
+      },
+      "vscode": {
+        "version": "0.1.8"
+      }
+    }
+  }
+]

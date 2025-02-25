@@ -18,14 +18,13 @@ const News: FC = () => {
     >
       <Markdown>
         {
-          `### **New Release 0.1.7 🚀**
+          `### **New Release 0.1.8 🚀**
 
 What's new: 
-- [Added HTTL CLI](https://httl.dev/docs/cli)
-- Added support for YAML OpenAPI spec
+- [Support of HTTL 0.1.1](https://httl.dev/docs/release-notes#2025-02-25)
 
 Bugfix:
-- Fixed form data not being sent correctly`
+- [IPv4 is now the default for requests to localhost](https://github.com/httl-lang/HTTL/issues/10)`
         }
       </Markdown>
     </s.NewsPopup>

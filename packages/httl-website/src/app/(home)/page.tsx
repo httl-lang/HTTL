@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import QuickRun from "@/components/quick-run";
 import { Nav } from "@/components/nav";
 
-import packageJson from '../../../package.json';
+import releases from '../../../../../releases.json';
 
 import styles from './page.module.css';
 
@@ -36,9 +36,9 @@ export default function Home() {
             />
           </div>
           <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-            <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-500 ring-1 ring-gray-200/10">
-              v{packageJson.version}
-            </div>
+            <a href={`/docs/release-notes#${releases[0].date}`} className="relative rounded-full px-3 py-1 text-sm/6 text-gray-400 ring-1 ring-gray-200/10">
+              <span className="text-gray-500">Release</span> #{releases[0].date}
+            </a>
           </div>
           <div className="text-center">
             <h1 className="mt-14 font-display text-5xl font-semibold text-white">

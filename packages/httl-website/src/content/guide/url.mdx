@@ -1,0 +1,47 @@
+# URL
+
+HTTL supports both full URLs and their shorter form.
+
+
+## Full URL
+
+Nothing to add. The full URL is a full URL.
+
+```httl
+get https://httl.dev/api/users
+```
+
+
+## Shorter Form  
+
+### HTTL allows you to omit the protocol when specifying a URL. By default:
+
+- **For non-local URLs**, HTTL automatically uses the `https` protocol.  
+
+  ```httl
+  get httl.dev/api/users  # Equivalent to: get https://httl.dev/api/users
+  ```  
+
+- **For local URLs**, HTTL defaults to the `http` protocol.  
+
+  ```httl
+  get localhost/api/users  # Equivalent to: get http://localhost/api/users
+  ```  
+
+### Special Form for Localhost  
+
+For convenience, `localhost` can be omitted in HTTL.  
+
+- **Using just a port**:  
+
+  ```httl
+  get :3000/api/users  # Equivalent to: get http://localhost:3000/api/users
+  ```  
+
+- **Without a port** (defaults to `http://localhost`):  
+
+  ```httl
+  get :/api/users  # Equivalent to: get http://localhost/api/users
+  ```  
+
+
