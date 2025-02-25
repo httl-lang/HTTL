@@ -1,6 +1,10 @@
 import nextra from 'nextra'
 import { createHighlighter, } from 'shiki'
-import httlGrammars from './src/components/editor/httl-extension/language/grammars.json' assert { type: 'json' };
+import fs from 'fs/promises';
+
+const httlGrammars = JSON.parse(
+  await fs.readFile(new URL('./src/components/editor/httl-extension/language/grammars.json', import.meta.url), 'utf-8')
+);
 
 const withNextra = nextra({
   contentDirBasePath: '/docs',
