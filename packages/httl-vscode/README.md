@@ -1,38 +1,41 @@
 # HTTL for Visual Studio Code
 
-[The VS Code HTTL extension](https://marketplace.visualstudio.com/items?itemName=HTTL.httl-vscode)
-provides rich language support for the
-[HTTL programming language](https://httl.dev/).
+[HTTL for VS Code](https://marketplace.visualstudio.com/items?itemName=HTTL.httl-vscode) brings powerful language support for the [HTTL programming language](https://httl.dev/), making it easy to write, execute, and test HTTP requests directly within VS Code.
 
 ## What is HTTL?
 
-If you ask ChatGPT — or, back in the day, Google — 'What is an HTTP programming language?' they respond that HTTP is not a programming language.
+If you search for an "HTTP programming language," you'll likely be told that HTTP is just a protocol, not a language. But why isn’t there a dedicated language for writing HTTP requests?
 
-But wait — while it's true that HTTP itself isn't a programming language, why don't they suggest a language that can be used for writing HTTP requests? Consider how SQL allows you to retrieve data from a database or how Terraform lets you write infrastructure code without worrying about specific details.
+Think of how SQL allows structured data retrieval or how Terraform enables infrastructure as code. **HTTL does the same for HTTP requests and API testing.**
 
-**Imagine a language that:**
+### Why HTTL?
 
-- Is simple and intuitive.
-- Is smart enough to offer IntelliSense for OpenAPI.
-- Is flexible — you can save responses as variables and use them as building blocks for headers or body content in follow-up requests.
-- Provides a native way to write test scenarios without mixing in JavaScript or Python.
+- **Intuitive and easy to learn** – Simple syntax designed for API workflows.
+- **Intelligent OpenAPI support** – Get smart IntelliSense suggestions.
+- **Reusable requests** – Save responses as variables for use in headers, bodies, and follow-up requests.
+- **Built-in test scenarios** – Write and run API tests natively, without mixing in JavaScript or Python.
 
-<br />
+🚀 **Meet HTTL – The first HTTP programming language!** 🎉
 
-🚀🚀🚀 **Introducing HTTL** 🎉
-
-This is the first HTTP programming language that allows you to write code to query and test web APIs, replacing the need for UI tools like Postman or Insomnia.
-
-Ready to code smarter? Let’s dive in! 🚀 <br />
-
+With HTTL, you can replace UI-based tools like Postman or Insomnia with a powerful, code-first experience in VS Code.
 
 ## Quick Start
 
-1.  Install the [The VS Code HTTL extension](https://marketplace.visualstudio.com/items?itemName=HTTL.httl-vscode).
+### 1. Install HTTL for VS Code
 
-2.  Create or Open *.httl file to activate the extension.
+[Get the extension](https://marketplace.visualstudio.com/items?itemName=HTTL.httl-vscode) from the VS Code Marketplace.
 
-3.  Write a simple query e.g. `get https://httpbin.org/anything` and press F5 or CTRL|CMD+Enter
+### 2. Open or create an `.httl` file
+
+The extension activates automatically when you open an `.httl` file.
+
+### 3. Write and run your first request
+
+```bash
+get httl.dev/api/users
+```
+
+Press **F5** or **Ctrl | Cmd + Enter** to execute.
 
 <p align="center">
 <img src="docs/images/httl-file-demo.gif" width=75%>
@@ -40,8 +43,12 @@ Ready to code smarter? Let’s dive in! 🚀 <br />
 <em>(HTTL file)</em>
 </p>
 
-1. Alternatively, you can open the `Quick Run` panel if you don't want to create a file.
-  <em>NOTE: Some features, such as IntelliSense and formatting, are not supported.</em>
+
+### 4. Use Quick Run (Optional)
+
+If you don’t want to create a file, open the **Quick Run** panel to execute one-off requests.
+
+> **Note:** Some features, like IntelliSense and formatting, are not available in Quick Run.
    
 <p align="center">
 <img src="docs/images/quick-run.gif" width=75%>
@@ -49,12 +56,12 @@ Ready to code smarter? Let’s dive in! 🚀 <br />
 <em>(Quick Run)</em>
 </p>
 
-Happy coding! :-) &nbsp;&nbsp; 🎉🎉🎉
+## Learn More
 
-## What's next
-
-Visit [Our website](https://httl.dev/) for complete documentation
+Check out the [HTTL Documentation](https://httl.dev/docs) for full language details and advanced features.
 
 ## License
 
-[LICENSE](./LICENSE.md)
+[View License](./LICENSE.md)
+
+Happy coding! 🎉
