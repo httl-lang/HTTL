@@ -28,14 +28,14 @@ const footer = <Footer>HTTL License {new Date().getFullYear()} © HTTL.</Footer>
 
 export default async function RootLayout({ children }: any) {
   return (
-    <html lang="en" dir="ltr" suppressHydrationWarning    >
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <Head>
         <HttlHead />
       </Head>
       <body>
-        <Banner storageKey="0.1.7-release">
-          <a href="/docs/cli">
-            🎉 HTTL 0.1.7 is released, now we have CLI. Read more →
+        <Banner storageKey="0.1.1-release">
+          <a href="/docs/release-notes#2025-02-25">
+            🎉 HTTL 0.1.1 is released, Read more →
           </a>
         </Banner>
         <Layout
