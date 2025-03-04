@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import Markdown from 'react-markdown';
+// import Markdown from 'react-markdown';
 
 import { NewsContext, useNewsModel } from './news.model';
 
@@ -16,7 +16,7 @@ const News: FC = () => {
       showCloseButton={true}
       onClose={() => model.aknowledgeReleaseNote()}
     >
-      <Markdown>
+      {/* <Markdown>
         {
           `### **New Release 0.1.8 🚀**
 
@@ -26,7 +26,7 @@ What's new:
 Bugfix:
 - [IPv4 is now the default for requests to localhost](https://github.com/httl-lang/HTTL/issues/10)`
         }
-      </Markdown>
+      </Markdown> */}
     </s.NewsPopup>
   );
 };

@@ -9,6 +9,8 @@
 		"sourceMap": true,
 		"resolveJsonModule": true,
 		"jsx": "react-jsx",
+		"module": "Node16",
+		"target": "ES2022",
 		"lib": [
 			"webworker",
 			"dom",

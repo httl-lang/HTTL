@@ -45,6 +45,11 @@ export class Commutator {
     this.subscribe('set-response', cb);
   }
 
+  public onRunLmResult(cb: (message: any) => void) {
+    // @ts-ignore
+    this.subscribe('run-lm-result', cb);
+  }
+
   private subscribe(command: UIMessageType, cb: (...args: any[]) => void) {
     const calls = this.subscribers.get(command) || [];
     calls.push(cb);

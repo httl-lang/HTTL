@@ -15,7 +15,7 @@
 		"name": "Evgen Mykhailenko"
 	},
 	"engines": {
-		"vscode": "^1.92.0"
+		"vscode": "^1.93.0"
 	},
 	"main": "./dist/extension.js",
 	"icon": "media/logo.png",

@@ -17,6 +17,9 @@ const _MainView: React.FC = () => {
         <s.TabButton to="/main/utils" end>
           Utils
         </s.TabButton>
+        <s.TabButton to="/main/runtimer" end>
+          Runtimer
+        </s.TabButton>
         <s.TabButton to="/main/tutorials" end right icon>
           <VscBook />
         </s.TabButton>
