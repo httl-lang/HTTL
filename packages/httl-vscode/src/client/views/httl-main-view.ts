@@ -6,8 +6,7 @@ import { HttlBaseViewProvider } from './base-view';
 import { HttlResponseViewProvider } from './httl-response-view';
 import { HttlLanguageClient } from '../httl-language-client';
 import { HttlRunCommand } from '../commands/run-command';
-import { LmTest } from '../../lm/lm';
-import { OpenapiSpecAgent } from '../../ai/openapi-spec-agent';
+import { OpenapiSpecAgent } from '../../ai/agents/openapi-spec-agent';
 
 export class HttlMainViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlMainView';
@@ -51,16 +50,18 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
       }
 
       case 'run-lm': {
-        // const lm = new LmTest();
-        // const result = await lm.start(messagefromUI.payload);
-        const result = await OpenapiSpecAgent.run();
 
-        await this.postMessage({
-          // @ts-ignore
-          command: 'run-lm-result',
-          // @ts-ignore
-          payload: result,
-        });
+        for await (const result of OpenapiSpecAgent.run()) {
+          await this.postMessage({
+            // @ts-ignore
+            command: 'run-lm-result',
+            // @ts-ignore
+            payload: result,
+          });
+        }
+
+        // const result = await OpenapiSpecAgent.run();
+
         return;
       }
     }

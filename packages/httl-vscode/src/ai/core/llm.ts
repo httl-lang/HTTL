@@ -41,7 +41,7 @@ export class LLM {
   }
 
   public async sendRequest(
-    step: AgentStepBase,
+    step: AgentStepBase<any>,
     token: vscode.CancellationToken
   ) {
 

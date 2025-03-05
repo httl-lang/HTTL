@@ -4,37 +4,45 @@ import path from "path";
 import ignore, { Ignore } from "ignore";
 
 
-export const findDepTool = {
-  name: 'find-dep-tool',
-  description: 'Find dependencies in the workspace',
+export const findFilesTool = {
+  name: 'find-files-tool',
+  description: 'Find files in the SELECTED DIRECTORY',
   inputSchema: {
     type: "object",
     properties: {
+      baseUri: {
+        type: "string",
+        description: "Base folder URI to search files in"
+      },
       pattern: {
         type: "string",
-        description: "Pahttern to search for dependencies"
+        description: "Search for files that match the Glob pattern, e.g.: **​/*.{ts,js}, *.cs, package.json etc."
       },
+      purpose: {
+        type: "string",
+        description: "Purpose for searching files, e.g. 'controller', 'dependency'"
+      }
     },
     required: [
+      "baseUri",
       "pattern",
+      "purpose"
     ]
   }
 };
 
-export class FindDepTool {
-  static async invoke({ pattern }: { pattern: string }) {
+export class FindFilesTool {
+  static async invoke({ pattern, baseUri }: { pattern: string, baseUri: string }) {
     // await vscode.workspace.workspaceFile
     // const gitignore = await vscode.workspace.findFiles(
     //   '.gitignore',
     // );
     // const gitignoreContent = fs.readFileSync(gitignore.at(-1)!.fsPath, "utf-8");
 
-    const t = getWorkspaceDirectory();
-
+    // const t = getWorkspaceDirectory();
 
     const files = await vscode.workspace.findFiles(
-      // path.join(t!, "./apps/srv-api", pattern),
-      pattern,
+      new vscode.RelativePattern(baseUri, pattern),
       "**/node_modules/**",
       undefined
     );

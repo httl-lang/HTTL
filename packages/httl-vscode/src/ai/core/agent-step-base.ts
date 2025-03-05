@@ -3,37 +3,40 @@ import { LLM } from './llm';
 import { FindFilesTool, findFilesTool } from './tools/find-files-tool';
 import { GetFileContentTool, getFileContentTool } from './tools/get-file-content-tool';
 
-export type AgentStepType = new (llm: LLM) => AgentStepBase;
+export type AgentStepType<TResult> = new (llm: LLM, args: any[]) => AgentStepBase<TResult>;
 
-export interface AgentStepResult {
+export interface AgentStepResult<TResult> {
   name: string;
-  result: any;
+  result: TResult;
   message: string;
 }
 
-export abstract class AgentStepBase {
-  private static readonly MAX_ITERATIONS = 10;
+export abstract class AgentStepBase<TResult> {
+  public static readonly MAX_ITERATIONS = 10;
 
   protected response: string = '';
-  protected result?: AgentStepResult;
-  protected iterations = 0;
+  protected result?: AgentStepResult<TResult>;
+  protected iterations = NaN;
 
   constructor(
-    protected readonly llm: LLM
+    protected readonly llm: LLM,
+    protected readonly args: any[] = []
   ) { }
 
   public start() {
+    this.iterations = Number.isNaN(this.iterations) ? 0 : this.iterations + 1;
+
     if (this.iterations > AgentStepBase.MAX_ITERATIONS) {
       throw new Error(`Max iterations reached for ${this.constructor.name}`);
     }
 
     if (this.iterations > 0) {
-      this.nextIteration();
+      this.nextIteration(this.iterations);
     } else {
-      this.startMessage();
+      this.llm.addUserMessage(
+        this.startMessage()
+      );
     }
-
-    this.iterations++;
   }
 
   public getOptions(): vscode.LanguageModelChatRequestOptions {
@@ -52,8 +55,8 @@ export abstract class AgentStepBase {
 
   public async execute(tool: vscode.LanguageModelToolCallPart): Promise<string | undefined> {
     if (tool.name === findFilesTool.name) {
-      const { pattern, purpose } = tool.input as { pattern: string; purpose: string; };
-      const { files, message } = await FindFilesTool.invoke({ pattern });
+      const { pattern, baseUri, purpose } = tool.input as { pattern: string; baseUri: string, purpose: string; };
+      const { files, message } = await FindFilesTool.invoke({ pattern, baseUri });
 
       return message;
     }
@@ -84,7 +87,7 @@ export abstract class AgentStepBase {
     return this.result !== undefined;
   }
 
-  public getResult(): AgentStepResult {
+  public getResult(): AgentStepResult<TResult> {
     if (!this.result) {
       throw new Error('Result is not defined');
     }
@@ -98,7 +101,7 @@ export abstract class AgentStepBase {
     return response;
   }
 
-  protected nextIteration() {
+  protected nextIteration(iteration: number) {
     this.llm.addUserMessage("Continue");
   }
 
