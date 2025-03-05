@@ -14,26 +14,24 @@ export const getFileContentTool = {
         type: "string",
         description: "Path to the file to read"
       },
-      // purpose: {
-      //   type: "string",
-      //   description: "Purpose for reading the file, e.g. 'controller', 'dependency'"
-      // }
     },
     required: [
       "filePath",
-      // "purpose"
     ]
   }
 };
 
 export class GetFileContentTool {
   static async invoke({ filePath }: { filePath: string }) {
-    const file = await vscode.workspace.fs.readFile(
-      vscode.Uri.file(filePath)
-    );
-    const content = new TextDecoder().decode(file);
+    try {
+      const file = await vscode.workspace.fs.readFile(
+        vscode.Uri.file(filePath)
+      );
+      const content = new TextDecoder().decode(file);
 
-
-    return `Content of ${filePath}:\n${content}`;
+      return `Content of \`${filePath}\`:\n${content}\n`;
+    } catch (error) {
+      return `Error reading file: ${filePath}\n${error}`;
+    }
   }
 }

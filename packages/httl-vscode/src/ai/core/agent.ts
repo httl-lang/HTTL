@@ -22,7 +22,7 @@ export class Agent {
   public async run<TResult>(stepType: AgentStepType<TResult>, ...args: any[]): Promise<AgentStepResult<TResult>> {
     const step = new stepType(this.llm, args);
     while (!step.isDone()) {
-      step.start();
+      await step.start();
 
       const chatResponse = await this.llm.sendRequest(
         step,

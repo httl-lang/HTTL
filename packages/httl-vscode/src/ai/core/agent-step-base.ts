@@ -23,7 +23,7 @@ export abstract class AgentStepBase<TResult> {
     protected readonly args: any[] = []
   ) { }
 
-  public start() {
+  public async start() {
     this.iterations = Number.isNaN(this.iterations) ? 0 : this.iterations + 1;
 
     if (this.iterations > AgentStepBase.MAX_ITERATIONS) {
@@ -33,10 +33,14 @@ export abstract class AgentStepBase<TResult> {
     if (this.iterations > 0) {
       this.nextIteration(this.iterations);
     } else {
-      this.llm.addUserMessage(
-        this.startMessage()
-      );
+      await this.startAction();
     }
+  }
+
+  protected async startAction() {
+    this.llm.addUserMessage(
+      this.startMessage()
+    );
   }
 
   public getOptions(): vscode.LanguageModelChatRequestOptions {

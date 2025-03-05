@@ -15,6 +15,7 @@ export class FindApiControllersStep extends AgentStepBase<FindApiControllersStep
   protected override startMessage = () =>
     `Instructions:
   - Find all API controllers files in the SELECTED PROJECT.
+  - Prioritize TypeScript files over JavaScript files.
   - Provide final response in a plain json array of elements in a format { name: <controller_name>, path: <controller_path> }
 `;
 

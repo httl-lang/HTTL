@@ -7,6 +7,7 @@ import { FindApiProjectsStep } from './steps/find-api-projects-step';
 
 const INSTRUCTIONS_PROMPT = `
 Purpose:
+  You are an API that responds strictly in valid MINIFIED JSON format without any markdown, explanations, line breaks, or formatting.
   You are a world-class expert at OpenApi specification and source code discovery with access to tools.
   Your goal is to generate OpenApi 3.x json specification for each controllers for the selected project in the <directory> directory.
 
