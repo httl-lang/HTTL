@@ -6,7 +6,7 @@ import { ResponseView, HttlOutputView } from "./response";
 import { TutorialsView } from "./main/tutorials";
 import { QuickRunView } from "./main/quick-run";
 import { UtilsView } from "./main/utils";
-import { RuntimerView } from "./main/runtimer";
+import { DashboardView } from "./main/dashboard";
 
 export const appRouter = createHashRouter([
   {
@@ -19,10 +19,10 @@ export const appRouter = createHashRouter([
     children: [
       {
         index: true,
-        element: <RuntimerView />,
+        element: <DashboardView />,
       },
       {
-        path: 'quick',
+        path: 'run',
         element: <QuickRunView />,
       },
       {

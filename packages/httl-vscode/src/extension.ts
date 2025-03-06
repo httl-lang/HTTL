@@ -6,7 +6,6 @@ import { Logger } from './common/logger';
 import { HttlExtensionContext } from './common';
 import { HttlResponseViewProvider } from './client/views/httl-response-view';
 import { HttlMainViewProvider } from './client/views/httl-main-view';
-// import { registerChatTools } from './lm/lm';
 
 let logger!: Logger;
 
@@ -15,7 +14,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	try {
 		const httlContext = new HttlExtensionContext(context, logger);
 		const client = HttlLanguageClient.initialize(httlContext);
-		// registerChatTools(context);
 
 		// * Providers
 		HttlInlineCompletionItemProvider.register(httlContext, client);

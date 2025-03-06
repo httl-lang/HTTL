@@ -39,21 +39,21 @@ export class FileSearch {
     });
   }
 
-  private loadGitignoreRules(dir: string): Ignore {
-    const gitignorePath = path.join(dir, '.gitignore');
-    const ig = ignore({ ignoreCase: true, allowRelativePaths: true });
+  // private loadGitignoreRules(dir: string): Ignore {
+  //   const gitignorePath = path.join(dir, '.gitignore');
+  //   const ig = ignore({ ignoreCase: true, allowRelativePaths: true });
 
-    try {
-      if (fs.existsSync(gitignorePath)) {
-        const gitignoreContent = fs.readFileSync(gitignorePath, 'utf8');
-        ig.add(gitignoreContent);
-      }
-    } catch (error) {
-      console.warn('Could not read .gitignore file:', error);
-    }
+  //   try {
+  //     if (fs.existsSync(gitignorePath)) {
+  //       const gitignoreContent = fs.readFileSync(gitignorePath, 'utf8');
+  //       ig.add(gitignoreContent);
+  //     }
+  //   } catch (error) {
+  //     console.warn('Could not read .gitignore file:', error);
+  //   }
 
-    return ig;
-  }
+  //   return ig;
+  // }
 
   private getWorkspaceDirectory(): vscode.Uri {
     const workspaceFolders = vscode.workspace.workspaceFolders;

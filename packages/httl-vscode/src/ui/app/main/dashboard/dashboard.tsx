@@ -4,19 +4,19 @@ import { VscClose } from "react-icons/vsc";
 import { HttlEditor, Viewer } from '../../../components/editor';
 import Button from '../../../components/button';
 
-import { RuntimerContext, useRuntimerModel } from './runtimer.model';
-import * as s from './runtimer.styles';
+import { DashboardContext, useDashboardModel } from './dashboard.model';
+import * as s from './dashboard.styles';
 import RunSvg from './run.svg';
 
-const _RuntimerView: React.FC = () => {
-  const model = useRuntimerModel(({ run, data }) => ({ run, data }));
+const _DashboardView: React.FC = () => {
+  const model = useDashboardModel(({ run, data, inProgress }) => ({ run, data, inProgress }));
 
   return (
     <s.Container>
       <s.Panel>
         <s.Description>
-          Runtimer
-          <Button onClick={() => model.run()}>
+          Workspace APIs
+          <Button progress={model.inProgress} onClick={() => model.run()}>
             <RunSvg />
           </Button>
         </s.Description>
@@ -41,4 +41,4 @@ const _RuntimerView: React.FC = () => {
   );
 };
 
-export const RuntimerView = () => <RuntimerContext><_RuntimerView /></RuntimerContext>;
+export const DashboardView = () => <DashboardContext><_DashboardView /></DashboardContext>;

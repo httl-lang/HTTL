@@ -4,17 +4,16 @@ import { AppModel } from "../../app.model";
 import { commutator } from "../../../services/commutator";
 
 @Model()
-export class RuntimerModel {
-  // private static readonly STORE_JWT_KEY = 'utils-jwt-decode';
-
+export class DashboardModel {
   public data?: any;
+  public inProgress = false;
 
   constructor(
     private readonly appModel = store(AppModel)
   ) { }
 
   public init() {
-    // this.rawJwt = this.appModel.getState(RuntimerModel.STORE_JWT_KEY) ?? '';
+    // this.rawJwt = this.appModel.getState(DashboardModel.STORE_JWT_KEY) ?? '';
     commutator.onRunLmResult((result: any) => {
       this.setResult(result);
     });
@@ -22,18 +21,20 @@ export class RuntimerModel {
 
   @Action()
   public run() {
+    this.inProgress = true;
     vscode.postMessage({
-      command: 'run-lm',
+      command: 'run-api-spec-gen',
       payload: '',
     });
   }
 
   @Action()
   public setResult(data: any) {
+    this.inProgress = false;
     this.data = data.payload;
   }
 }
 
-const [RuntimerContext, useRuntimerModel] = connect(RuntimerModel);
+const [DashboardContext, useDashboardModel] = connect(DashboardModel);
 
-export { RuntimerContext, useRuntimerModel };
+export { DashboardContext, useDashboardModel };

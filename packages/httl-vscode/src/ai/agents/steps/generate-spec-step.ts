@@ -21,21 +21,18 @@ export class GenerateSpecStep extends AgentStepBase<any> {
   - Resolve imports for such dependencies correctly, considering framework technology, aliases and relative paths.
     - If necessary, use available tool to load metadata files (e.g., package.json, webpack.config.js, tsconfig.json) to resolve aliases.
   - Generate a valid OpenAPI 3.x JSON specification for the ${this.args[0].name} controller file.
-  - The response must be **pure JSON** without markdown (\` \`\`\`json \`).
-  - The output MUST be a **VALID minified JSON** string:
-     \`\`\`json
-     {"openapi":"3.0.0","info":{"title":"Activity API","version":"1.0.0"}}
-     \`\`\`
+  - You must return plain **VALID JSON** string without wrapping in \`\`\`json\`\`\` block!
 `;
 
-// - The output MUST be a **minified JSON**:
-//     \`\`\`json
-//     {"openapi":"3.0.0","info":{"title":"Activity API","version":"1.0.0"}}
-//     \`\`\`
+// - The output MUST be a **VALID minified JSON** string:
+// \`\`\`json
+// {"openapi":"3.0.0","info":{"title":"Activity API","version":"1.0.0"}}
+// \`\`\`
 
   protected override parseResponse(response: string | undefined): any {
     try {
-      return JSON.parse(response!);
+      return eval(`(${response!})`);
+      // return JSON.parse(response!);
     } catch (error) {
       const errorMessage = `Error parsing response: ${response}`;
       console.error(errorMessage, error);

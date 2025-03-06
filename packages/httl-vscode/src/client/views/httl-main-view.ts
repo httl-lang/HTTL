@@ -11,6 +11,8 @@ import { OpenapiSpecAgent } from '../../ai/agents/openapi-spec-agent';
 export class HttlMainViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlMainView';
 
+  private readonly openapiSpecAgent = new OpenapiSpecAgent(this.context);
+
   constructor(
     context: HttlExtensionContext,
     private readonly client: HttlLanguageClient,
@@ -51,8 +53,7 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
       }
 
       case 'run-lm': {
-
-        for await (const result of OpenapiSpecAgent.run()) {
+        for await (const result of this.openapiSpecAgent.run()) {
           await this.postMessage({
             // @ts-ignore
             command: 'run-lm-result',
@@ -60,8 +61,6 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
             payload: result,
           });
         }
-
-        // const result = await OpenapiSpecAgent.run();
 
         return;
       }

@@ -18,6 +18,15 @@ export class HttlExtensionContext {
     return this._logger;
   }
 
+  public getWorkspaceDirectory(): string | undefined {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (workspaceFolders && workspaceFolders.length > 0) {
+      return workspaceFolders[0].uri.fsPath; // Returns the first workspace folder's path
+    }
+
+    return undefined; // No workspace opened
+  }
+
   public async saveState(key: string, value: any, global = false) {
     const state = global
       ? this._context.globalState

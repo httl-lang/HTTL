@@ -1,15 +1,17 @@
 import * as vscode from 'vscode';
 import { Agent } from '../core/agent';
 import { LLM } from '../core/llm';
-import { FindApiControllersStep, FindApiControllersStepResult } from './steps/find-api-controllers-step';
+import { FindApiControllersStep } from './steps/find-api-controllers-step';
 import { GenerateSpecStep } from './steps/generate-spec-step';
 import { FindApiProjectsStep } from './steps/find-api-projects-step';
+import { HttlExtensionContext } from '../../common';
 
 const INSTRUCTIONS_PROMPT = `
 Purpose:
-  You are an API that responds strictly in valid MINIFIED JSON format without any markdown, explanations, line breaks, or formatting.
-  You are a world-class expert at OpenApi specification and source code discovery with access to tools.
-  Your goal is to generate OpenApi 3.x json specification for each controllers for the selected project in the <directory> directory.
+  - You are an API that responds strictly in MINIFIED VALID JSON format without any markdown, explanations, line breaks, or formatting.
+  - JSON.parse() must be able to parse the output without any errors.
+  - You are a world-class expert at OpenApi specification and source code discovery with access to tools.
+  - Your goal is to generate OpenApi 3.x json specification for each controllers for the selected project in the <directory> directory.
 
 Instructions:
   - You will be instructed along the way to find the API backend projects and their files that contain API controllers and generate OpenApi spec.
@@ -25,19 +27,24 @@ General Instructions:
 
 export class OpenapiSpecAgent {
 
-  public static getWorkspaceDirectory(): string | undefined {
-    const workspaceFolders = vscode.workspace.workspaceFolders;
-    if (workspaceFolders && workspaceFolders.length > 0) {
-      return workspaceFolders[0].uri.fsPath; // Returns the first workspace folder's path
-    }
-    return undefined; // No workspace opened
-  }
+  constructor(
+    private readonly context: HttlExtensionContext,
+  ) { }
 
-  public static async *run(): AsyncGenerator<any, any, any> {
+  public async *run(): AsyncGenerator<any, any, any> {
+
+    const workDir = this.context.getWorkspaceDirectory();
+    if (!workDir) {
+      vscode.window.showErrorMessage('No workspace opened.');
+      return;
+    }
+
     const result: any[] = [];
+    const instructions = INSTRUCTIONS_PROMPT.replace('<directory>', workDir);
+
     const agent = new Agent({
       llm: await LLM.create(),
-      instructions: INSTRUCTIONS_PROMPT.replace('<directory>', this.getWorkspaceDirectory()!),
+      instructions,
     });
 
     const apiProjectResult = await agent.run(FindApiProjectsStep);
