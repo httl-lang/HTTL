@@ -8,11 +8,9 @@ import {
 } from "../../common";
 
 export class Commutator {
-
   public static isUserCommand(data: any) {
     return data?.command === 'set-progress' || data?.command === 'change-active-editor' || data?.command === 'set-response';
   }
-
 
   public static createInstance() {
     const commutator = new Commutator();

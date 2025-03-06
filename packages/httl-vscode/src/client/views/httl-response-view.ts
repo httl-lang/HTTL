@@ -99,10 +99,6 @@ export class HttlResponseViewProvider extends HttlBaseViewProvider {
     await this.postMessage({ command: 'close-response', file });
   }
 
-  public async setResponse(file: string, payload: any) {
-    await this.postMessage({ command: 'set-response', file, payload });
-  }
-
   public async setProgress(file: string, active?: boolean) {
     await this.postMessage({ command: 'set-progress', file, payload: active });
   }

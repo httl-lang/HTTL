@@ -19,6 +19,10 @@ export const appRouter = createHashRouter([
     children: [
       {
         index: true,
+        element: <RuntimerView />,
+      },
+      {
+        path: 'quick',
         element: <QuickRunView />,
       },
       {
@@ -28,10 +32,6 @@ export const appRouter = createHashRouter([
       {
         path: 'tutorials',
         element: <TutorialsView />,
-      },
-      {
-        path: 'runtimer',
-        element: <RuntimerView />,
       },
     ],
   },

@@ -36,6 +36,7 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
       case 'run-script': {
         await HttlRunCommand.execute(
           this.responseView,
+          this,
           this.client,
           messagefromUI.payload,
           constants.QUICK_RUN_DOCUMENT_NAME,

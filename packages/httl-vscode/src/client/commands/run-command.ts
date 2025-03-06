@@ -2,10 +2,11 @@ import vscode from 'vscode';
 import { HttlLanguageClient } from '../httl-language-client';
 import { HttlExtensionContext } from '../../common';
 import { HttlResponseViewProvider } from '../views/httl-response-view';
+import { HttlMainViewProvider } from '../views/httl-main-view';
 
 export class HttlRunCommand {
 
-  public static async execute(responseView: HttlResponseViewProvider, client: HttlLanguageClient, text: string, documentUri: string, filePath: string) {
+  public static async execute(responseView: HttlResponseViewProvider, mainView: HttlMainViewProvider | null, client: HttlLanguageClient, text: string, documentUri: string, filePath: string) {
     await responseView.show();
     await responseView.setProgress(filePath, true);
 
@@ -14,6 +15,7 @@ export class HttlRunCommand {
       text,
     );
     await responseView.setResponse(filePath, response);
+    await mainView?.setResponse(filePath, response); // TODO: temporary
   };
 
   constructor(
@@ -32,6 +34,7 @@ export class HttlRunCommand {
 
     await HttlRunCommand.execute(
       this.responseView,
+      null, // TODO: temporary
       this.client,
       text,
       document.uri.toString(),

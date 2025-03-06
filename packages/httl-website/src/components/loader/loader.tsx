@@ -1,15 +1,9 @@
 'use client';
 
-import React, { useRef, useState } from "react";
-
-import { HttlEditorRef } from "../editor";
+import React from "react";
 import styles from './loader.module.css';
 
 export default function Loader() {
-  const editorRef = useRef<HttlEditorRef>(null);
-  const [inProgress, setInProgress] = useState(false)
-  const [result, setResult] = useState();
-
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 384" className={styles.loader}>
       <circle

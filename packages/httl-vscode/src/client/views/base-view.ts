@@ -88,6 +88,10 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
     }
   }
 
+  public async setResponse(file: string, payload: any) {
+    await this.postMessage({ command: 'set-response', file, payload });
+  }
+
   protected async handleUIMessages(messagefromUI: any) { }
 
   protected async postMessage(message: UIMessage) {
@@ -98,7 +102,7 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
 
     await this.view.webview.postMessage(message);
   }
-
+  
   protected getHtmlForWebview(webview: vscode.Webview, appData: any): string {
     const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(
       this.context.ext.extensionUri, 'dist', 'ui.js'));

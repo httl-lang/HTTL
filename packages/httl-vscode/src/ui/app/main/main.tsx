@@ -12,13 +12,13 @@ const _MainView: React.FC = () => {
     <s.Main>
       <s.Tabs>
         <s.TabButton to="/main" end>
-          Run
+          Runtimer
+        </s.TabButton>
+        <s.TabButton to="/main/quick" end>
+          Quick
         </s.TabButton>
         <s.TabButton to="/main/utils" end>
           Utils
-        </s.TabButton>
-        <s.TabButton to="/main/runtimer" end>
-          Runtimer
         </s.TabButton>
         <s.TabButton to="/main/tutorials" end right icon>
           <VscBook />
