@@ -13,12 +13,21 @@ export const Container = styled.div`
   position: relative;
 `;
 
-export const Input = styled.textarea`
+
+export const Label = styled.div`
   background-color: inherit;
   color: var(--vscode-input-foreground);
   height: 24px;
-  scrollbar-width: none;
-  padding: 3px 0 3px 6px;
-  outline: none;
-  resize: none;
+  padding: 3px 3px 3px 6px;
 `;
+
+
+// export const Input = styled.textarea`
+//   background-color: inherit;
+//   color: var(--vscode-input-foreground);
+//   height: 24px;
+//   scrollbar-width: none;
+//   padding: 3px 0 3px 6px;
+//   outline: none;
+//   resize: none;
+// `;

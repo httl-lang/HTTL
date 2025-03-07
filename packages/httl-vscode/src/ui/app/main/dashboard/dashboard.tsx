@@ -9,9 +9,10 @@ import * as s from './dashboard.styles';
 import RunSvg from './run.svg';
 import { VscSparkle } from "react-icons/vsc";
 import ComboBox from '../../../components/combobox';
+import { ProjectPanel } from './project-panel';
 
 const _DashboardView: React.FC = () => {
-  const model = useDashboardModel(({ startWorkspaceAnalyzing, projects, controllers, apiProjectsProgress, inProgress, hasControllers }) =>
+  const model = useDashboardModel(({ startWorkspaceAnalyzing, projects, controllers, projectsProgress: apiProjectsProgress, inProgress, hasControllers }) =>
     ({ startWorkspaceAnalyzing, projects, controllers, inProgress, apiProjectsProgress, hasControllers }));
 
   return (
@@ -23,33 +24,7 @@ const _DashboardView: React.FC = () => {
             <VscSparkle />
           </Button>
         </s.Header>
-        {
-          model.projects.length !== 0 &&
-          <>
-            <s.ApisPanel>
-              <ComboBox options={model.projects} value={model.projects[0]} idField={'name'} valueField={'name'} />
-            </s.ApisPanel>
-            <s.Label>
-              .httl
-            </s.Label>
-            <s.Editor style={{ height: 150 }}>
-              <HttlEditor
-                value={"@spec: :3000"}
-                options={{
-                  overviewRulerLanes: 0,
-                  lineNumbers: 'off',
-                  lineDecorationsWidth: 0,
-                  glyphMargin: false,
-                  folding: false,
-                  scrollBeyondLastLine: false,
-                }}
-                onChange={(script) => null}
-                onRun={(script) => null}
-                onFocus={() => null}
-              />
-            </s.Editor>
-          </>
-        }
+        <ProjectPanel />
       </s.Panel>
       <s.Label center>
         Endpoints
@@ -58,6 +33,7 @@ const _DashboardView: React.FC = () => {
       {
         model.controllers.map((controller) => (
           <>
+
             <s.Label>
               {controller.tag} ({controller.name})
             </s.Label>
