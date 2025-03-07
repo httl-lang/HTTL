@@ -4,7 +4,12 @@ import {
   UIMessage,
   UIMessageType,
   ChangeActiveEditorMessagePayload,
-  CloseResponseMessagePayload
+  CloseResponseMessagePayload,
+  SetWorkspaceApiControllersPayload,
+  SetWorkspaceApiProjectsPayload,
+  SetWorkspaceApiControllerSpecPayload,
+  SetWorkspaceApiErrorPayload
+
 } from "../../common";
 
 export class Commutator {
@@ -43,9 +48,20 @@ export class Commutator {
     this.subscribe('set-response', cb);
   }
 
-  public onRunLmResult(cb: (message: any) => void) {
-    // @ts-ignore
-    this.subscribe('run-lm-result', cb);
+  public onSetWorkspaceApiProjects(cb: (message: SetWorkspaceApiProjectsPayload) => void) {
+    this.subscribe('set-workspace-api-projects', cb);
+  }
+
+  public onSetWorkspaceApiControllers(cb: (message: SetWorkspaceApiControllersPayload) => void) {
+    this.subscribe('set-workspace-api-controllers', cb);
+  }
+
+  public onSetWorkspaceApiControllerSpec(cb: (message: SetWorkspaceApiControllerSpecPayload) => void) {
+    this.subscribe('set-workspace-api-controller-spec', cb);
+  }
+
+  public onSetWorkspaceApiError(cb: (message: SetWorkspaceApiErrorPayload) => void) {
+    this.subscribe('set-workspace-api-error', cb);
   }
 
   private subscribe(command: UIMessageType, cb: (...args: any[]) => void) {

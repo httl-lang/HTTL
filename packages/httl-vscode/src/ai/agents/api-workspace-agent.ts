@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
 import { Agent } from '../core/agent';
 import { LLM } from '../core/llm';
-import { FindApiControllersStep } from './steps/find-api-controllers-step';
+import { FindApiControllersStep, FindApiControllersStepResult } from './steps/find-api-controllers-step';
 import { GenerateSpecStep } from './steps/generate-spec-step';
-import { FindApiProjectsStep } from './steps/find-api-projects-step';
+import { FindApiProjectsStep, FindApiProjectsStepResult } from './steps/find-api-projects-step';
 import { HttlExtensionContext } from '../../common';
 
 const INSTRUCTIONS_PROMPT = `
 Purpose:
-  - You are an API that responds strictly in MINIFIED VALID JSON format without any markdown, explanations, line breaks, or formatting.
+  - You are an API that responds strictly in VALID JSON format without any markdown, explanations, line breaks, or formatting.
   - JSON.parse() must be able to parse the output without any errors.
   - You are a world-class expert at OpenApi specification and source code discovery with access to tools.
   - Your goal is to generate OpenApi 3.x json specification for each controllers for the selected project in the <directory> directory.
@@ -25,13 +25,44 @@ General Instructions:
   - You must return plain json without wrapping in \`\`\`json\`\`\` block!
 `;
 
-export class OpenapiSpecAgent {
+export interface ControllerSpec {
+  tag: string;
+  spec: any;
+}
+
+export class ApiWorkspaceAgentResult {
+  public static apiProjects(projects: FindApiProjectsStepResult[]) {
+    return new ApiWorkspaceAgentResult('set-workspace-api-projects', projects);
+  }
+
+  public static apiControllers(controllers: FindApiControllersStepResult[]) {
+    return new ApiWorkspaceAgentResult('set-workspace-api-controllers', controllers);
+  }
+
+  public static controllerSpec(controllerSpec: ControllerSpec) {
+    return new ApiWorkspaceAgentResult('set-workspace-api-controller-spec', controllerSpec);
+  }
+
+  constructor(
+    public readonly command: string,
+    public readonly payload: any,
+    // public readonly next: any,
+  ) { }
+}
+
+// enum ApiWorkspaceAgent {
+//   apiProjects = 'set-workspace-api-projects',
+//   apiControllers = 'set-workspace-api-controllers',
+//   controllerSpec = 'set-workspace-api-controller-spec',
+// }
+
+export class ApiWorkspaceAgent {
 
   constructor(
     private readonly context: HttlExtensionContext,
   ) { }
 
-  public async *run(): AsyncGenerator<any, any, any> {
+  public async *analyze(): AsyncGenerator<ApiWorkspaceAgentResult, any, any> {
 
     const workDir = this.context.getWorkspaceDirectory();
     if (!workDir) {
@@ -39,7 +70,6 @@ export class OpenapiSpecAgent {
       return;
     }
 
-    const result: any[] = [];
     const instructions = INSTRUCTIONS_PROMPT.replace('<directory>', workDir);
 
     const agent = new Agent({
@@ -47,19 +77,24 @@ export class OpenapiSpecAgent {
       instructions,
     });
 
-    const apiProjectResult = await agent.run(FindApiProjectsStep);
-    yield apiProjectResult.result;
+    const apiProjectsResult = await agent.run(FindApiProjectsStep);
+    yield ApiWorkspaceAgentResult.apiProjects(apiProjectsResult.result, );
 
     const apiControllersResult = await agent.run(FindApiControllersStep);
-    yield apiControllersResult.result;
+    const apiControllers = apiControllersResult.result.sort((a, b) => a.tag.localeCompare(b.tag));
+    yield ApiWorkspaceAgentResult.apiControllers(apiControllers);
 
-    const apiControllers = apiControllersResult.result;
-
+    const result: any[] = [];
     for (const controller of apiControllers) {
       const controllerSpec = await agent.run(GenerateSpecStep, controller);
       result.push(controllerSpec.result);
+
+      yield ApiWorkspaceAgentResult.controllerSpec({
+        tag: controller.tag,
+        spec: controllerSpec.result,
+      });
     }
 
-    yield result;
+    // yield result;
   }
 }

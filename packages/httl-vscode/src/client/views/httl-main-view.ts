@@ -6,12 +6,12 @@ import { HttlBaseViewProvider } from './base-view';
 import { HttlResponseViewProvider } from './httl-response-view';
 import { HttlLanguageClient } from '../httl-language-client';
 import { HttlRunCommand } from '../commands/run-command';
-import { OpenapiSpecAgent } from '../../ai/agents/openapi-spec-agent';
+import { ApiWorkspaceAgent } from '../../ai/agents/api-workspace-agent';
 
 export class HttlMainViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlMainView';
 
-  private readonly openapiSpecAgent = new OpenapiSpecAgent(this.context);
+  private readonly workspaceAgent = new ApiWorkspaceAgent(this.context);
 
   constructor(
     context: HttlExtensionContext,
@@ -52,18 +52,27 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
         return;
       }
 
-      case 'run-lm': {
-        for await (const result of this.openapiSpecAgent.run()) {
-          await this.postMessage({
-            // @ts-ignore
-            command: 'run-lm-result',
-            // @ts-ignore
-            payload: result,
-          });
-        }
-
+      case 'start-workspace-analyzing': {
+        await this.startWorkspaceAnalyzing(messagefromUI);
         return;
       }
     }
+  }
+
+  private async startWorkspaceAnalyzing(message: any) {
+    try {
+      for await (const result of this.workspaceAgent.analyze()) {
+        await this.postMessage({
+          command: result.command as any, //TODO: fix this
+          payload: result.payload,
+        });
+      }
+    } catch (error: any) {
+      await this.postMessage({
+        command: 'set-workspace-api-error',
+        payload: error.message,
+      });
+    }
+
   }
 }

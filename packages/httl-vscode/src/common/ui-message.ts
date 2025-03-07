@@ -1,4 +1,7 @@
 import { HttlOutput } from 'httl-core';
+import { FindApiProjectsStepResult } from '../ai/agents/steps/find-api-projects-step';
+import { FindApiControllersStepResult } from '../ai/agents/steps/find-api-controllers-step';
+import { ControllerSpec } from '../ai/agents/api-workspace-agent';
 
 interface InitializeMessage {
   command: 'initialize';
@@ -31,7 +34,41 @@ interface SetProgressMessage {
 }
 export type SetProgressMessagePayload = Omit<SetProgressMessage, 'command'>;
 
-export type UIMessage = InitializeMessage | ChangeActiveEditorMessage | CloseResponseMessage | SetResponseMessage | SetProgressMessage;
+interface SetWorkspaceApiProjectsMessage {
+  command: 'set-workspace-api-projects';
+  payload: FindApiProjectsStepResult[];
+}
+export type SetWorkspaceApiProjectsPayload = Omit<SetWorkspaceApiProjectsMessage, 'command'>;
+
+
+interface SetWorkspaceApiControllersMessage {
+  command: 'set-workspace-api-controllers';
+  payload: FindApiControllersStepResult[];
+}
+export type SetWorkspaceApiControllersPayload = Omit<SetWorkspaceApiControllersMessage, 'command'>;
+
+interface SetWorkspaceApiControllerSpecMessage {
+  command: 'set-workspace-api-controller-spec';
+  payload: ControllerSpec;
+}
+export type SetWorkspaceApiControllerSpecPayload = Omit<SetWorkspaceApiControllerSpecMessage, 'command'>;
+
+interface SetWorkspaceApiErrorMessage {
+  command: 'set-workspace-api-error';
+  payload: ControllerSpec;
+}
+export type SetWorkspaceApiErrorPayload = Omit<SetWorkspaceApiErrorMessage, 'command'>;
+
+
+export type UIMessage = InitializeMessage |
+  ChangeActiveEditorMessage |
+  CloseResponseMessage |
+  SetResponseMessage |
+  SetProgressMessage |
+  SetWorkspaceApiProjectsMessage |
+  SetWorkspaceApiControllersMessage |
+  SetWorkspaceApiControllerSpecMessage |
+  SetWorkspaceApiErrorMessage;
 
 export type UIMessageType = UIMessage['command'];
 

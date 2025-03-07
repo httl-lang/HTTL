@@ -3,7 +3,7 @@ import { FileSearch } from '../../../common';
 import { AgentStepBase } from '../../core/agent-step-base';
 import { LLM } from '../../core/llm';
 
-interface FindApiProjectsStepResult {
+export interface FindApiProjectsStepResult {
   name: string;
   path: string;
   technology: string; // e.g. NodeJs - NestJs, Python - FastApi, etc.

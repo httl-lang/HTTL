@@ -6,6 +6,7 @@ import { AgentStepBase } from '../../core/agent-step-base';
 
 export interface FindApiControllersStepResult {
   name: string;
+  tag: string;
   path: string;
 }
 
@@ -16,7 +17,7 @@ export class FindApiControllersStep extends AgentStepBase<FindApiControllersStep
     `Instructions:
   - Find all API controllers files in the SELECTED PROJECT.
   - Prioritize TypeScript files over JavaScript files.
-  - Provide final response in a plain json array of elements in a format { name: <controller_name>, path: <controller_path> }
+  - Provide final response in a plain json array of elements in a format { name: <controller_file_name>, tag: <controller_api_tag>, path: <controller_path> }
 `;
 
   protected override parseResponse(response: string | undefined): any {
