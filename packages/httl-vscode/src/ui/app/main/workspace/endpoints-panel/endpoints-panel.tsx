@@ -1,7 +1,7 @@
 import React from 'react';
 import { VscClose } from "react-icons/vsc";
 
-import { DashboardContext, useDashboardModel } from '../dashboard.model';
+import { useWorkspaceModel } from '../workspace.model';
 import * as s from './endpoints-panel.styles';
 import RunSvg from './run.svg';
 import { VscSparkle } from "react-icons/vsc";
@@ -9,7 +9,7 @@ import { LoadingText } from '../../../../components/loading-text';
 
 
 export const EndpointsPanel: React.FC = () => {
-  const model = useDashboardModel(({ controllersProgress, controllers }) =>
+  const model = useWorkspaceModel(({ controllersProgress, controllers }) =>
     ({ controllersProgress, controllers }));
 
   if (model.controllersProgress) {

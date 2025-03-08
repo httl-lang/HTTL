@@ -14,7 +14,7 @@ interface ApiControllers extends FindApiControllersStepResult {
 }
 
 @Model()
-export class DashboardModel {
+export class WorkspaceModel {
   public projects: FindApiProjectsStepResult[] = [];
   public controllers: ApiControllers[] = [];
 
@@ -34,7 +34,7 @@ export class DashboardModel {
   ) { }
 
   public init() {
-    // this.rawJwt = this.appModel.getState(DashboardModel.STORE_JWT_KEY) ?? '';
+    // this.rawJwt = this.appModel.getState(WorkspaceModel.STORE_JWT_KEY) ?? '';
     commutator.onSetWorkspaceApiProjects((result: SetWorkspaceApiProjectsPayload) => {
       this.setWorkspaceApiProjects(result.payload);
     });
@@ -106,6 +106,6 @@ export class DashboardModel {
   }
 }
 
-const [DashboardContext, useDashboardModel] = connect(DashboardModel);
+const [WorkspaceContext, useWorkspaceModel] = connect(WorkspaceModel);
 
-export { DashboardContext, useDashboardModel };
+export { WorkspaceContext, useWorkspaceModel };

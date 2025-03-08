@@ -3,14 +3,14 @@ import { VscClose } from "react-icons/vsc";
 
 import { HttlEditor, Viewer } from '../../../../components/editor';
 
-import { DashboardContext, useDashboardModel } from '../dashboard.model';
+import { useWorkspaceModel } from '../workspace.model';
 import * as s from './project-panel.styles';
 import RunSvg from './run.svg';
 import { VscSparkle } from "react-icons/vsc";
 import ComboBox from '../../../../components/combobox';
 
 export const ProjectPanel: React.FC = () => {
-  const model = useDashboardModel(({ projects, projectsProgress, }) =>
+  const model = useWorkspaceModel(({ projects, projectsProgress, }) =>
     ({ projects, projectsProgress }));
 
   if (model.projectsProgress) {

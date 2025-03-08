@@ -4,16 +4,16 @@ import { VscClose } from "react-icons/vsc";
 import { HttlEditor, Viewer } from '../../../components/editor';
 import Button from '../../../components/button';
 
-import { DashboardContext, useDashboardModel } from './dashboard.model';
-import * as s from './dashboard.styles';
+import { WorkspaceContext, useWorkspaceModel } from './workspace.model';
+import * as s from './workspace.styles';
 import RunSvg from './run.svg';
 import { VscSparkle } from "react-icons/vsc";
 import ComboBox from '../../../components/combobox';
 import { ProjectPanel } from './project-panel';
 import { EndpointsPanel } from './endpoints-panel';
 
-const _DashboardView: React.FC = () => {
-  const model = useDashboardModel(({ startWorkspaceAnalyzing, inProgress, hasControllers }) =>
+const _WorkspaceView: React.FC = () => {
+  const model = useWorkspaceModel(({ startWorkspaceAnalyzing, inProgress, hasControllers }) =>
     ({ startWorkspaceAnalyzing, inProgress, hasControllers }));
 
   return (
@@ -48,4 +48,4 @@ const _DashboardView: React.FC = () => {
           />
         </s.ViewPanel> */}
 
-export const DashboardView = () => <DashboardContext><_DashboardView /></DashboardContext>;
+export const WorkspaceView = () => <WorkspaceContext><_WorkspaceView /></WorkspaceContext>;
