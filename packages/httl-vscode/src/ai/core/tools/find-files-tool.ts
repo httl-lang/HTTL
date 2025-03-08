@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import fs from "fs";
 import path from "path";
 import ignore, { Ignore } from "ignore";
+import { FileSearch } from '../../../common';
 
 
 export const findFilesTool = {
@@ -33,26 +34,18 @@ export const findFilesTool = {
 
 export class FindFilesTool {
   static async invoke({ pattern, baseUri }: { pattern: string, baseUri: string }) {
-    // await vscode.workspace.workspaceFile
-    // const gitignore = await vscode.workspace.findFiles(
-    //   '.gitignore',
+
+    // const files = await vscode.workspace.findFiles(
+    //   new vscode.RelativePattern(baseUri, pattern),
+    //   "**/node_modules/**",
+    //   undefined
     // );
-    // const gitignoreContent = fs.readFileSync(gitignore.at(-1)!.fsPath, "utf-8");
+    const files = await FileSearch.search(pattern, baseUri);
 
-    // const t = getWorkspaceDirectory();
-
-    const files = await vscode.workspace.findFiles(
-      new vscode.RelativePattern(baseUri, pattern),
-      "**/node_modules/**",
-      undefined
-    );
-
-    // const files = getFilteredFiles(t!);
-
-    const filePaths = files.map(x => x.fsPath);
+    // const filePaths = files.map(x => x.fsPath);
     return {
-      message: `Found ${files.length} files matching "${pattern}":\n${filePaths.join('\n')}`,
-      files: filePaths
+      message: `Found ${files.length} files matching "${pattern}":\n${files.join('\n')}`,
+      files: files
     };
   }
 }

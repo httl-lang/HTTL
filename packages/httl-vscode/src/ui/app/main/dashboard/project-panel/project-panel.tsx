@@ -10,9 +10,8 @@ import { VscSparkle } from "react-icons/vsc";
 import ComboBox from '../../../../components/combobox';
 
 export const ProjectPanel: React.FC = () => {
-  const model = useDashboardModel(({ startWorkspaceAnalyzing, projects, controllers, projectsProgress, inProgress, hasControllers }) =>
-    ({ startWorkspaceAnalyzing, projects, controllers, inProgress, projectsProgress, hasControllers }));
-
+  const model = useDashboardModel(({ projects, projectsProgress, }) =>
+    ({ projects, projectsProgress }));
 
   if (model.projectsProgress) {
     return (

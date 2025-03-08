@@ -19,14 +19,14 @@ export class DashboardModel {
   public controllers: ApiControllers[] = [];
 
   public projectsProgress = false;
-  public apiControllersProgress = false;
+  public controllersProgress = false;
 
   public get hasControllers() {
     return this.controllers.length > 0;
   }
 
   public get inProgress() {
-    return this.projectsProgress || this.apiControllersProgress || this.controllers.some(c => c.inProgress);
+    return this.projectsProgress || this.controllersProgress || this.controllers.some(c => c.inProgress);
   }
 
   constructor(
@@ -57,7 +57,7 @@ export class DashboardModel {
     this.projects = [];
     this.controllers = [];
     this.projectsProgress = true;
-    this.apiControllersProgress = false;
+    this.controllersProgress = false;
 
     vscode.postMessage({
       command: 'start-workspace-analyzing',
@@ -68,7 +68,7 @@ export class DashboardModel {
   @Action()
   public setWorkspaceApiProjects(data: FindApiProjectsStepResult[]) {
     this.projectsProgress = false;
-    this.apiControllersProgress = true;
+    this.controllersProgress = true;
 
     this.projects = data;
   }
@@ -76,7 +76,7 @@ export class DashboardModel {
   @Action()
   public setWorkspaceApiControllers(data: FindApiControllersStepResult[]) {
     this.projectsProgress = false;
-    this.apiControllersProgress = false;
+    this.controllersProgress = false;
 
     this.controllers = data;
     this.controllers[0].inProgress = true;
@@ -100,7 +100,7 @@ export class DashboardModel {
   @Action()
   public setError() {
     this.projectsProgress = false;
-    this.apiControllersProgress = false;
+    this.controllersProgress = false;
 
     this.controllers = [];
   }

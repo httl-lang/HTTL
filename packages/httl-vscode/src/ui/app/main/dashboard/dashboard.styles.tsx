@@ -16,21 +16,6 @@ export const Panel = styled.div`
   flex-direction: column;
 `;
 
-export const EditPanel = styled.div`
-  height: 150px;
-`;
-
-export const ViewPanel = styled.div`
-  flex: 1;
-`;
-
-export const ApisPanel = styled.div`
-
-`
-
-export const Editor = styled.div`
-`;
-
 export const Label = styled.div<{ center?: boolean }>`
   font-size: 10px;
   /* color: #535353; */

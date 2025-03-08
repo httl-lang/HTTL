@@ -10,10 +10,11 @@ import RunSvg from './run.svg';
 import { VscSparkle } from "react-icons/vsc";
 import ComboBox from '../../../components/combobox';
 import { ProjectPanel } from './project-panel';
+import { EndpointsPanel } from './endpoints-panel';
 
 const _DashboardView: React.FC = () => {
-  const model = useDashboardModel(({ startWorkspaceAnalyzing, projects, controllers, projectsProgress: apiProjectsProgress, inProgress, hasControllers }) =>
-    ({ startWorkspaceAnalyzing, projects, controllers, inProgress, apiProjectsProgress, hasControllers }));
+  const model = useDashboardModel(({ startWorkspaceAnalyzing, inProgress, hasControllers }) =>
+    ({ startWorkspaceAnalyzing, inProgress, hasControllers }));
 
   return (
     <s.Container expanded={model.hasControllers}>
@@ -26,31 +27,7 @@ const _DashboardView: React.FC = () => {
         </s.Header>
         <ProjectPanel />
       </s.Panel>
-      <s.Label center>
-        Endpoints
-      </s.Label>
-
-      {
-        model.controllers.map((controller) => (
-          <>
-
-            <s.Label>
-              {controller.tag} ({controller.name})
-            </s.Label>
-            {
-              Object.entries(controller.spec?.paths || {}).flatMap(([url, methods]) => (
-                Object.entries(methods as any).map(([method, spec]) => (
-                  <s.Panel>
-                    {method} {url}
-                    {/* GET /api/{controller.name} <RunSvg /> */}
-                  </s.Panel>
-                ))
-
-              ))
-            }
-          </>
-        ))
-      }
+      <EndpointsPanel />
     </s.Container>
   );
 };
