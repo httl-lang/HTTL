@@ -6,6 +6,7 @@ import { FindApiProjectsStepResult } from "../../../../ai/agents/steps/find-api-
 import { FindApiControllersStepResult } from "../../../../ai/agents/steps/find-api-controllers-step";
 import { SetWorkspaceApiProjectsPayload, SetWorkspaceApiControllersPayload, SetWorkspaceApiControllerSpecPayload, SetWorkspaceApiErrorPayload } from "../../../../common";
 import { ControllerSpec } from "../../../../ai/agents/api-workspace-agent";
+import { MainApi } from "../main-api";
 
 
 interface ApiControllers extends FindApiControllersStepResult {
@@ -13,9 +14,15 @@ interface ApiControllers extends FindApiControllersStepResult {
   inProgress?: boolean;
 }
 
+interface ApiProject {
+  name: string;
+  path: string;
+  technology: string;
+}
+
 @Model()
 export class WorkspaceModel {
-  public projects: FindApiProjectsStepResult[] = [];
+  public project?: ApiProject;//FindApiProjectsStepResult[] = [{ name: '@test/app', technology: 'NestJs', path: './app/src' }];
   public controllers: ApiControllers[] = [];
 
   public projectsProgress = false;
@@ -30,7 +37,8 @@ export class WorkspaceModel {
   }
 
   constructor(
-    private readonly appModel = store(AppModel)
+    private readonly appModel = store(AppModel),
+    private readonly api = new MainApi()
   ) { }
 
   public init() {
@@ -52,9 +60,28 @@ export class WorkspaceModel {
     });
   }
 
+  public async resolveProjects(search: string): Promise<ApiProject[]> {
+    // this.api.findProjects();
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([
+          { name: '@test/app', technology: 'NestJs', path: './app/src' },
+          { name: '@server/app', technology: 'NestJs', path: './server/app/src' }
+        ]);
+      }, 1000);
+    })
+    // return [{ name: '@test/app', technology: 'NestJs', path: './app/src' }];
+  }
+
+  @Action()
+  public async selectProject(project: ApiProject): Promise<void> {
+    // this.api.findProjects();
+    this.project = project;
+  }
+
   @Action()
   public startWorkspaceAnalyzing() {
-    this.projects = [];
+    this.project = undefined;
     this.controllers = [];
     this.projectsProgress = true;
     this.controllersProgress = false;
@@ -70,7 +97,7 @@ export class WorkspaceModel {
     this.projectsProgress = false;
     this.controllersProgress = true;
 
-    this.projects = data;
+    // this.projects = data;
   }
 
   @Action()

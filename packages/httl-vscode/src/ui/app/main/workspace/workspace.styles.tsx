@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-export const Container = styled.div<{ expanded?: boolean }>`
-  height: ${p => p.expanded ? '100%' : 'auto'};
-  background-color: ${p => p.expanded ? 'var(--vscode-diffEditor-unchangedRegionBackground)' : 'transparent'};
+export const Container = styled.div`
+  height: 100%;
+  background-color: var(--vscode-diffEditor-unchangedRegionBackground);
   width: 100%;
   overflow: hidden;
 `;

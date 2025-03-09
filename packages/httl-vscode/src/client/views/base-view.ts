@@ -8,10 +8,12 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
   protected view!: vscode.WebviewView;
   protected delayedMessages: UIMessage[] = [];
 
+
   constructor(
     protected readonly context: HttlExtensionContext,
     protected readonly viewType: string,
-    protected readonly appData: Omit<AppData, 'baseUri'> | any
+    protected readonly appData: Omit<AppData, 'baseUri'> | any,
+    protected readonly api?: any
   ) {
     context.ext.subscriptions.push(
       vscode.window.registerWebviewViewProvider(
@@ -39,7 +41,29 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
 
     webviewView.webview.onDidReceiveMessage(
       async message => {
-        switch (message.command) {
+        const { command, requestId, payload } = message;
+
+        if (requestId) {
+          if (!this.api) {
+            throw new Error('API is not defined');
+          }
+
+          if (typeof this.api[`${command}`] !== 'function') {
+            throw new Error(`API method ${command} is not defined`);
+          }
+
+          const response = await this.api[`${command}`](payload);
+
+          webviewView.webview.postMessage({
+            command,
+            requestId,
+            payload: response
+          });
+
+          return;
+        }
+
+        switch (command) {
           case 'ready': {
             this.isAppReady = true;
 
@@ -102,7 +126,7 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
 
     await this.view.webview.postMessage(message);
   }
-  
+
   protected getHtmlForWebview(webview: vscode.Webview, appData: any): string {
     const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(
       this.context.ext.extensionUri, 'dist', 'ui.js'));

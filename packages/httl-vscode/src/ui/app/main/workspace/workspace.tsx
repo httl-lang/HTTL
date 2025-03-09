@@ -9,7 +9,7 @@ import * as s from './workspace.styles';
 import RunSvg from './run.svg';
 import { VscSparkle } from "react-icons/vsc";
 import ComboBox from '../../../components/combobox';
-import { ProjectPanel } from './project-panel';
+import { ProjectPanel } from './project-selector';
 import { EndpointsPanel } from './endpoints-panel';
 
 const _WorkspaceView: React.FC = () => {
@@ -17,15 +17,13 @@ const _WorkspaceView: React.FC = () => {
     ({ startWorkspaceAnalyzing, inProgress, hasControllers }));
 
   return (
-    <s.Container expanded={model.hasControllers}>
+    <s.Container>
       <s.Panel>
         <s.Header>
           Workspace APIs
-          <Button progress={model.inProgress} onClick={() => model.startWorkspaceAnalyzing()}>
-            <VscSparkle />
-          </Button>
         </s.Header>
         <ProjectPanel />
+        {/* <PrestartPanel /> */}
       </s.Panel>
       <EndpointsPanel />
     </s.Container>

@@ -46,16 +46,21 @@ const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, showC
       }
     };
 
+    const onBlur = () => {
+      onClose?.();
+    };
+
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('click', onClick);
     window.addEventListener('message', onMessage, true);
-    // document.addEventListener('mouseleave', onDocMouseleave);
+    window.addEventListener('blur', onBlur);
+
 
     return () => {
       document.removeEventListener('click', onClick);
       document.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('message', onMessage);
-      // document.removeEventListener('mouseleave', onDocMouseleave);
+      window.removeEventListener('blur', onBlur);
     };
   }, [showState, closeOnEscape]);
 

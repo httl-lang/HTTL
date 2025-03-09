@@ -8,6 +8,16 @@ import { HttlLanguageClient } from '../httl-language-client';
 import { HttlRunCommand } from '../commands/run-command';
 import { ApiWorkspaceAgent } from '../../ai/agents/api-workspace-agent';
 
+
+export class HttlMainViewApi {
+
+  public async createExample(payload: string) {
+    return vscode.workspace.openTextDocument({
+      content: payload,
+    });
+  }
+}
+
 export class HttlMainViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlMainView';
 
@@ -18,9 +28,14 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
     private readonly client: HttlLanguageClient,
     private readonly responseView: HttlResponseViewProvider,
   ) {
-    super(context, HttlMainViewProvider.viewType, {
-      view: 'main',
-    });
+    super(
+      context,
+      HttlMainViewProvider.viewType,
+      {
+        view: 'main',
+      },
+      new HttlMainViewApi()
+    );
   }
 
   protected override async handleUIMessages(messagefromUI: any): Promise<void> {

@@ -1,9 +1,13 @@
 import React from "react";
 import * as s from './loader.styles';
 
-export function Loader() {
+export interface LoaderProps {
+  className?: string;
+}
+
+export function Loader({ className }: LoaderProps) {
   return (
-    <s.Container>
+    <s.Container className={className}>
       <s.Loader xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 384">
         <s.ActiveCircle
           r="176"

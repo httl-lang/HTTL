@@ -9,6 +9,9 @@ declare global {
 
   const appData: AppData;
   const vscode: ReturnType<typeof acquireVsCodeApi>;
+
+  const MonacoEnvironment: any;
+
 }
 
-export {};
+export { };
