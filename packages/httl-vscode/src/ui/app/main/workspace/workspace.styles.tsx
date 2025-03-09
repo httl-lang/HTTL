@@ -2,18 +2,27 @@ import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
   height: 100%;
-  background-color: var(--vscode-diffEditor-unchangedRegionBackground);
   width: 100%;
+  background-color: var(--vscode-diffEditor-unchangedRegionBackground);
   overflow: hidden;
 `;
 
-export const Panel = styled.div`
+export const Panel = styled.div<{ title?: string }>`
   padding: 5px;
   margin: 6px;
   background-color: var(--vscode-editor-background);
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+
+  ${p => p.title && css`
+    &::before {
+      content: '${p.title}';
+      font-size: 12px;
+      line-height: 21px;
+      color: #9d9d9d;
+    }
+  `}
 `;
 
 export const Label = styled.div<{ center?: boolean }>`
@@ -25,22 +34,4 @@ export const Label = styled.div<{ center?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: ${p => p.center ? 'center' : 'flex-start'};
-`;
-
-export const Header = styled.div`
-  font-size: 12px;
-  line-height: 21px;
-  color: #9d9d9d;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  small {
-    color: #535353;
-  }
-
-  a {
-    color: #9d9d9d;
-  }
 `;

@@ -8,9 +8,9 @@ import { WorkspaceContext, useWorkspaceModel } from './workspace.model';
 import * as s from './workspace.styles';
 import RunSvg from './run.svg';
 import { VscSparkle } from "react-icons/vsc";
-import ComboBox from '../../../components/combobox';
-import { ProjectPanel } from './project-selector';
+import { ProjectSelector } from './project-selector';
 import { EndpointsPanel } from './endpoints-panel';
+import { PrestartPanel } from './prestart-panel';
 
 const _WorkspaceView: React.FC = () => {
   const model = useWorkspaceModel(({ startWorkspaceAnalyzing, inProgress, hasControllers }) =>
@@ -18,12 +18,9 @@ const _WorkspaceView: React.FC = () => {
 
   return (
     <s.Container>
-      <s.Panel>
-        <s.Header>
-          Workspace APIs
-        </s.Header>
-        <ProjectPanel />
-        {/* <PrestartPanel /> */}
+      <s.Panel title="HTTL Projects">
+        <ProjectSelector />
+        <PrestartPanel />
       </s.Panel>
       <EndpointsPanel />
     </s.Container>
