@@ -18,7 +18,7 @@ function ComboBox<TItem extends { [key: string]: any }>(
   const [showPopup, setShowPopup] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(false);
-  const [items, setItems] = useState<TItem[]>([]);
+  const [items, setItems] = useState<TItem[] | undefined>(undefined);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ function ComboBox<TItem extends { [key: string]: any }>(
 
   const onSelect = useCallback((item: TItem) => {
     setShowPopup(false);
-    setItems([]);
+    setItems(undefined);
     onChange?.(item);
   }, [searchText]);
 
@@ -84,11 +84,13 @@ function ComboBox<TItem extends { [key: string]: any }>(
           {loading && <s.CircleLoader />}
           <s.Select>
             {
-              items.map((item, index) => (
-                <s.SelectItem key={index} onClick={() => onSelect(item)}                >
-                  {render(item)}
-                </s.SelectItem>
-              ))
+              items?.length === 0
+                ? <s.SelectItem>No projects found</s.SelectItem>
+                : items?.map((item, index) => (
+                  <s.SelectItem key={index} onClick={() => onSelect(item)} focused={items.length === 1}>
+                    {render(item)}
+                  </s.SelectItem>
+                ))
             }
           </s.Select>
         </s.PopupBody>

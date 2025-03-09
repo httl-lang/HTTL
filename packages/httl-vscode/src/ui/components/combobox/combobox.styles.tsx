@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Popup from '../popup';
 import { Loader } from '../loader';
 
@@ -60,18 +60,23 @@ export const Select = styled.div`
   flex-direction: column;
   margin-top: 3px;
   max-height: 300px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
-export const SelectItem = styled.div`
+export const SelectItem = styled.div<{ focused?: boolean }>`
   cursor: pointer;
   border-radius: 3px;
   padding: 3px 6px;
   width: 100%;
+  color: var(--vscode-quickInputList-focusForeground);
 
   &:hover {
     background-color: var(--vscode-list-hoverBackground);
   }
+
+  ${({ focused }) => focused && css`
+    background-color: var(--vscode-quickInputList-focusBackground) !important;
+  `}
 `;
 
 export const CircleLoader = styled(Loader)`
@@ -80,6 +85,7 @@ export const CircleLoader = styled(Loader)`
   top: 14px;
   opacity: 0.6;
 `;
+
 
 // export const Loader = styled.div`
 //   overflow: hidden;

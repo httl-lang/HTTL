@@ -21,7 +21,7 @@ export class FileSearch {
   private workDir!: vscode.Uri;
 
   private init() {
-    this.workDir = this.getWorkspaceDirectory();
+    this.workDir = FileSearch.getWorkspaceDirectory();
     // this.ignoreRules = this.loadGitignoreRules(this.workDir.fsPath);
   }
 
@@ -56,7 +56,7 @@ export class FileSearch {
   //   return ig;
   // }
 
-  private getWorkspaceDirectory(): vscode.Uri {
+  public static getWorkspaceDirectory(): vscode.Uri {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (workspaceFolders && workspaceFolders.length > 0) {
       return workspaceFolders[0].uri;

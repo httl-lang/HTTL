@@ -1,34 +1,45 @@
 import { Json } from "httl-common";
 import { FileSearch } from "../../../common";
 import { HttlProjectFileInfo, HttlProjectItem } from "./types";
+import fs from "fs";
 
 export class HttlProjectService {
 
   public async resolveProjects({ search }: { search: string }): Promise<HttlProjectItem[]> {
+    try {
+      const files = await FileSearch.search('**/*.json');
 
-    const files = await FileSearch.search('**/*.json', undefined, false);
+      const infos: HttlProjectFileInfo[] = files
+        .map(file => ({
+          path: file,
+          content: Json.safeParse(
+            fs.readFileSync(file, 'utf-8')
+          )
+        }))
+        .filter(({ path, content: { name, source, prestart, scripts } = {} }) =>
+          name && source && prestart && scripts && (
+            name.includes(search) ||
+            path.includes(search) ||
+            source.includes(search)
+          )
+        )
+        .map(file => ({
+          name: file.content.name,
+          path: file.path,
+        }));
 
-    const infos: HttlProjectFileInfo[] = files
-      .map(file => Json.safeParse(file))
-      .filter(Boolean)
-      .filter(project =>
-        project.name.includes(search) ||
-        project.path.includes(search) ||
-        project.source?.includes(search)
-      )
-      .map(file => ({
-        name: file.name,
-        path: file,
-      }));
+      if (infos.length === 0 && URL.canParse(search)) {
+        return [{
+          name: 'Import From OpenAPI Spec',
+          specUrl: search,
+        }];
+      }
 
-    if (infos.length === 0 && URL.canParse(search)) {
-      return [{
-        name: 'Import From OpenAPI Spec',
-        specUrl: search,
-      }];
+      return infos;
+    } catch (error) {
+      console.error(error);
+      return [];
     }
-
-    return infos;
   }
 
   public async openProject({ path }: { path: string }): Promise<any> {

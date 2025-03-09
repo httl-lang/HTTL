@@ -17,17 +17,17 @@ export const Label = styled.div`
 export const Item = styled.div`
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
 `;
 
 export const Name = styled.span`
-  color: var(--vscode-quickInputList-focusForeground);
   font-size: 12px;
 `;
 
 export const SubTitle = styled.span`
   font-size: 10px;
   margin-left: 10px;
-  color: var(--vscode-quickInputList-descriptionForeground);
+  color: var(--vscode-foreground)
 `;
 
 export const DefaultHttlFile = styled.div`
