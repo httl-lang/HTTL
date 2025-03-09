@@ -24,14 +24,25 @@ export const ProjectPanel: React.FC = () => {
         options={(search) => model.resolveProjects(search)}
         onChange={(project) => model.selectProject(project)}
         render={(item) => (
-          <s.Item>
-            <s.Name>
-              {item.name}
-            </s.Name>
-            <s.SubTitle>
-              {item.path}
-            </s.SubTitle>
-          </s.Item>
+          'path' in item
+            ?
+            <s.Item>
+              <s.Name>
+                {item.name}
+              </s.Name>
+              <s.SubTitle>
+                {item.path}
+              </s.SubTitle>
+            </s.Item>
+            :
+            <s.Item>
+              <s.Name>
+                {item.name}
+              </s.Name>
+              <s.SubTitle>
+                {item.specUrl}
+              </s.SubTitle>
+            </s.Item>
         )}
         buttons={() => (
           <Button progress={model.inProgress} onClick={() => model.startWorkspaceAnalyzing()}>

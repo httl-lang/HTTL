@@ -1,22 +1,13 @@
 
 import vscode from 'vscode';
-import { constants, HttlExtensionContext } from '../../common';
+import { constants, FileSearch, HttlExtensionContext } from '../../common';
 import { Lang } from 'httl-core';
 import { HttlBaseViewProvider } from './base-view';
 import { HttlResponseViewProvider } from './httl-response-view';
 import { HttlLanguageClient } from '../httl-language-client';
 import { HttlRunCommand } from '../commands/run-command';
 import { ApiWorkspaceAgent } from '../../ai/agents/api-workspace-agent';
-
-
-export class HttlMainViewApi {
-
-  public async createExample(payload: string) {
-    return vscode.workspace.openTextDocument({
-      content: payload,
-    });
-  }
-}
+import { HttlProjectService } from '../services/project/project-service';
 
 export class HttlMainViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlMainView';
@@ -34,7 +25,7 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
       {
         view: 'main',
       },
-      new HttlMainViewApi()
+      new HttlProjectService()
     );
   }
 
@@ -88,6 +79,5 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
         payload: error.message,
       });
     }
-
   }
 }

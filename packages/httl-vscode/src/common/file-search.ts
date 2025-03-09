@@ -8,13 +8,13 @@ import { glob, globSync, globStream, globStreamSync, Glob } from 'glob'
 export class FileSearch {
 
   private static instance: FileSearch;
-  public static search(pattern: string | string[], root?: string): Promise<string[]> {
+  public static search(pattern: string | string[], root?: string, absolute = true): Promise<string[]> {
     if (!this.instance) {
       this.instance = new FileSearch();
       this.instance.init();
     }
 
-    return this.instance.search(pattern, root);
+    return this.instance.search(pattern, root, absolute);
   }
 
   private ignoreRules!: Ignore;
@@ -25,10 +25,11 @@ export class FileSearch {
     // this.ignoreRules = this.loadGitignoreRules(this.workDir.fsPath);
   }
 
-  private search(pattern: string | string[], root?: string): Promise<string[]> {
+  private search(pattern: string | string[], root?: string, absolute?: boolean): Promise<string[]> {
     return glob(pattern, {
       cwd: root || this.workDir.toString(),
-      absolute: true,
+      absolute,
+      dotRelative: !absolute,
       nodir: true,
       ignore: ["**/node_modules/**", "**/.git/**", "**/.vscode/**", "**/.idea/**", "**/dist/**", "**/build/**"],
       // ignore: {

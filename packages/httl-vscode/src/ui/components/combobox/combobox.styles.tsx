@@ -59,6 +59,8 @@ export const Select = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 3px;
+  max-height: 300px;
+  overflow-y: scroll;
 `;
 
 export const SelectItem = styled.div`
