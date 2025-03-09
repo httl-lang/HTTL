@@ -4,17 +4,17 @@ import { VscClose } from "react-icons/vsc";
 import { HttlEditor, Viewer } from '../../../components/editor';
 import Button from '../../../components/button';
 
-import { WorkspaceContext, useWorkspaceModel } from './workspace.model';
-import * as s from './workspace.styles';
+import { ProjectContext, useProjectModel } from './project.model';
+import * as s from './project.styles';
 import RunSvg from './run.svg';
 import { VscSparkle } from "react-icons/vsc";
 import { ProjectSelector } from './project-selector';
 import { EndpointsPanel } from './endpoints-panel';
 import { PrestartPanel } from './prestart-panel';
 
-const _WorkspaceView: React.FC = () => {
-  const model = useWorkspaceModel(({ startWorkspaceAnalyzing, inProgress, hasControllers }) =>
-    ({ startWorkspaceAnalyzing, inProgress, hasControllers }));
+const _ProjectView: React.FC = () => {
+  // const model = useProjectModel(({ startWorkspaceAnalyzing, inProgress, hasControllers }) =>
+  //   ({ startWorkspaceAnalyzing, inProgress, hasControllers }));
 
   return (
     <s.Container>
@@ -43,4 +43,4 @@ const _WorkspaceView: React.FC = () => {
           />
         </s.ViewPanel> */}
 
-export const WorkspaceView = () => <WorkspaceContext><_WorkspaceView /></WorkspaceContext>;
+export const ProjectView = () => <ProjectContext><_ProjectView /></ProjectContext>;

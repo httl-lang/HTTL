@@ -1,9 +1,13 @@
-import { Json } from "httl-common";
-import { FileSearch } from "../../../common";
-import { HttlProjectFileInfo, HttlProjectItem } from "./types";
 import fs from "fs";
+import { Json } from "httl-common";
+
+import { FileSearch } from "../../../common";
+import { HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData } from "./types";
+import { HttlProject } from "./project";
 
 export class HttlProjectService {
+
+  private projects = new Map<string, HttlProject>();
 
   public async resolveProjects({ search }: { search: string }): Promise<HttlProjectItem[]> {
     try {
@@ -16,11 +20,11 @@ export class HttlProjectService {
             fs.readFileSync(file, 'utf-8')
           )
         }))
-        .filter(({ path, content: { name, source, prestart, scripts } = {} }) =>
-          name && source && prestart && scripts && (
-            name.includes(search) ||
-            path.includes(search) ||
-            source.includes(search)
+        .filter(({ path, content }) =>
+          HttlProject.isValid(content) && (
+            content.name.includes(search) ||
+            content.source.includes(search) ||
+            path.includes(search)
           )
         )
         .map(file => ({
@@ -42,19 +46,25 @@ export class HttlProjectService {
     }
   }
 
-  public async openProject({ path }: { path: string }): Promise<any> {
-    const fiels = await FileSearch.search('**/*.json', undefined, false);
+  public async openProject({ path }: { path: string }): Promise<HttlProjectViewData> {
+    const project = this.projects.get(path) || HttlProject.open(path);
 
-    return fiels.map(file => ({
-      name: file,
-    }));
+    this.projects.set(path, project);
+
+    return project.getViewData();
   }
 
-  public async importFromOpenApiSpec({ url }: { url: string }): Promise<any> {
-    const fiels = await FileSearch.search('**/*.json', undefined, false);
+  public async importFromOpenApiSpec({ url }: { url: string }): Promise<HttlProjectViewData> {
+    if (!URL.canParse(url)) {
+      throw new Error('Invalid URL');
+    }
 
-    return fiels.map(file => ({
-      name: file,
-    }));
+    const response = await fetch(url);
+    const openApiSpec = await response.text();
+
+    const project = HttlProject.fromSpec(openApiSpec, url);
+    project.save();
+
+    return project.getViewData();
   }
 }

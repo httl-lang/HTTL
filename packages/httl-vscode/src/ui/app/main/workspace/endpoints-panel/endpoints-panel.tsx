@@ -1,7 +1,7 @@
 import React from 'react';
 import { VscClose } from "react-icons/vsc";
 
-import { useWorkspaceModel } from '../workspace.model';
+import { useWorkspaceModel } from '../project.model';
 import * as s from './endpoints-panel.styles';
 import RunSvg from './run.svg';
 import { VscSparkle } from "react-icons/vsc";

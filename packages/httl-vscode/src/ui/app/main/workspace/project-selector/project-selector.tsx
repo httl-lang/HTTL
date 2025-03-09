@@ -4,7 +4,7 @@ import { VscSparkle } from "react-icons/vsc";
 import ComboBox from '../../../../components/combobox';
 import Button from '../../../../components/button';
 
-import { useWorkspaceModel } from '../workspace.model';
+import { useWorkspaceModel } from '../project.model';
 import * as s from './project-selector.styles';
 
 

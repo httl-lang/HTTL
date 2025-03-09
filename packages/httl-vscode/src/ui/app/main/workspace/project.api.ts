@@ -1,4 +1,4 @@
-import { HttlProjectItem } from "../../../../client/services/project";
+import { HttlProjectItem, HttlProjectFileInfo, HttlProjectViewData } from "../../../../client/services/project";
 import { Api } from "../../../services/api";
 
 export class ProjectApi extends Api {
@@ -7,11 +7,11 @@ export class ProjectApi extends Api {
     return this.sendRequest('resolveProjects', { search });
   }
 
-  public openProject(path: string): Promise<any> {
+  public openProject(path: string): Promise<HttlProjectViewData> {
     return this.sendRequest('openProject', { path });
   }
 
-  public importFromOpenApiSpec(url: string): Promise<any> {
+  public importFromOpenApiSpec(url: string): Promise<HttlProjectViewData> {
     return this.sendRequest('importFromOpenApiSpec', { url });
   }
 }
