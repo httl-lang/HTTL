@@ -4,48 +4,41 @@ import { VscSparkle } from "react-icons/vsc";
 import ComboBox from '../../../../components/combobox';
 import Button from '../../../../components/button';
 
-import { useWorkspaceModel } from '../project.model';
+import { useProjectModel } from '../project.model';
 import * as s from './project-selector.styles';
 
 
 export const ProjectSelector: React.FC = () => {
-  const model = useWorkspaceModel(({ project, resolveProjects, selectProject, inProgress, projectsProgress, startWorkspaceAnalyzing }) =>
-    ({ project, resolveProjects, selectProject, inProgress, projectsProgress, startWorkspaceAnalyzing }));
+  const model = useProjectModel(({ fileInfo, resolveProjects, selectProject }) =>
+    ({ fileInfo, resolveProjects, selectProject }));
 
   return (
     <s.Container>
       <ComboBox
         placeholder='Select project'
         keyField='name'
-        current={model.project}
+        current={model.fileInfo}
         options={(search) => model.resolveProjects(search)}
         onChange={(project) => model.selectProject(project)}
         render={(item) => (
-          'path' in item
-            ?
-            <s.Item>
-              <s.Name>
-                {item.name}
-              </s.Name>
-              <s.SubTitle>
-                {item.path}
-              </s.SubTitle>
-            </s.Item>
-            :
-            <s.Item>
-              <s.Name>
-                {item.name}
-              </s.Name>
-              <s.SubTitle>
-                {item.specUrl}
-              </s.SubTitle>
-            </s.Item>
+          <s.Item>
+            <s.Name>
+              {item.name}
+            </s.Name>
+            <s.SubTitle>
+              {
+                'path' in item
+                  ? item.path
+                  : item.specUrl
+              }
+            </s.SubTitle>
+          </s.Item>
         )}
-        buttons={() => (
-          <Button progress={model.inProgress} onClick={() => model.startWorkspaceAnalyzing()}>
-            <VscSparkle />
-          </Button>
-        )}
+      // buttons={() => (
+      //   <Button progress={model.inProgress} onClick={() => model.startWorkspaceAnalyzing()}>
+      //     <VscSparkle />
+      //   </Button>
+      // )}
       />
     </s.Container>
   );

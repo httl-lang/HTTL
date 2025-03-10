@@ -81,8 +81,17 @@ export class HttlProject {
   }
 
   public getViewData(): HttlProjectViewData {
-    const endpoints = this.spec.getEndpoints();
-    t[0].method
+    const endpoints = this.spec
+      .getEndpoints()
+      .map(endpoint => ({
+        method: endpoint.method,
+        path: endpoint.path,
+        tag: endpoint.tags?.[0] || 'default',
+        scripts: this.props.scripts
+          .filter(script =>
+            script.id === `${endpoint.method} ${endpoint.path}`.toLowerCase()
+          ),
+      }));
 
     return {
       fileInfo: this.getInfo(),
@@ -90,7 +99,7 @@ export class HttlProject {
       source: this.props.source,
       technologies: this.props.technologies,
       prestart: this.props.prestart.code,
-      endpoints: [],
+      endpoints,
     };
   }
 }

@@ -9,24 +9,11 @@ import { ControllerSpec } from "../../../../ai/agents/api-workspace-agent";
 import { ProjectApi } from "./project.api";
 import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectItem } from "../../../../client/services/project";
 
-
-// interface ApiControllers extends FindApiControllersStepResult {
-//   spec?: any;
-//   inProgress?: boolean;
-// }
-
-export interface HttlProjectViewData {
-  fileInfo: HttlProjectFileInfo
-  description: string;
-  source: string;
-  technologies: string[];
-  prestart: {
-    code: string;
-  };
-
+interface ApiEndpointGroup {
+  name: string;
+  inProgress: boolean;
   endpoints: HttlProjectApiEndpoint[];
 }
-
 
 @Model()
 export class ProjectModel {
@@ -36,7 +23,7 @@ export class ProjectModel {
   public technologies?: string[];
   public prestart?: string;
 
-  public endpoints: HttlProjectApiEndpoint[] = [];
+  public endpointGoups: ApiEndpointGroup[] = [];
 
   // public controllers: ApiControllers[] = [];
 
@@ -93,7 +80,23 @@ export class ProjectModel {
     this.source = project.source;
     this.technologies = project.technologies;
     this.prestart = project.prestart;
-    this.endpoints = project.endpoints;
+
+    const groupedEndpoints = project.endpoints.reduce((acc, endpoint) => {
+      const group = acc.get(endpoint.tag) || {
+        name: endpoint.tag,
+        inProgress: false,
+        endpoints: []
+      };
+
+      group.endpoints.push(endpoint);
+
+      return acc;
+    }, new Map<string, ApiEndpointGroup>);
+
+
+    this.endpointGoups = groupedEndpoints.entries().toArray()
+      .sort(([tagA], [tagB]) => tagA.localeCompare(tagB))
+      .map(([_, group]) => group);
   }
 
   // @Action()
