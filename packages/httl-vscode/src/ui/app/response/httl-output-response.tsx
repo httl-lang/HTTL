@@ -8,11 +8,13 @@ import StatusLabel from '../../components/status-label';
 
 export interface HttlOutputResponseProps {
   response: HttpResponse;
+  source?: string;
+  onSourceClick?: () => void;
 }
 
 type Panels = 'body' | 'headers';
 
-export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response }) => {
+export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response, source, onSourceClick }) => {
   const [panel, setPanel] = useState<Panels>('body');
 
   // todo: very dirty
@@ -22,6 +24,8 @@ export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response }) =>
       : response.res.headers.some(([key, value]) => key.toLowerCase() === 'content-type' && value.includes('html'))
         ? 'html'
         : 'json';
+
+  const sourceFileName = source?.split(/\/|\\/).pop();
 
   return (
     <s.ResponseView>
@@ -34,15 +38,19 @@ export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response }) =>
         </s.ToggleAction>
         <s.Information>
           <s.InfoItem>
+            <s.SourceLink title={source} onClick={onSourceClick}>
+              {sourceFileName}
+            </s.SourceLink>
+          </s.InfoItem>
+          <s.Circle />
+          <s.InfoItem>
             {response.timings.totalFormatted} ms
           </s.InfoItem>
           <s.Circle />
-
           <s.InfoItem>
             {response.res.size.totalFormatted}
           </s.InfoItem>
           <s.Circle />
-
           <s.InfoItem>
             <StatusLabel value={response.statusCode} />
           </s.InfoItem>

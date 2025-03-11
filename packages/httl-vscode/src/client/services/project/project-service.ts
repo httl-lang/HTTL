@@ -9,6 +9,10 @@ export class HttlProjectService {
 
   // private projects = new Map<string, HttlProject>();
 
+  constructor(
+    private scriptRunner: { run: (script: string) => void }
+  ) { }
+
   public async resolveProjects({ search }: { search: string }): Promise<HttlProjectItem[]> {
     try {
       const files = await FileSearch.search('**/*.json');
@@ -66,5 +70,13 @@ export class HttlProjectService {
     project.save();
 
     return project.getViewData();
+  }
+
+  public async runScript({ project, script }: { project: string, script: string }): Promise<void> {
+    const prestartScript = HttlProject.open(project).props.prestart.code;
+    // TODO: temporary solution
+    const fianlScript = prestartScript + '\n' + script;
+
+    await this.scriptRunner.run(fianlScript);
   }
 }

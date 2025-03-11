@@ -8,6 +8,7 @@ import * as s from './httl-response-list.styles';
 import Toggle from '../../components/toggle';
 import Popup from '../../components/popup';
 import { HttlResponseListItem } from './httl-response-list-item';
+import { MethodLabel } from '../../components/method-label';
 
 export interface HttlResponseListProps {
   responses: HttpResponse[];
@@ -43,7 +44,7 @@ const HttlResponseList: FC = () => {
                   response.source && <s.LineLabel>Line: {response.source.line + 1}</s.LineLabel>
                 }
                 <s.RequestTitle active={+response.active}>
-                  <s.ResMethod method={response.method}>{response.method}</s.ResMethod>
+                  <MethodLabel method={response.method} />
                   <s.ResUrl>{response.url}</s.ResUrl>
                 </s.RequestTitle>
               </s.DropDownItem>))

@@ -4,13 +4,48 @@ import styled, { css } from 'styled-components';
 export const Container = styled.div`
 `;
 
-export const Panel = styled.div`
+export const Endpoint = styled.div<{ expanded?: boolean }>`
+  cursor: pointer;
+  user-select: none;
+  font-size: 12px;
+
+  ${p => p.expanded && css`
+    opacity: 0.4;
+  `}
+
+  transition: opacity 0.1s;
+`;
+
+export const EndpointEditor = styled.div`
+  margin-top: 5px;
+  height: 100px;
+
+  padding: 5px;
+  border-radius: 5px;
+  --background: var(--vscode-editor-background);
+
+  
+  background-color: var(--background);
+
+  .monaco-editor {
+    --vscode-editor-background: var(--background);
+    --vscode-editorStickyScroll-background: var(--background);
+  }
+`;
+
+export const Panel = styled.div<{ expanded?: boolean }>`
   padding: 5px;
   margin: 6px;
   background-color: var(--vscode-editor-background);
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+
+  ${p => p.expanded && css`
+    background-color: var(--vscode-input-background);
+  `}
+  
+  transition: background-color 0.05s;
 `;
 
 export const Label = styled(LoadingText) <{ center?: boolean, dark?: boolean }>`

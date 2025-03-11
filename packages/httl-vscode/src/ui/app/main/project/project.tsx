@@ -26,21 +26,5 @@ const _ProjectView: React.FC = () => {
     </s.Container>
   );
 };
-{/* <s.ViewPanel>
-          <Viewer
-            value={model.data || ''}
-            language='json'
-            options={{
-              overviewRulerLanes: 0,
-              lineNumbers: 'off',
-              wordWrap: 'on',
-              wrappingIndent: 'indent',
-              lineDecorationsWidth: 0,
-              glyphMargin: false,
-              folding: false,
-              scrollBeyondLastLine: false,
-            }}
-          />
-        </s.ViewPanel> */}
 
 export const ProjectView = () => <ProjectContext><_ProjectView /></ProjectContext>;

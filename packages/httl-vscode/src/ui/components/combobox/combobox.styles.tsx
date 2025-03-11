@@ -21,6 +21,10 @@ export const Main = styled.div`
   display: flex;
   flex: 1;
   cursor: pointer;
+
+  &:hover {
+    border-color: var(--vscode-commandCenter-activeBorder);
+  }
 `;
 
 export const Label = styled.div`

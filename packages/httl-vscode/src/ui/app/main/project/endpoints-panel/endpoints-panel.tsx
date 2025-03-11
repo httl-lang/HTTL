@@ -6,11 +6,14 @@ import * as s from './endpoints-panel.styles';
 import RunSvg from './run.svg';
 import { VscSparkle } from "react-icons/vsc";
 import { LoadingText } from '../../../../components/loading-text';
+import { HttlEditor } from '../../../../components/editor';
+import { MethodLabel } from '../../../../components/method-label';
+import { EndpointItem } from './endpoint-item';
 
 
 export const EndpointsPanel: React.FC = () => {
-  const model = useProjectModel(({ endpointGoups }) =>
-    ({ endpointGoups }));
+  const model = useProjectModel(({ endpointGoups, runScript }) =>
+    ({ endpointGoups, runScript }));
 
   // if (model.controllersProgress) {
   //   return (
@@ -43,9 +46,7 @@ export const EndpointsPanel: React.FC = () => {
             </s.ControllerTag>
             {
               group.endpoints.map((endpoint) => (
-                <s.Panel>
-                  {endpoint.method} {endpoint.path}
-                </s.Panel>
+                <EndpointItem endpoint={endpoint} onRun={(script) => model.runScript(script)} />
               ))
             }
           </>

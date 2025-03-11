@@ -14,4 +14,8 @@ export class ProjectApi extends Api {
   public importFromOpenApiSpec(url: string): Promise<HttlProjectViewData> {
     return this.sendRequest('importFromOpenApiSpec', { url });
   }
+
+  public runScript(project: string, script: string): Promise<void> {
+    return this.sendRequest('runScript', { project, script });
+  }
 }

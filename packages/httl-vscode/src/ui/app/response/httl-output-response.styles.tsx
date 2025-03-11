@@ -37,6 +37,15 @@ export const InfoItem = styled.div`
   cursor: default;
 `;
 
+export const SourceLink = styled.a`
+  cursor: pointer;
+  opacity: 0.7;
+  &:hover {
+    text-decoration: underline;
+    opacity: 1;
+  }
+`;
+
 export const Circle = styled.div`
   content: "";
   height: 4px;

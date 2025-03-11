@@ -154,6 +154,11 @@ export class ProjectModel {
 
     // this.controllers = [];
   }
+
+  @Action()
+  public runScript(script: string) {
+    this.api.runScript(this.fileInfo!.path, script);
+  }
 }
 
 const [ProjectContext, useProjectModel] = connect(ProjectModel);

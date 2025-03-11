@@ -20,6 +20,8 @@ const _HttlOutputView: FC = () => {
   const model = useHttlOutputModel(({ inProgress, currentResponse, errors, responses, selectResponse }) =>
     ({ inProgress, currentResponse, errors, responses, selectResponse }));
 
+  const resModel = useResponseModel(({ currentFile, highlightCode }) => ({ currentFile, highlightCode }));
+
   useEffect(() => {
     if (model.inProgress) {
       // @ts-ignore
@@ -51,7 +53,11 @@ const _HttlOutputView: FC = () => {
                   <HttlResponseList responses={model.responses} />
                 </s.ResponseList>
                 <s.Main>
-                  <HttlOutputResponse response={model.currentResponse} />
+                  <HttlOutputResponse
+                    response={model.currentResponse}
+                    source={resModel.currentFile}
+                    onSourceClick={() => resModel.highlightCode(model.currentResponse.source!)}
+                  />
                 </s.Main>
               </>
             )

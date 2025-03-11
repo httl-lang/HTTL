@@ -25,7 +25,11 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
       {
         view: 'main',
       },
-      new HttlProjectService()
+      new HttlProjectService({
+        run: async (script: string) => {
+          await this.sendRunCommand(script);
+        }
+      })
     );
   }
 
@@ -42,14 +46,7 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
       }
 
       case 'run-script': {
-        await HttlRunCommand.execute(
-          this.responseView,
-          this,
-          this.client,
-          messagefromUI.payload,
-          constants.QUICK_RUN_DOCUMENT_NAME,
-          constants.QUICK_RUN_DOCUMENT_NAME);
-
+        await this.sendRunCommand(messagefromUI.payload);
         return;
       }
 
@@ -63,6 +60,16 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
         return;
       }
     }
+  }
+
+  private async sendRunCommand(script: string) {
+    await HttlRunCommand.execute(
+      this.responseView,
+      this,
+      this.client,
+      script,
+      constants.QUICK_RUN_DOCUMENT_NAME,
+      constants.QUICK_RUN_DOCUMENT_NAME);
   }
 
   private async startWorkspaceAnalyzing(message: any) {
