@@ -89,6 +89,7 @@ export class ProjectModel {
       };
 
       group.endpoints.push(endpoint);
+      acc.set(endpoint.tag, group);
 
       return acc;
     }, new Map<string, ApiEndpointGroup>);
@@ -97,6 +98,8 @@ export class ProjectModel {
     this.endpointGoups = groupedEndpoints.entries().toArray()
       .sort(([tagA], [tagB]) => tagA.localeCompare(tagB))
       .map(([_, group]) => group);
+
+    console.log('endpointGoups', this.endpointGoups);
   }
 
   // @Action()

@@ -20,12 +20,12 @@ export const ProjectSelector: React.FC = () => {
         current={model.fileInfo}
         options={(search) => model.resolveProjects(search)}
         onChange={(project) => model.selectProject(project)}
-        render={(item) => (
-          <s.Item>
+        render={(item, isLabel) => (
+          <s.Item nowrap={isLabel}>
             <s.Name>
               {item.name}
             </s.Name>
-            <s.SubTitle>
+            <s.SubTitle short={isLabel}>
               {
                 'path' in item
                   ? item.path

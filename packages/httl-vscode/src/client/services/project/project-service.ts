@@ -7,7 +7,7 @@ import { HttlProject } from "./project";
 
 export class HttlProjectService {
 
-  private projects = new Map<string, HttlProject>();
+  // private projects = new Map<string, HttlProject>();
 
   public async resolveProjects({ search }: { search: string }): Promise<HttlProjectItem[]> {
     try {
@@ -47,9 +47,9 @@ export class HttlProjectService {
   }
 
   public async openProject({ path }: { path: string }): Promise<HttlProjectViewData> {
-    const project = this.projects.get(path) || HttlProject.open(path);
+    const project = HttlProject.open(path);
 
-    this.projects.set(path, project);
+    // this.projects.set(path, project);
 
     return project.getViewData();
   }

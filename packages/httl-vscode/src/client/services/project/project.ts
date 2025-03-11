@@ -30,7 +30,7 @@ export class HttlProject {
     return new HttlProject(
       path,
       rawJson,
-      ApiSpec.fromString(rawJson.spec, HttlUrl.parse(rawJson.source))
+      ApiSpec.fromSpec(rawJson.spec, HttlUrl.parse(rawJson.source))
     );
   }
 

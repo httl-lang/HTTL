@@ -13,7 +13,7 @@ export const PrestartPanel: React.FC = () => {
   return (
     <s.Container>
       <s.Label>
-        Prestart
+        Prestart script
       </s.Label>
       <s.Editor style={{ height: 150 }}>
         <HttlEditor

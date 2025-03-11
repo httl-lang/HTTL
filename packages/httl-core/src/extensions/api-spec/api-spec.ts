@@ -35,7 +35,11 @@ export class ApiSpec {
       throw new Error('Failed to parse spec');
     }
 
-    const spec = ApiSpec.parseSpec(specRes.unwrap());
+    return ApiSpec.fromSpec(specRes.unwrap(), url);
+  }
+
+  public static fromSpec(specJson: any, url: HttlUrl): ApiSpec {
+    const spec = ApiSpec.parseSpec(specJson);
     return new ApiSpec(url, spec);
   }
 

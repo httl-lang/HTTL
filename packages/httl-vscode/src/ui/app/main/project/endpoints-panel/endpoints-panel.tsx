@@ -24,7 +24,7 @@ export const EndpointsPanel: React.FC = () => {
 
   // if (model.controllers.length === 0)
   //   return null;
-
+  console.log('endpointGoups__', model.endpointGoups);
   return (
     <s.Container>
       {/* <s.Label center dark loading={model.controllers.some(c => c.inProgress)}>

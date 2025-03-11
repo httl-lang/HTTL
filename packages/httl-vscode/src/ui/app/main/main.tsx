@@ -12,7 +12,7 @@ const _MainView: React.FC = () => {
     <s.Main>
       <s.Tabs>
         <s.TabButton to="/main" end>
-          Workspace
+          Project
         </s.TabButton>
         <s.TabButton to="/main/run" end>
           Run

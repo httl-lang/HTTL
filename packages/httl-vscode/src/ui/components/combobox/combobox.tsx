@@ -8,7 +8,7 @@ interface ComboBoxProps<TItem extends { [key: string]: any }> {
   options: (search: string) => Promise<TItem[]>;
   onChange?: (value: TItem) => void;
 
-  render: (item: TItem) => React.ReactNode;
+  render: (item: TItem, label?: boolean) => React.ReactNode;
   buttons?: () => React.ReactNode;
 }
 
@@ -61,7 +61,7 @@ function ComboBox<TItem extends { [key: string]: any }>(
         <s.Label onClick={() => onLabelClick()}>
           {
             current
-              ? render(current)
+              ? render(current, true)
               : placeholder
           }
         </s.Label>

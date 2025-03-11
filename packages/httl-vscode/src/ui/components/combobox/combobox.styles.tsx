@@ -28,11 +28,11 @@ export const Label = styled.div`
   height: 24px;
   padding: 3px 3px 3px 6px;
   flex: 1;
+  overflow: hidden;
 `;
 
 export const Input = styled.input`
   background-color: inherit;
-  color: var(--vscode-input-foreground);
   height: 24px;
   border-radius: 2px;
   scrollbar-width: none;
