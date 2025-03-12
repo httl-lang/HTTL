@@ -2,12 +2,11 @@ import fs from "fs";
 import { Json } from "httl-common";
 
 import { FileSearch } from "../../../common";
-import { HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData } from "./types";
+import { EndpointScriptCode, HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData } from "./types";
 import { HttlProject } from "./project";
 
 export class HttlProjectService {
-
-  // private projects = new Map<string, HttlProject>();
+  private projects = new Map<string, HttlProject>();
 
   constructor(
     private scriptRunner: { run: (script: string) => void }
@@ -51,9 +50,14 @@ export class HttlProjectService {
   }
 
   public async openProject({ path }: { path: string }): Promise<HttlProjectViewData> {
-    const project = HttlProject.open(path);
+    let project = this.projects.get(path);
 
-    // this.projects.set(path, project);
+    if (project) {
+      await project.sync();
+    } else {
+      project = HttlProject.open(path);
+      this.projects.set(path, project);
+    }
 
     return project.getViewData();
   }
@@ -67,16 +71,41 @@ export class HttlProjectService {
     const openApiSpec = await response.text();
 
     const project = HttlProject.fromSpec(openApiSpec, url);
-    project.save();
+    await project.save();
 
     return project.getViewData();
   }
 
-  public async runScript({ project, script }: { project: string, script: string }): Promise<void> {
-    const prestartScript = HttlProject.open(project).props.prestart.code;
+  public async runScript({ projectFile, scriptId, code }: EndpointScriptCode): Promise<void> {
+    const project = this.projects.get(projectFile);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    if (code) {
+      project.updateScript(scriptId, code);
+      project.save();
+    }
+
+    const prestartScript = project.props.prestart.code;
     // TODO: temporary solution
-    const fianlScript = prestartScript + '\n' + script;
+    const fianlScript = prestartScript + '\n' + code;
 
     await this.scriptRunner.run(fianlScript);
+  }
+
+  public async updateScript({ projectFile, scriptId, code }: EndpointScriptCode): Promise<void> {
+    if (!code) {
+      throw new Error('Code is required');
+    }
+
+    const project = this.projects.get(projectFile);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    project.updateScript(scriptId, code!, true);
+
+    await project.save();
   }
 }

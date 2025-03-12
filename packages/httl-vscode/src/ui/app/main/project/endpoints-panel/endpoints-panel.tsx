@@ -12,8 +12,8 @@ import { EndpointItem } from './endpoint-item';
 
 
 export const EndpointsPanel: React.FC = () => {
-  const model = useProjectModel(({ endpointGoups, runScript }) =>
-    ({ endpointGoups, runScript }));
+  const model = useProjectModel(({ endpointGoups, runScript, updateScript }) =>
+    ({ endpointGoups, runScript, updateScript }));
 
   // if (model.controllersProgress) {
   //   return (
@@ -27,7 +27,7 @@ export const EndpointsPanel: React.FC = () => {
 
   // if (model.controllers.length === 0)
   //   return null;
-  console.log('endpointGoups__', model.endpointGoups);
+
   return (
     <s.Container>
       {/* <s.Label center dark loading={model.controllers.some(c => c.inProgress)}>
@@ -46,7 +46,12 @@ export const EndpointsPanel: React.FC = () => {
             </s.ControllerTag>
             {
               group.endpoints.map((endpoint) => (
-                <EndpointItem endpoint={endpoint} onRun={(script) => model.runScript(script)} />
+                <EndpointItem
+                  key={endpoint.id}
+                  endpoint={endpoint}
+                  onRun={(code) => model.runScript(endpoint.id, code)}
+                  onChange={(code) => model.updateScript(endpoint.id, code)}
+                />
               ))
             }
           </>

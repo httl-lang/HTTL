@@ -43,7 +43,7 @@ export const HttlEditor: React.FC<EditorProps> = ({
   theme = "vs-dark",
   options = defaultOptions,
 }) => {
-  const [editorValue, setEditorValue] = useState("");
+  const [editorValue, setEditorValue] = useState(value);
 
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);

@@ -1,4 +1,4 @@
-import { HttlProjectItem, HttlProjectFileInfo, HttlProjectViewData } from "../../../../client/services/project";
+import { HttlProjectItem, HttlProjectFileInfo, HttlProjectViewData, EndpointScriptCode } from "../../../../client/services/project";
 import { Api } from "../../../services/api";
 
 export class ProjectApi extends Api {
@@ -15,7 +15,11 @@ export class ProjectApi extends Api {
     return this.sendRequest('importFromOpenApiSpec', { url });
   }
 
-  public runScript(project: string, script: string): Promise<void> {
-    return this.sendRequest('runScript', { project, script });
+  public runScript(projectFile: string, scriptId: string, code?: string): Promise<void> {
+    return this.sendRequest('runScript', { projectFile, scriptId, code } satisfies EndpointScriptCode);
+  }
+
+  public updateScript(projectFile: string, scriptId: string, code: string): Promise<void> {
+    return this.sendRequest('updateScript', { projectFile, scriptId, code } satisfies EndpointScriptCode);
   }
 }

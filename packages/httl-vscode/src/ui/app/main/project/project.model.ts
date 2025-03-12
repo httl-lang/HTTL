@@ -22,6 +22,7 @@ export class ProjectModel {
   public source?: string;
   public technologies?: string[];
   public prestart?: string;
+  public endpoints: HttlProjectApiEndpoint[] = [];
 
   public endpointGoups: ApiEndpointGroup[] = [];
 
@@ -80,6 +81,7 @@ export class ProjectModel {
     this.source = project.source;
     this.technologies = project.technologies;
     this.prestart = project.prestart;
+    this.endpoints = project.endpoints;
 
     const groupedEndpoints = project.endpoints.reduce((acc, endpoint) => {
       const group = acc.get(endpoint.tag) || {
@@ -98,7 +100,7 @@ export class ProjectModel {
     this.endpointGoups = groupedEndpoints.entries().toArray()
       .sort(([tagA], [tagB]) => tagA.localeCompare(tagB))
       .map(([_, group]) => group);
-
+      
     console.log('endpointGoups', this.endpointGoups);
   }
 
@@ -156,8 +158,26 @@ export class ProjectModel {
   }
 
   @Action()
-  public runScript(script: string) {
-    this.api.runScript(this.fileInfo!.path, script);
+  public runScript(scriptId: string, code?: string) {
+    if (code) {
+      this.endpoints.find(e => e.id === scriptId)!.scripts[0].code = code;
+    }
+    this.api.runScript(this.fileInfo!.path, scriptId, code);
+  }
+
+  @Action()
+  public updateScript(scriptId: string, code: string) {
+    const endpoint = this.endpoints.find(e => e.id === scriptId)!;
+    if (!endpoint?.scripts?.length) {
+      endpoint.scripts = [{
+        id: scriptId,
+        name: scriptId,
+        code: ''
+      }];
+    }
+
+    endpoint.scripts[0].code = code;
+    this.api.updateScript(this.fileInfo!.path, scriptId, code);
   }
 }
 

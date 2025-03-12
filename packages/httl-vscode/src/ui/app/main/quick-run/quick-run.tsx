@@ -6,7 +6,7 @@ import { HttlEditor } from '../../../components/editor';
 
 import { QuickRunContext, useQuickRunModel } from './quick-run.model';
 import * as s from './quick-run.styles';
-import RunSvg from './run.svg';
+import RunSvg from '/media/run.svg';
 
 const _QuickRunView: React.FC = () => {
   const editorRef = useRef<HTMLDivElement>(null);

@@ -4,17 +4,23 @@ import styled, { css } from 'styled-components';
 export const Container = styled.div`
 `;
 
-export const Endpoint = styled.div<{ expanded?: boolean }>`
-  cursor: pointer;
+export const Endpoint = styled.div`
   user-select: none;
   font-size: 12px;
+  display: flex;
+  align-items: center;
+`;
+
+export const EndpointTitle = styled.div<{ expanded?: boolean }>`
+  cursor: pointer;
 
   ${p => p.expanded && css`
     opacity: 0.4;
   `}
+  flex: 1;
 
   transition: opacity 0.1s;
-`;
+`
 
 export const EndpointEditor = styled.div`
   margin-top: 5px;
@@ -42,7 +48,7 @@ export const Panel = styled.div<{ expanded?: boolean }>`
   flex-direction: column;
 
   ${p => p.expanded && css`
-    background-color: var(--vscode-input-background);
+    background-color: rgb(21 21 21); // var(--vscode-input-background);
   `}
   
   transition: background-color 0.05s;

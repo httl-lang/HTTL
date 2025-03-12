@@ -41,8 +41,17 @@ export interface HttlProjectViewData {
 }
 
 export interface HttlProjectApiEndpoint {
+  id: string;
   method: string;
   path: string;
   tag: string;
+  description?: string;
+  operationId?: string;
   scripts: HttlProjectScript[];
+}
+
+export interface EndpointScriptCode {
+  projectFile: string,
+  scriptId: string,
+  code?: string
 }
