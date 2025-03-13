@@ -1,36 +1,74 @@
 import { LoadingText } from '../../../../components/loading-text';
 import styled, { css } from 'styled-components';
+import { ResizePanel } from '../../../../components/resize-panel';
 
 export const Container = styled.div`
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-color: auto;
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
 `;
 
-export const Endpoint = styled.div`
+export const Name = styled.div`
+  flex: 1;
+  transition: opacity 0.02s;
+  /* opacity: 0.8; */
+`;
+
+export const Panel = styled.div<{ expanded?: boolean }>`
+  margin: 6px;
+  background-color: var(--vscode-editor-background);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+
+  outline: 1px solid var(--vscode-chat-requestBorder, var(--vscode-input-background, transparent));
+  
+  &:hover {
+    outline-color: var(--vscode-commandCenter-activeBorder);
+    
+    /* ${Name} {
+      opacity: 1;
+    } */
+  }
+  
+  ${p => p.expanded && css`
+    /* background-color: var(--vscode-editor-background); //var(--vscode-input-background); */
+    background-color: transparent;
+    /* border: 1px solid var(--vscode-input-background); */
+    /* outline: 1px solid var(--vscode-input-background);
+
+    &:hover {
+      outline-color: var(--vscode-commandCenter-activeBorder);
+    } */
+
+    & ${Name} {
+      opacity: 0.2;
+    }
+  `}
+
+  transition: background-color 0.05s;
+`;
+
+export const Header = styled.div`
   user-select: none;
   font-size: 12px;
   display: flex;
   align-items: center;
+  padding: 5px;
+  cursor: pointer;
 `;
 
-export const EndpointTitle = styled.div<{ expanded?: boolean }>`
-  cursor: pointer;
 
-  ${p => p.expanded && css`
-    opacity: 0.4;
-  `}
-  flex: 1;
-
-  transition: opacity 0.1s;
-`
-
-export const EndpointEditor = styled.div`
-  margin-top: 5px;
-  height: 100px;
-
-  padding: 5px;
-  border-radius: 5px;
+export const Editor = styled(ResizePanel)`
   --background: var(--vscode-editor-background);
 
-  
+  margin: 0 5px 5px 5px;
+  padding: 5px 5px 0 5px;
+  border-radius: 5px;
   background-color: var(--background);
 
   .monaco-editor {
@@ -39,25 +77,6 @@ export const EndpointEditor = styled.div`
   }
 `;
 
-export const Panel = styled.div<{ expanded?: boolean }>`
-  padding: 5px;
-  margin: 6px;
-  background-color: var(--vscode-editor-background);
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-
-  ${p => p.expanded && css`
-    background-color: var(--vscode-input-background);
-    border: 1px solid var(--vscode-input-background);
-
-    &:hover {
-      border-color: var(--vscode-commandCenter-activeBorder);
-    }
-  `}
-  
-  transition: background-color 0.05s;
-`;
 
 export const Label = styled(LoadingText) <{ center?: boolean, dark?: boolean }>`
   font-size: 10px;
@@ -68,8 +87,11 @@ export const Label = styled(LoadingText) <{ center?: boolean, dark?: boolean }>`
   color: ${p => p.dark ? 'color-mix(in srgb, var(--vscode-input-foreground) 70%, transparent)' : 'inherit'};
 `;
 
+export const EndpointGroup = styled.div`
+  margin-bottom: 20px;
+`;
 
-export const ControllerTag = styled(LoadingText) <{ dark?: boolean }>`
+export const EndpointTag = styled(LoadingText) <{ dark?: boolean }>`
   font-size: 14px;
   margin: 0 10px 0;
   display: flex;
@@ -77,12 +99,12 @@ export const ControllerTag = styled(LoadingText) <{ dark?: boolean }>`
   & h1 {
     font-weight: 500;
     font-variant-caps: all-petite-caps;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   & h1::before {
     content: '📦';
-    margin-right: 5px;
+    margin-right: 3px;
   }
 
   & small {

@@ -40,10 +40,10 @@ export const EndpointsPanel: React.FC = () => {
 
       {
         model.endpointGoups.map((group) => (
-          <>
-            <s.ControllerTag dark={!group.inProgress} loading={group.inProgress}>
+          <s.EndpointGroup>
+            <s.EndpointTag dark={!group.inProgress} loading={group.inProgress}>
               <h1>{group.name}</h1> {/*<small>{controller.name}</small> */}
-            </s.ControllerTag>
+            </s.EndpointTag>
             {
               group.endpoints.map((endpoint) => (
                 <EndpointItem
@@ -54,7 +54,7 @@ export const EndpointsPanel: React.FC = () => {
                 />
               ))
             }
-          </>
+          </s.EndpointGroup>
         ))
       }
     </s.Container>

@@ -6,16 +6,16 @@ import { useProjectModel } from '../project.model';
 import * as s from './prestart-panel.styles';
 import { ResizePanel } from '../../../../components/resize-panel';
 
-export const PrestartPanel: React.FC= ({ }) => {
-  const model = useProjectModel(({ prestart, defaultHeight, updatePrestartScript }) =>
-    ({ prestart, defaultHeight, updatePrestartScript }));
+export const PrestartPanel: React.FC = ({ }) => {
+  const model = useProjectModel(({ prestart, projectState, updatePrestartScript, setProjectState }) =>
+    ({ prestart, projectState, updatePrestartScript, setProjectState }));
 
   return (
     <s.Container>
       <s.Label>
         Prestart script
       </s.Label>
-      <ResizePanel height={model.defaultHeight + 'px'}>
+      <ResizePanel height={model.projectState.prestartEditorHeight} onResize={height => model.setProjectState({ prestartEditorHeight: height })}>
         <HttlEditor
           value={model.prestart || ''}
           options={{

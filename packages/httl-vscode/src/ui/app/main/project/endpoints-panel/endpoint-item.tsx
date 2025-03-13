@@ -22,17 +22,17 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({ endpoint, onRun, onC
 
   return (
     <s.Panel expanded={showEditor}>
-      <s.Endpoint onClick={() => setShowEditor(!showEditor)}>
-        <s.EndpointTitle expanded={showEditor}>
+      <s.Header onClick={() => setShowEditor(!showEditor)}>
+        <s.Name>
           <MethodLabel method={endpoint.method} /> {endpoint.path}
-        </s.EndpointTitle>
+        </s.Name>
         <Button onClick={() => onRun?.()}>
           <RunSvg />
         </Button>
-      </s.Endpoint>
+      </s.Header>
       {
         showEditor &&
-        <s.EndpointEditor>
+        <s.Editor height="70px">
           <HttlEditor
             value={endpoint.scripts.at(0)?.code || `${endpoint.method} ${endpoint.path}`}
             options={{
@@ -48,7 +48,7 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({ endpoint, onRun, onC
             onRun={(code) => onRun?.(code)}
             onFocus={() => null}
           />
-        </s.EndpointEditor>
+        </s.Editor>
       }
     </s.Panel>
   );

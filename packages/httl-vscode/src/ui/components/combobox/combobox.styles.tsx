@@ -87,7 +87,17 @@ export const CircleLoader = styled(Loader)`
   position: absolute;
   right: 10px;
   top: 14px;
-  opacity: 0.6;
+  opacity: 0;
+  animation: show 0.3s forwards 0.5s;
+
+  @keyframes show {
+      from {
+          opacity: 0;
+      }
+      to {
+          opacity: 0.6;
+      }
+  }
 `;
 
 

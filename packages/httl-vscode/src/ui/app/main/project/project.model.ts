@@ -15,14 +15,15 @@ interface ApiEndpointGroup {
   endpoints: HttlProjectApiEndpoint[];
 }
 
-interface ProjectUIState {
+interface ProjectState {
   projectPath?: string;
+  prestartEditorHeight: string;
 }
 
 @Model()
 export class ProjectModel {
 
-  public static readonly UI_STATE = 'project-ui-state';
+  public static readonly PROJECT_STATE = 'project-state';
 
   public fileInfo?: HttlProjectFileInfo;
   public description?: string;
@@ -33,9 +34,7 @@ export class ProjectModel {
 
   public endpointGoups: ApiEndpointGroup[] = [];
 
-  public defaultHeight = 100;
-
-  public declare uiState: ProjectUIState;
+  public declare projectState: ProjectState;
 
   // public controllers: ApiControllers[] = [];
 
@@ -56,13 +55,12 @@ export class ProjectModel {
   ) { }
 
   public async init() {
-    this.uiState = this.appModel.getState(ProjectModel.UI_STATE) ?? {
-
+    this.projectState = this.appModel.getState(ProjectModel.PROJECT_STATE) ?? {
+      prestartEditorHeight: '100px'
     };
-
-    if (this.uiState.projectPath) {
+    if (this.projectState.projectPath) {
       this.setProject(
-        await this.api.openProject(this.uiState.projectPath)
+        await this.api.openProject(this.projectState.projectPath)
       );
     }
 
@@ -87,33 +85,6 @@ export class ProjectModel {
     return this.api.resolveProjects(search);
   }
 
-  private async setProject(project: HttlProjectViewData): Promise<void> {
-    this.fileInfo = project.fileInfo;
-    this.description = project.description;
-    this.source = project.source;
-    this.technologies = project.technologies;
-    this.prestart = project.prestart;
-    this.endpoints = project.endpoints;
-
-    const groupedEndpoints = project.endpoints.reduce((acc, endpoint) => {
-      const group = acc.get(endpoint.tag) || {
-        name: endpoint.tag,
-        inProgress: false,
-        endpoints: []
-      };
-
-      group.endpoints.push(endpoint);
-      acc.set(endpoint.tag, group);
-
-      return acc;
-    }, new Map<string, ApiEndpointGroup>);
-
-
-    this.endpointGoups = groupedEndpoints.entries().toArray()
-      .sort(([tagA], [tagB]) => tagA.localeCompare(tagB))
-      .map(([_, group]) => group);
-  }
-
   @Action()
   public async selectProject(projectItem: HttlProjectItem): Promise<void> {
     const projectLoader =
@@ -123,7 +94,7 @@ export class ProjectModel {
 
     const project = await projectLoader;
 
-    this.appModel.saveState(ProjectModel.UI_STATE, {
+    this.setProjectState({
       projectPath: project.fileInfo.path
     });
 
@@ -209,6 +180,43 @@ export class ProjectModel {
   @Action()
   public updatePrestartScript(code: string) {
     this.api.updateScript(this.fileInfo!.path, null, code);
+  }
+
+  @Action()
+  public setProjectState(state: Partial<ProjectState>) {
+    this.projectState = {
+      ...this.projectState,
+      ...state
+    };
+
+    this.appModel.saveState(ProjectModel.PROJECT_STATE, this.projectState);
+  }
+
+  private async setProject(project: HttlProjectViewData): Promise<void> {
+    this.fileInfo = project.fileInfo;
+    this.description = project.description;
+    this.source = project.source;
+    this.technologies = project.technologies;
+    this.prestart = project.prestart;
+    this.endpoints = project.endpoints;
+
+    const groupedEndpoints = project.endpoints.reduce((acc, endpoint) => {
+      const group = acc.get(endpoint.tag) || {
+        name: endpoint.tag,
+        inProgress: false,
+        endpoints: []
+      };
+
+      group.endpoints.push(endpoint);
+      acc.set(endpoint.tag, group);
+
+      return acc;
+    }, new Map<string, ApiEndpointGroup>);
+
+
+    this.endpointGoups = groupedEndpoints.entries().toArray()
+      .sort(([tagA], [tagB]) => tagA.localeCompare(tagB))
+      .map(([_, group]) => group);
   }
 }
 
