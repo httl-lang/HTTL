@@ -112,7 +112,13 @@ export class HttlProject {
     this.spec = ApiSpec.fromSpec(this.props.spec, HttlUrl.parse(this.props.source));
   }
 
-  public updateScript(scriptId: string, code: string, upsert = false) {
+  public updateScript(scriptId: string | null, code: string, upsert = false) {
+
+    if(scriptId === null) {
+      this.props.prestart = { code };
+      return;
+    }
+
     const script = this.props.scripts.find(s => s.id === scriptId);
 
     if (script) {

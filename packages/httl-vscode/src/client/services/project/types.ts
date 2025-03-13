@@ -52,6 +52,6 @@ export interface HttlProjectApiEndpoint {
 
 export interface EndpointScriptCode {
   projectFile: string,
-  scriptId: string,
+  scriptId: string | null,
   code?: string
 }

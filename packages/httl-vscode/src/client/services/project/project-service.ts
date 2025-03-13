@@ -88,6 +88,10 @@ export class HttlProjectService {
       throw new Error('Project not found');
     }
 
+    if (!scriptId) {
+      throw new Error('Script id is required');
+    }
+
     if (code) {
       project.updateScript(scriptId, code);
       project.save();

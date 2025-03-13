@@ -19,7 +19,7 @@ export class ProjectApi extends Api {
     return this.sendRequest('runScript', { projectFile, scriptId, code } satisfies EndpointScriptCode);
   }
 
-  public updateScript(projectFile: string, scriptId: string, code: string): Promise<void> {
+  public updateScript(projectFile: string, scriptId: string | null, code: string): Promise<void> {
     return this.sendRequest('updateScript', { projectFile, scriptId, code } satisfies EndpointScriptCode);
   }
 }

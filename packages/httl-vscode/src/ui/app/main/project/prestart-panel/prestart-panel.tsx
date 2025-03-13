@@ -6,10 +6,9 @@ import { useProjectModel } from '../project.model';
 import * as s from './prestart-panel.styles';
 import { ResizePanel } from '../../../../components/resize-panel';
 
-
-export const PrestartPanel: React.FC = () => {
-  const model = useProjectModel(({ prestart, defaultHeight }) =>
-    ({ prestart, defaultHeight }));
+export const PrestartPanel: React.FC= ({ }) => {
+  const model = useProjectModel(({ prestart, defaultHeight, updatePrestartScript }) =>
+    ({ prestart, defaultHeight, updatePrestartScript }));
 
   return (
     <s.Container>
@@ -27,7 +26,7 @@ export const PrestartPanel: React.FC = () => {
             folding: false,
             scrollBeyondLastLine: false,
           }}
-          onChange={(script) => null}
+          onChange={(script) => model.updatePrestartScript(script)}
           onRun={(script) => null}
           onFocus={() => null}
         />

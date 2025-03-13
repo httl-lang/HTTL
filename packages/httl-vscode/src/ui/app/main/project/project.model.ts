@@ -7,7 +7,7 @@ import { FindApiControllersStepResult } from "../../../../ai/agents/steps/find-a
 import { SetWorkspaceApiProjectsPayload, SetWorkspaceApiControllersPayload, SetWorkspaceApiControllerSpecPayload, SetWorkspaceApiErrorPayload } from "../../../../common";
 import { ControllerSpec } from "../../../../ai/agents/api-workspace-agent";
 import { ProjectApi } from "./project.api";
-import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectItem } from "../../../../client/services/project";
+import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData } from "../../../../client/services/project";
 
 interface ApiEndpointGroup {
   name: string;
@@ -15,8 +15,15 @@ interface ApiEndpointGroup {
   endpoints: HttlProjectApiEndpoint[];
 }
 
+interface ProjectUIState {
+  projectPath?: string;
+}
+
 @Model()
 export class ProjectModel {
+
+  public static readonly UI_STATE = 'project-ui-state';
+
   public fileInfo?: HttlProjectFileInfo;
   public description?: string;
   public source?: string;
@@ -27,6 +34,8 @@ export class ProjectModel {
   public endpointGoups: ApiEndpointGroup[] = [];
 
   public defaultHeight = 100;
+
+  public declare uiState: ProjectUIState;
 
   // public controllers: ApiControllers[] = [];
 
@@ -42,12 +51,21 @@ export class ProjectModel {
   // }
 
   constructor(
-    // private readonly appModel = store(AppModel),
+    private readonly appModel = store(AppModel),
     private readonly api = new ProjectApi()
   ) { }
 
-  public init() {
-    // this.rawJwt = this.appModel.getState(WorkspaceModel.STORE_JWT_KEY) ?? '';
+  public async init() {
+    this.uiState = this.appModel.getState(ProjectModel.UI_STATE) ?? {
+
+    };
+
+    if (this.uiState.projectPath) {
+      this.setProject(
+        await this.api.openProject(this.uiState.projectPath)
+      );
+    }
+
     commutator.onSetWorkspaceApiProjects((result: SetWorkspaceApiProjectsPayload) => {
       this.setWorkspaceApiProjects(result.payload);
     });
@@ -69,15 +87,7 @@ export class ProjectModel {
     return this.api.resolveProjects(search);
   }
 
-  @Action()
-  public async selectProject(projectItem: HttlProjectItem): Promise<void> {
-    const projectLoader =
-      'path' in projectItem
-        ? this.api.openProject(projectItem.path)
-        : this.api.importFromOpenApiSpec(projectItem.specUrl);
-
-    const project = await projectLoader;
-
+  private async setProject(project: HttlProjectViewData): Promise<void> {
     this.fileInfo = project.fileInfo;
     this.description = project.description;
     this.source = project.source;
@@ -102,8 +112,22 @@ export class ProjectModel {
     this.endpointGoups = groupedEndpoints.entries().toArray()
       .sort(([tagA], [tagB]) => tagA.localeCompare(tagB))
       .map(([_, group]) => group);
-      
-    console.log('endpointGoups', this.endpointGoups);
+  }
+
+  @Action()
+  public async selectProject(projectItem: HttlProjectItem): Promise<void> {
+    const projectLoader =
+      'path' in projectItem
+        ? this.api.openProject(projectItem.path)
+        : this.api.importFromOpenApiSpec(projectItem.specUrl);
+
+    const project = await projectLoader;
+
+    this.appModel.saveState(ProjectModel.UI_STATE, {
+      projectPath: project.fileInfo.path
+    });
+
+    this.setProject(project);
   }
 
   // @Action()
@@ -180,6 +204,11 @@ export class ProjectModel {
 
     endpoint.scripts[0].code = code;
     this.api.updateScript(this.fileInfo!.path, scriptId, code);
+  }
+
+  @Action()
+  public updatePrestartScript(code: string) {
+    this.api.updateScript(this.fileInfo!.path, null, code);
   }
 }
 
