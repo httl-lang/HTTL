@@ -48,7 +48,12 @@ export const Panel = styled.div<{ expanded?: boolean }>`
   flex-direction: column;
 
   ${p => p.expanded && css`
-    background-color: rgb(21 21 21); // var(--vscode-input-background);
+    background-color: var(--vscode-input-background);
+    border: 1px solid var(--vscode-input-background);
+
+    &:hover {
+      border-color: var(--vscode-commandCenter-activeBorder);
+    }
   `}
   
   transition: background-color 0.05s;

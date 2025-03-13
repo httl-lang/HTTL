@@ -31,6 +31,8 @@ export class FileSearch {
       absolute,
       dotRelative: !absolute,
       nodir: true,
+      dot: true,
+      posix: true,
       ignore: ["**/node_modules/**", "**/.git/**", "**/.vscode/**", "**/.idea/**", "**/dist/**", "**/build/**"],
       // ignore: {
       //   ignored: (p) => {

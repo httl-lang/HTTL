@@ -4,18 +4,19 @@ import { HttlEditor } from '../../../../components/editor';
 
 import { useProjectModel } from '../project.model';
 import * as s from './prestart-panel.styles';
+import { ResizePanel } from '../../../../components/resize-panel';
 
 
 export const PrestartPanel: React.FC = () => {
-  const model = useProjectModel(({ prestart }) =>
-    ({ prestart }));
+  const model = useProjectModel(({ prestart, defaultHeight }) =>
+    ({ prestart, defaultHeight }));
 
   return (
     <s.Container>
       <s.Label>
         Prestart script
       </s.Label>
-      <s.Editor style={{ height: 150 }}>
+      <ResizePanel height={model.defaultHeight + 'px'}>
         <HttlEditor
           value={model.prestart || ''}
           options={{
@@ -30,7 +31,7 @@ export const PrestartPanel: React.FC = () => {
           onRun={(script) => null}
           onFocus={() => null}
         />
-      </s.Editor>
+      </ResizePanel>
     </s.Container>
   );
 };

@@ -8,7 +8,7 @@ export const Container = styled.div`
 `;
 
 export const Panel = styled.div<{ title?: string }>`
-  padding: 5px;
+  padding: 5px 5px 0 5px;
   margin: 6px;
   background-color: var(--vscode-editor-background);
   border-radius: 5px;

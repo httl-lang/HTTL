@@ -1,4 +1,5 @@
 import fs from "fs";
+import * as fsPath from "path";
 import { Json } from "httl-common";
 
 import { FileSearch } from "../../../common";
@@ -7,6 +8,7 @@ import { HttlProject } from "./project";
 
 export class HttlProjectService {
   private projects = new Map<string, HttlProject>();
+  private workDir = FileSearch.getWorkspaceDirectory();
 
   constructor(
     private scriptRunner: { run: (script: string) => void }
@@ -14,15 +16,19 @@ export class HttlProjectService {
 
   public async resolveProjects({ search }: { search: string }): Promise<HttlProjectItem[]> {
     try {
-      const files = await FileSearch.search('**/*.json');
+      const files = await FileSearch.search('**/*.json', undefined, false);
 
       const infos: HttlProjectFileInfo[] = files
-        .map(file => ({
-          path: file,
-          content: Json.safeParse(
-            fs.readFileSync(file, 'utf-8')
-          )
-        }))
+        .map(file => {
+          const fullPath = fsPath.join(this.workDir.fsPath, file);
+          return {
+            path: file,
+            content: Json.safeParse(
+              fs.readFileSync(fullPath, 'utf-8')
+            )
+          };
+        }
+        )
         .filter(({ path, content }) =>
           HttlProject.isValid(content) && (
             content.name.includes(search) ||
@@ -85,6 +91,12 @@ export class HttlProjectService {
     if (code) {
       project.updateScript(scriptId, code);
       project.save();
+    } else {
+      code = project.props.scripts.find(s => s.id === scriptId)?.code;
+    }
+
+    if (!code) {
+      throw new Error('Code is required');
     }
 
     const prestartScript = project.props.prestart.code;

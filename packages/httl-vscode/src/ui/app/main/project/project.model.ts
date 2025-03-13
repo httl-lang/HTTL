@@ -26,6 +26,8 @@ export class ProjectModel {
 
   public endpointGoups: ApiEndpointGroup[] = [];
 
+  public defaultHeight = 100;
+
   // public controllers: ApiControllers[] = [];
 
   // public projectsProgress = false;

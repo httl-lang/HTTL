@@ -1,9 +1,11 @@
 import { Json } from "httl-common";
 import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectProps, HttlProjectScript, HttlProjectViewData } from "./types";
 import * as fs from 'fs';
+import * as fsPath from 'path';
 import * as asyncFs from 'node:fs/promises';
 import { ApiSpec } from "httl-core";
 import { HttlUrl } from "httl-core/dist/common/url";
+import { FileSearch } from "../../../common";
 
 export class HttlProject {
 
@@ -17,16 +19,21 @@ export class HttlProject {
   }
 
   public static open(path: string) {
-    if (!fs.existsSync(path)) {
-      throw new Error(`File not found: ${path}`);
+    let fullPath = path;
+    if (!fsPath.isAbsolute(path)) {
+      fullPath = fsPath.join(FileSearch.getWorkspaceDirectory().fsPath, path);
+    }
+
+    if (!fs.existsSync(fullPath)) {
+      throw new Error(`File not found: ${fullPath}`);
     }
 
     const rawJson = Json.safeParse(
-      fs.readFileSync(path, 'utf-8')
+      fs.readFileSync(fullPath, 'utf-8')
     );
 
     if (!this.isValid(rawJson)) {
-      throw new Error(`Invalid project file: ${path}`);
+      throw new Error(`Invalid project file: ${fullPath}`);
     }
 
     return new HttlProject(
@@ -60,6 +67,7 @@ export class HttlProject {
   }
 
   public spec!: ApiSpec;
+  private fullPath!: string;
 
   constructor(
     public readonly filePath: string,
@@ -68,6 +76,10 @@ export class HttlProject {
     if (!filePath) {
       throw new Error('Invalid file path');
     }
+
+    this.fullPath = fsPath.isAbsolute(filePath)
+      ? filePath
+      : fsPath.join(FileSearch.getWorkspaceDirectory().fsPath, filePath);
 
     this.spec = ApiSpec.fromSpec(props.spec, HttlUrl.parse(props.source));
   }
@@ -80,20 +92,20 @@ export class HttlProject {
   }
 
   public async save() {
-    await asyncFs.writeFile(this.filePath, JSON.stringify(this.props, null, 2));
+    await asyncFs.writeFile(this.fullPath, JSON.stringify(this.props, null, 2));
   }
 
   public async sync() {
-    if (!fs.existsSync(this.filePath)) {
-      throw new Error(`File not found: ${this.filePath}`);
+    if (!fs.existsSync(this.fullPath)) {
+      throw new Error(`File not found: ${this.fullPath}`);
     }
 
     const rawJson = Json.safeParse(
-      await asyncFs.readFile(this.filePath, 'utf-8')
+      await asyncFs.readFile(this.fullPath, 'utf-8')
     );
 
     if (!HttlProject.isValid(rawJson)) {
-      throw new Error(`Invalid project file: ${this.filePath}`);
+      throw new Error(`Invalid project file: ${this.fullPath}`);
     }
 
     Object.assign(this.props, rawJson);

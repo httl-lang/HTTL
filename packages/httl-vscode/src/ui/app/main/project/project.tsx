@@ -13,8 +13,8 @@ import { EndpointsPanel } from './endpoints-panel';
 import { PrestartPanel } from './prestart-panel';
 
 const _ProjectView: React.FC = () => {
-  // const model = useProjectModel(({ startWorkspaceAnalyzing, inProgress, hasControllers }) =>
-  //   ({ startWorkspaceAnalyzing, inProgress, hasControllers }));
+  const model = useProjectModel(({ defaultHeight }) =>
+    ({ defaultHeight }));
 
   return (
     <s.Container>

@@ -2,9 +2,13 @@ import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
   margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `;
 
 export const Editor = styled.div`
+  flex: 1;
 `;
 
 export const Label = styled.div`
