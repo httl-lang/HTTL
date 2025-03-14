@@ -71,7 +71,7 @@ export class ApiEndpointBody {
         return [this.generateExample(items)];
 
       case "string":
-        return schema.example || "string_example";
+        return schema.example || "string";
 
       case "integer":
         return schema.example || 123;
@@ -126,5 +126,28 @@ export class ApiEndpoint {
 
   public getMethodAndPath() {
     return `${this.method} ${this.path}`;
+  }
+
+  public generateFullRequest() {
+    return !!this.requestBody
+      ? `${this.getMethodAndPath()} ${this.requestBody?.generateBodyString()}`
+      : this.getMethodAndPath()
+  }
+
+  public hasBody() {
+    return !!this.requestBody;
+  }
+
+  public getBodyModel(): string {
+    return this.requestBody?.generateBodyString();
+  }
+
+  public hasResponse() {
+    return !!this.responses && Object.keys(this.responses).length > 0;
+  }
+
+  public getResponseModel(): string {
+    return "gopa"
+    // return this.responses.default;
   }
 }

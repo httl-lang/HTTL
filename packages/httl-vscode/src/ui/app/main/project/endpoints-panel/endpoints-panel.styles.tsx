@@ -108,6 +108,7 @@ export const HasScriptIndicator = styled(VscCircleFilled)`
 export const Editor = styled(ResizePanel)`
   --background: var(--vscode-editor-background);
 
+  position: relative;
   margin: 0 5px;
   padding: 5px 5px 0 5px;
   border-radius: 5px;
@@ -123,7 +124,25 @@ export const Expanded = styled.div`
 
 `;
 
-export const BottomBar = styled.div`
+
+// export const FloatingBar = styled.div`
+//   position: absolute;
+//   top: 3px;
+//   right: 2px;
+//   opacity: 0.3;
+//   z-index: 100;
+
+//   &:hover {
+//     opacity: 1;
+//   }
+
+//   & a {
+//     color: var(--vscode-input-foreground);
+//     font-size: 12px;
+//   }
+// `;
+
+export const ToolBar = styled.div`
   display: flex;
   padding: 3px 10px 9px;
   gap: 10px;
@@ -133,6 +152,38 @@ export const BottomBar = styled.div`
   & span:hover {
     cursor: pointer;
     color: var(--vscode-input-foreground);
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+
+  & a {
+    color: var(--vscode-input-foreground);
+    font-size: 12px;
+    font-weight: var(--vscode-font-weight);
+    font-family: var(--vscode-font-family);
+
+    display: flex;
+    font-size: 10px;
+    gap: 3px;
+    font-variant-caps: all-petite-caps;
+    padding: 3px 5px;
+    border-radius: 3px;
+
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    & svg {
+      font-size: 10px;
+    }
+
+    & span {
+      margin-top: -1px;
+    }
   }
 `;
 

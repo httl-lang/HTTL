@@ -15,7 +15,7 @@ export const PrestartPanel: React.FC = ({ }) => {
       <s.Label>
         Prestart script
       </s.Label>
-      <ResizePanel height={model.projectState.prestartEditorHeight} onResize={height => model.setProjectState({ prestartEditorHeight: height })}>
+      <s.Editor height={model.projectState.prestartEditorHeight} onResize={height => model.setProjectState({ prestartEditorHeight: height })}>
         <HttlEditor
           value={model.prestart || ''}
           options={{
@@ -25,12 +25,13 @@ export const PrestartPanel: React.FC = ({ }) => {
             glyphMargin: false,
             folding: false,
             scrollBeyondLastLine: false,
+            renderLineHighlight: "none",
           }}
           onChange={(script) => model.updatePrestartScript(script)}
           onRun={(script) => null}
           onFocus={() => null}
         />
-      </ResizePanel>
+      </s.Editor>
     </s.Container>
   );
 };

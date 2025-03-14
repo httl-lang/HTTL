@@ -1,5 +1,4 @@
 import { Action, Model, connect, store } from "react-storm";
-import jwt from 'jsonwebtoken';
 import { AppModel } from "../../app.model";
 import { commutator } from "../../../services/commutator";
 import { FindApiProjectsStepResult } from "../../../../ai/agents/steps/find-api-projects-step";
@@ -12,7 +11,11 @@ import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectItem, HttlProje
 interface ApiEndpointGroup {
   name: string;
   inProgress: boolean;
-  endpoints: HttlProjectApiEndpoint[];
+  endpoints: ApiEndpoint[];
+}
+
+export interface ApiEndpoint extends HttlProjectApiEndpoint {
+  defaultScript?: string;
 }
 
 interface ProjectState {
@@ -30,7 +33,7 @@ export class ProjectModel {
   public source?: string;
   public technologies?: string[];
   public prestart?: string;
-  public endpoints: HttlProjectApiEndpoint[] = [];
+  public endpoints: ApiEndpoint[] = [];
 
   public endpointGoups: ApiEndpointGroup[] = [];
 
@@ -58,27 +61,28 @@ export class ProjectModel {
     this.projectState = this.appModel.getState(ProjectModel.PROJECT_STATE) ?? {
       prestartEditorHeight: '100px'
     };
+
     if (this.projectState.projectPath) {
       this.setProject(
         await this.api.openProject(this.projectState.projectPath)
       );
     }
 
-    commutator.onSetWorkspaceApiProjects((result: SetWorkspaceApiProjectsPayload) => {
-      this.setWorkspaceApiProjects(result.payload);
-    });
+    // commutator.onSetWorkspaceApiProjects((result: SetWorkspaceApiProjectsPayload) => {
+    //   this.setWorkspaceApiProjects(result.payload);
+    // });
 
-    commutator.onSetWorkspaceApiControllers((result: SetWorkspaceApiControllersPayload) => {
-      this.setWorkspaceApiControllers(result.payload);
-    });
+    // commutator.onSetWorkspaceApiControllers((result: SetWorkspaceApiControllersPayload) => {
+    //   this.setWorkspaceApiControllers(result.payload);
+    // });
 
-    commutator.onSetWorkspaceApiControllerSpec((result: SetWorkspaceApiControllerSpecPayload) => {
-      this.setWorkspaceApiControllerSpec(result.payload);
-    });
+    // commutator.onSetWorkspaceApiControllerSpec((result: SetWorkspaceApiControllerSpecPayload) => {
+    //   this.setWorkspaceApiControllerSpec(result.payload);
+    // });
 
-    commutator.onSetWorkspaceApiError((result: SetWorkspaceApiErrorPayload) => {
-      this.setError();
-    });
+    // commutator.onSetWorkspaceApiError((result: SetWorkspaceApiErrorPayload) => {
+    //   this.setError();
+    // });
   }
 
   public resolveProjects(search: string): Promise<HttlProjectItem[]> {
@@ -114,52 +118,62 @@ export class ProjectModel {
   //   });
   // }
 
+  // @Action()
+  // public setWorkspaceApiProjects(data: FindApiProjectsStepResult[]) {
+  //   // this.projectsProgress = false;
+  //   // this.controllersProgress = true;
+
+  //   // this.projects = data;
+  // }
+
+  // @Action()
+  // public setWorkspaceApiControllers(data: FindApiControllersStepResult[]) {
+  //   // this.projectsProgress = false;
+  //   // this.controllersProgress = false;
+
+  //   // this.controllers = data;
+  //   // this.controllers[0].inProgress = true;
+  // }
+
+  // @Action()
+  // public setWorkspaceApiControllerSpec(data: ControllerSpec) {
+  //   // const controllerIdx = this.controllers.findIndex(c => c.tag === data.tag);
+  //   // if (controllerIdx === -1)
+  //   //   return;
+
+  //   // const controller = this.controllers[controllerIdx];
+  //   // controller.spec = data.spec;
+  //   // controller.inProgress = false;
+
+  //   // if (controllerIdx + 1 < this.controllers.length) {
+  //   //   this.controllers[controllerIdx + 1].inProgress = true;
+  //   // }
+  // }
+
+  // @Action()
+  // public setError() {
+  //   // this.projectsProgress = false;
+  //   // this.controllersProgress = false;
+
+  //   // this.controllers = [];
+  // }
+
   @Action()
-  public setWorkspaceApiProjects(data: FindApiProjectsStepResult[]) {
-    // this.projectsProgress = false;
-    // this.controllersProgress = true;
-
-    // this.projects = data;
-  }
-
-  @Action()
-  public setWorkspaceApiControllers(data: FindApiControllersStepResult[]) {
-    // this.projectsProgress = false;
-    // this.controllersProgress = false;
-
-    // this.controllers = data;
-    // this.controllers[0].inProgress = true;
-  }
-
-  @Action()
-  public setWorkspaceApiControllerSpec(data: ControllerSpec) {
-    // const controllerIdx = this.controllers.findIndex(c => c.tag === data.tag);
-    // if (controllerIdx === -1)
-    //   return;
-
-    // const controller = this.controllers[controllerIdx];
-    // controller.spec = data.spec;
-    // controller.inProgress = false;
-
-    // if (controllerIdx + 1 < this.controllers.length) {
-    //   this.controllers[controllerIdx + 1].inProgress = true;
-    // }
-  }
-
-  @Action()
-  public setError() {
-    // this.projectsProgress = false;
-    // this.controllersProgress = false;
-
-    // this.controllers = [];
-  }
-
-  @Action()
-  public runScript(scriptId: string, code?: string) {
+  public async runScript(scriptId: string, code?: string) {
     if (code) {
-      this.endpoints.find(e => e.id === scriptId)!.scripts[0].code = code;
+      await this.updateScript(scriptId, code);
     }
-    this.api.runScript(this.fileInfo!.path, scriptId, code);
+    await this.api.runScript(this.fileInfo!.path, scriptId);
+  }
+
+  @Action()
+  public showBodySchema(scriptId: string) {
+    this.api.showBodySchema(this.fileInfo!.path, scriptId);
+  }
+
+  @Action()
+  public showResponseSchema(scriptId: string) {
+    this.api.showResponseSchema(this.fileInfo!.path, scriptId);
   }
 
   @Action()
@@ -172,14 +186,20 @@ export class ProjectModel {
         code: ''
       }];
     }
-
     endpoint.scripts[0].code = code;
-    this.api.updateScript(this.fileInfo!.path, scriptId, code);
+    return this.api.updateScript(this.fileInfo!.path, scriptId, code);
+  }
+
+  @Action()
+  public async resetScript(scriptId: string) {
+    const endpoint = this.endpoints.find(e => e.id === scriptId)!;
+    endpoint.scripts = [];
+    await this.api.resetScript(this.fileInfo!.path, scriptId);
   }
 
   @Action()
   public updatePrestartScript(code: string) {
-    this.api.updateScript(this.fileInfo!.path, null, code);
+    this.api.updatePrestartScript(this.fileInfo!.path, code);
   }
 
   @Action()
@@ -190,6 +210,13 @@ export class ProjectModel {
     };
 
     this.appModel.saveState(ProjectModel.PROJECT_STATE, this.projectState);
+  }
+
+  @Action()
+  public async generateRequest(scriptId: string) {
+    const endpoint = this.endpoints.find(e => e.id === scriptId)!;
+    const script = await this.api.generateRequestScript(this.fileInfo!.path, scriptId);
+    endpoint.defaultScript = script;
   }
 
   private async setProject(project: HttlProjectViewData): Promise<void> {

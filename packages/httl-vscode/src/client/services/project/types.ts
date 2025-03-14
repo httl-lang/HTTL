@@ -50,8 +50,18 @@ export interface HttlProjectApiEndpoint {
   scripts: HttlProjectScript[];
 }
 
-export interface EndpointScriptCode {
+export interface UpdateEndpointScriptCode {
   projectFile: string,
-  scriptId: string | null,
-  code?: string
+  scriptId: string,
+  code: string
+}
+
+export interface UpdatePrestartScriptCode {
+  projectFile: string,
+  code: string
+}
+
+export interface EndpointScriptId {
+  projectFile: string,
+  scriptId: string
 }

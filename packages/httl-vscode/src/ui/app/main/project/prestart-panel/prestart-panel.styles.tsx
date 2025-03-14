@@ -1,3 +1,4 @@
+import { ResizePanel } from '../../../../components/resize-panel';
 import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
@@ -7,8 +8,17 @@ export const Container = styled.div`
   flex: 1;
 `;
 
-export const Editor = styled.div`
-  flex: 1;
+export const Editor = styled(ResizePanel)`
+  --background: var(--vscode-editor-background);
+
+  padding: 5px 5px 0 5px;
+  border-radius: 5px;
+  background-color: var(--background);
+
+  .monaco-editor {
+    --vscode-editor-background: var(--background);
+    --vscode-editorStickyScroll-background: var(--background);
+  }
 `;
 
 export const Label = styled.div`

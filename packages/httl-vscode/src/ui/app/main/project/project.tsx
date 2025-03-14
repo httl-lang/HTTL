@@ -18,7 +18,7 @@ const _ProjectView: React.FC = () => {
 
   return (
     <s.Container>
-      <s.Panel title="HTTL PROJECTS">
+      <s.Panel>
         <ProjectSelector />
         <PrestartPanel />
       </s.Panel>

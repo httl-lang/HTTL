@@ -1,9 +1,10 @@
+import * as vscode from "vscode";
 import fs from "fs";
 import * as fsPath from "path";
 import { Json } from "httl-common";
 
 import { FileSearch } from "../../../common";
-import { EndpointScriptCode, HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData } from "./types";
+import { HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData, EndpointScriptId, UpdateEndpointScriptCode, UpdatePrestartScriptCode } from "./types";
 import { HttlProject } from "./project";
 
 export class HttlProjectService {
@@ -82,7 +83,7 @@ export class HttlProjectService {
     return project.getViewData();
   }
 
-  public async runScript({ projectFile, scriptId, code }: EndpointScriptCode): Promise<void> {
+  public async runScript({ projectFile, scriptId }: EndpointScriptId): Promise<void> {
     const project = this.projects.get(projectFile);
     if (!project) {
       throw new Error('Project not found');
@@ -92,29 +93,22 @@ export class HttlProjectService {
       throw new Error('Script id is required');
     }
 
-    if (code) {
-      project.updateScript(scriptId, code);
-      project.save();
-    } else {
-      code = project.props.scripts.find(s => s.id === scriptId)?.code ?? scriptId;
-    }
+    const code =
+      project.props.scripts.find(s => s.id === scriptId)?.code &&
+      project.generateRequestScript(scriptId);
 
     if (!code) {
       throw new Error('Code is required');
     }
 
-    const prestartScript = project.props.prestart.code;
     // TODO: temporary solution
+    const prestartScript = project.props.prestart.code;
     const fianlScript = prestartScript + '\n' + code;
 
     await this.scriptRunner.run(fianlScript);
   }
 
-  public async updateScript({ projectFile, scriptId, code }: EndpointScriptCode): Promise<void> {
-    if (!code) {
-      throw new Error('Code is required');
-    }
-
+  public async updateScript({ projectFile, scriptId, code }: UpdateEndpointScriptCode): Promise<void> {
     const project = this.projects.get(projectFile);
     if (!project) {
       throw new Error('Project not found');
@@ -123,5 +117,70 @@ export class HttlProjectService {
     project.updateScript(scriptId, code!, true);
 
     await project.save();
+  }
+
+  public async updatePrestartScript({ projectFile, code }: UpdatePrestartScriptCode): Promise<void> {
+    const project = this.projects.get(projectFile);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    project.updatePrestartScript(code);
+
+    await project.save();
+  }
+
+  public async resetScript({ projectFile, scriptId }: EndpointScriptId): Promise<void> {
+    const project = this.projects.get(projectFile);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    project.resetScript(scriptId);
+
+    await project.save();
+  }
+
+  public async generateRequestScript({ projectFile, scriptId }: EndpointScriptId): Promise<string> {
+    const project = this.projects.get(projectFile);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    return project.generateRequestScript(scriptId);
+  }
+
+  public async showBodySchema({ projectFile, scriptId }: EndpointScriptId): Promise<void> {
+    const project = this.projects.get(projectFile);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    const endpoint = project.getEndpoint(scriptId);
+    if (endpoint.hasBody()) {
+      const document = await vscode.workspace.openTextDocument({
+        content: endpoint.getBodyModel(),
+        language: 'json',
+      });
+
+      vscode.window.showTextDocument(document);
+    }
+  }
+
+  public async showResponseSchema({ projectFile, scriptId }: EndpointScriptId): Promise<void> {
+    const project = this.projects.get(projectFile);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    const endpoint = project.getEndpoint(scriptId);
+    if (endpoint.hasResponse()) {
+      const document = await vscode.workspace.openTextDocument({
+        content: endpoint.getResponseModel(),
+        language: 'json',
+      });
+
+      vscode.window.showTextDocument(document);
+    }
   }
 }

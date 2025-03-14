@@ -9,22 +9,10 @@ export const Container = styled.div`
   overflow: hidden;
 `;
 
-export const Panel = styled.div<{ title?: string }>`
-  padding: 5px 5px 0 5px;
+export const Panel = styled.div`
   margin: 6px;
-  background-color: var(--vscode-editor-background);
-  border-radius: 5px;
   display: flex;
   flex-direction: column;
-
-  ${p => p.title && css`
-    &::before {
-      content: '${p.title}';
-      font-size: 12px;
-      line-height: 21px;
-      color: #9d9d9d;
-    }
-  `}
 `;
 
 export const Label = styled.div<{ center?: boolean }>`

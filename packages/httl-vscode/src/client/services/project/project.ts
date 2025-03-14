@@ -8,7 +8,6 @@ import { HttlUrl } from "httl-core/dist/common/url";
 import { FileSearch } from "../../../common";
 
 export class HttlProject {
-
   public static isValid(obj: any) {
     return obj &&
       typeof obj === 'object' &&
@@ -112,15 +111,12 @@ export class HttlProject {
     this.spec = ApiSpec.fromSpec(this.props.spec, HttlUrl.parse(this.props.source));
   }
 
-  public updateScript(scriptId: string | null, code: string, upsert = false) {
+  public updatePrestartScript(code: string) {
+    this.props.prestart = { code };
+  }
 
-    if(scriptId === null) {
-      this.props.prestart = { code };
-      return;
-    }
-
+  public updateScript(scriptId: string, code: string, upsert = false) {
     const script = this.props.scripts.find(s => s.id === scriptId);
-
     if (script) {
       script.code = code;
     } else if (upsert) {
@@ -132,6 +128,20 @@ export class HttlProject {
     } else {
       throw new Error(`Script not found: ${scriptId}`);
     }
+  }
+
+  public resetScript(scriptId: string) {
+    this.props.scripts = this.props.scripts.filter(s => s.id !== scriptId);
+  }
+
+  public getEndpoint(scriptId: string) {
+    const [method, path] = scriptId.split(' ');
+    const endpoint = this.spec.getEndpoints({ method, path })?.[0];
+    if (!endpoint) {
+      throw new Error(`Endpoint not found: ${scriptId}`);
+    }
+
+    return endpoint;
   }
 
   public getViewData(): HttlProjectViewData {
@@ -158,5 +168,15 @@ export class HttlProject {
       prestart: this.props.prestart.code,
       endpoints,
     };
+  }
+
+  public generateRequestScript(scriptId: string) {
+    const [method, path] = scriptId.split(' ');
+    const [endpoint] = this.spec.getEndpoints({ method, path }) || [];
+    if (!endpoint) {
+      throw new Error(`Endpoint not found: ${scriptId}`);
+    }
+
+    return endpoint.generateFullRequest();
   }
 }

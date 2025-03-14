@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { VscClose } from "react-icons/vsc";
 
-import { useProjectModel } from '../project.model';
+import { ApiEndpoint, useProjectModel } from '../project.model';
 import * as s from './endpoints-panel.styles';
 import RunSvg from '/media/run.svg';
 import { VscCircleFilled } from "react-icons/vsc";
@@ -14,23 +14,39 @@ import { VscIssueReopened } from "react-icons/vsc";
 import { VscCode } from "react-icons/vsc";
 import { VscJson } from "react-icons/vsc";
 import { VscBracketDot } from "react-icons/vsc";
+import { VscSync } from "react-icons/vsc";
 
 interface EndpointItemProps {
-  endpoint: HttlProjectApiEndpoint;
-  onRun?: (code?: string) => void;
-  onChange?: (code: string) => void;
+  endpoint: ApiEndpoint;
 }
 
-export const EndpointItem: React.FC<EndpointItemProps> = ({ endpoint, onRun, onChange }) => {
+export const EndpointItem: React.FC<EndpointItemProps> = ({ endpoint }) => {
   const [showEditor, setShowEditor] = React.useState(false);
+  const [editorBusy, setEditorBusy] = React.useState(false);
+  const model = useProjectModel(({ generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
+    ({ generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
+
+  const onExpand = useCallback(() => {
+    const expand = !showEditor;
+    setShowEditor(expand);
+
+    if (expand && !endpoint.scripts.length) {
+      setEditorBusy(true);
+      model.generateRequest(endpoint.id).then(() => {
+        setEditorBusy(false); // Hide loading indicator
+      });
+    }
+  }, [showEditor, endpoint.id, model]);
+
+  console.log(endpoint);
 
   return (
     <s.Panel expanded={showEditor} title={endpoint.description}>
-      <s.Header onClick={() => setShowEditor(!showEditor)}>
+      <s.Header onClick={onExpand}>
         <s.Name>
           <MethodLabel method={endpoint.method} /> {endpoint.path} <small>{endpoint.operationId}</small>
         </s.Name>
-        <s.RunButton onClick={() => onRun?.()}>
+        <s.RunButton onClick={() => model.runScript(endpoint.id)}>
           <RunSvg />
         </s.RunButton>
         {
@@ -43,7 +59,7 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({ endpoint, onRun, onC
         <s.Expanded>
           <s.Editor height="70px">
             <HttlEditor
-              value={endpoint.scripts.at(0)?.code || `${endpoint.method} ${endpoint.path}`}
+              value={endpoint.scripts.at(0)?.code ?? endpoint.defaultScript ?? ""}
               options={{
                 overviewRulerLanes: 0,
                 lineNumbers: 'off',
@@ -56,63 +72,30 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({ endpoint, onRun, onC
                   alwaysConsumeMouseWheel: false,
                 },
               }}
-              onChange={(code) => onChange?.(code)}
-              onRun={(code) => onRun?.(code)}
+              onChange={(code) => model.updateScript(endpoint.id, code)}
+              onRun={(code) => model.runScript(endpoint.id, code)}
               onFocus={() => null}
             />
-
+            {/* <s.FloatingBar>
+              {
+                endpoint.scripts.length > 0 &&
+                <Button onClick={() => onChange?.()} title="Reset to initial code">
+                  <VscSync />
+                </Button>
+              }
+            </s.FloatingBar> */}
           </s.Editor>
-          <s.BottomBar>
-            <span onClick={() => onChange?.(`${endpoint.method} ${endpoint.path}`)}>
-              <VscCode />
-            </span>
-            <span onClick={() => onChange?.(`{
-      "/users/{id}": {
-        "get": {
-          "summary": "Get user by id",
-          "description": "Get user by id",
-          "operationId": "getUserById",
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "description": "ID of user to return",
-              "schema": {
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/User"
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Invalid ID supplied"
-            },
-            "404": {
-              "description": "User not found"
-            }
-          }
-        }
-      }
-    }`)}>
-              <VscJson />
-            </span>
-            <span onClick={() => setShowEditor(false)}>
-              {/* RESPONSE SCHEMA */}
-              <VscBracketDot />
-            </span>
-            {/* <VscIssueReopened /> */}
-          </s.BottomBar>
+          <s.ToolBar>
+            <Button onClick={() => model.resetScript(endpoint.id)} title="Reset to initial code">
+              <VscSync /> <span>Reset</span>
+            </Button>
+            <Button onClick={() => model.showBodySchema(endpoint.id)}>
+              <VscJson /> <span>Body</span>
+            </Button>
+            <Button onClick={() => model.showResponseSchema(endpoint.id)}>
+              <VscBracketDot /> <span>Response</span>
+            </Button>
+          </s.ToolBar>
         </s.Expanded>
       }
     </s.Panel>
