@@ -1,6 +1,8 @@
 import { LoadingText } from '../../../../components/loading-text';
 import styled, { css } from 'styled-components';
 import { ResizePanel } from '../../../../components/resize-panel';
+import Button from '../../../../components/button';
+import { VscCircleFilled } from 'react-icons/vsc';
 
 export const Container = styled.div`
   position: relative;
@@ -12,10 +14,25 @@ export const Container = styled.div`
   }
 `;
 
+export const RunButton = styled(Button)`
+  visibility: hidden;
+
+  &:hover {
+    visibility: visible;
+    opacity: 1 !important;
+  }
+`;
+
 export const Name = styled.div`
   flex: 1;
   transition: opacity 0.02s;
-  /* opacity: 0.8; */
+  filter: brightness(0.9);
+
+  & small {
+    color: color-mix(in srgb, var(--vscode-input-foreground) 40%, transparent);
+    font-size: 10px;
+    margin-left: 10px;
+  }
 `;
 
 export const Panel = styled.div<{ expanded?: boolean }>`
@@ -30,9 +47,14 @@ export const Panel = styled.div<{ expanded?: boolean }>`
   &:hover {
     outline-color: var(--vscode-commandCenter-activeBorder);
     
-    /* ${Name} {
-      opacity: 1;
-    } */
+    ${Name} {
+      filter: none;
+    }
+
+    ${RunButton} {
+      visibility: visible;
+      opacity: 0.5;
+    }
   }
   
   ${p => p.expanded && css`
@@ -46,14 +68,26 @@ export const Panel = styled.div<{ expanded?: boolean }>`
     } */
 
     & ${Name} {
-      opacity: 0.2;
+      opacity: 0.4;
     }
+
+    & ${RunButton} {
+      visibility: visible;
+    }
+
+    &:hover {
+      & ${RunButton} {
+        opacity: 1 !important;
+      }
+    }
+    
   `}
 
   transition: background-color 0.05s;
 `;
 
 export const Header = styled.div`
+  position: relative;
   user-select: none;
   font-size: 12px;
   display: flex;
@@ -62,11 +96,19 @@ export const Header = styled.div`
   cursor: pointer;
 `;
 
+export const HasScriptIndicator = styled(VscCircleFilled)`
+  position: absolute;
+  right: 0;
+  top: 0;
+  opacity: 0.1;
+  font-size: 9px;
+`;
+
 
 export const Editor = styled(ResizePanel)`
   --background: var(--vscode-editor-background);
 
-  margin: 0 5px 5px 5px;
+  margin: 0 5px;
   padding: 5px 5px 0 5px;
   border-radius: 5px;
   background-color: var(--background);
@@ -74,6 +116,23 @@ export const Editor = styled(ResizePanel)`
   .monaco-editor {
     --vscode-editor-background: var(--background);
     --vscode-editorStickyScroll-background: var(--background);
+  }
+`;
+
+export const Expanded = styled.div`
+
+`;
+
+export const BottomBar = styled.div`
+  display: flex;
+  padding: 3px 10px 9px;
+  gap: 10px;
+  font-size: 9px;
+  color: color-mix(in srgb, var(--vscode-input-foreground) 70%, transparent);
+
+  & span:hover {
+    cursor: pointer;
+    color: var(--vscode-input-foreground);
   }
 `;
 

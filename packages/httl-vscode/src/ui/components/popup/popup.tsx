@@ -74,7 +74,6 @@ const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, showC
             </Button>
           </s.Controls>
         )}
-
         {children}
       </s.Popup>
     </s.Host>

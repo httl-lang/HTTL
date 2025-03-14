@@ -96,7 +96,7 @@ export class HttlProjectService {
       project.updateScript(scriptId, code);
       project.save();
     } else {
-      code = project.props.scripts.find(s => s.id === scriptId)?.code;
+      code = project.props.scripts.find(s => s.id === scriptId)?.code ?? scriptId;
     }
 
     if (!code) {

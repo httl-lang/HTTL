@@ -3,14 +3,20 @@ import { FC, PropsWithChildren } from 'react';
 import * as s from './button.styles';
 import { Loader } from '../loader';
 
-interface ButtonProps {
+export interface ButtonProps {
   onClick: () => void;
   progress?: boolean;
+  className?: string;
 }
 
-const Button: FC<PropsWithChildren<ButtonProps>> = ({ onClick, progress, children }) => {
+const Button: FC<PropsWithChildren<ButtonProps>> = ({ onClick, progress, children, className }) => {
   return (
-    <s.Button onClick={() => !progress && onClick()}>
+    <s.Button
+      className={className}
+      onClick={(e) => {
+        e.stopPropagation();
+        !progress && onClick();
+      }}>
       {
         progress ? <Loader /> : children
       }
