@@ -3,10 +3,10 @@ import React from 'react';
 import { HttlEditor } from '../../../../components/editor';
 
 import { useProjectModel } from '../project.model';
-import * as s from './prestart-panel.styles';
+import * as s from './prestart.styles';
 import { ResizePanel } from '../../../../components/resize-panel';
 
-export const PrestartPanel: React.FC = ({ }) => {
+export const Prestart: React.FC = ({ }) => {
   const model = useProjectModel(({ prestart, projectState, updatePrestartScript, setProjectState }) =>
     ({ prestart, projectState, updatePrestartScript, setProjectState }));
 

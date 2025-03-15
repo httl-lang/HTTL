@@ -13,7 +13,7 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
     protected readonly context: HttlExtensionContext,
     protected readonly viewType: string,
     protected readonly appData: Omit<AppData, 'baseUri'> | any,
-    protected readonly api?: any
+    protected readonly services?: Record<string, any>,
   ) {
     context.ext.subscriptions.push(
       vscode.window.registerWebviewViewProvider(
@@ -44,15 +44,20 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
         const { command, requestId, payload } = message;
 
         if (requestId) {
-          if (!this.api) {
-            throw new Error('API is not defined');
+          const [service, action] = command.split('.');
+          if (!service || !action) {
+            throw new Error(`Invalid Service action ${command}`);
           }
 
-          if (typeof this.api[`${command}`] !== 'function') {
+          if (!this.services) {
+            throw new Error('No services defined');
+          }
+
+          if (typeof this.services[service]?.[action] !== 'function') {
             throw new Error(`API method ${command} is not defined`);
           }
 
-          const response = await this.api[`${command}`](payload);
+          const response = await this.services[service][action](payload);
 
           webviewView.webview.postMessage({
             command,

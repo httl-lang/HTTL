@@ -7,7 +7,8 @@ import { HttlResponseViewProvider } from './httl-response-view';
 import { HttlLanguageClient } from '../httl-language-client';
 import { HttlRunCommand } from '../commands/run-command';
 import { ApiWorkspaceAgent } from '../../ai/agents/api-workspace-agent';
-import { HttlProjectService } from '../services/project/project-service';
+import { HttlProjectService } from '../services/project';
+import { QuickRunService } from '../services/quick-run';
 
 export class HttlMainViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlMainView';
@@ -25,11 +26,18 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
       {
         view: 'main',
       },
-      new HttlProjectService({
-        run: async (script: string) => {
-          await this.sendRunCommand(script);
-        }
-      })
+      {
+        project: new HttlProjectService({
+          run: async (script: string) => {
+            await this.sendRunCommand(script);
+          }
+        }),
+        quickRun: new QuickRunService({
+          run: async (script: string) => {
+            await this.sendRunCommand(script);
+          }
+        }),
+      }
     );
   }
 
@@ -45,10 +53,10 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
         return;
       }
 
-      case 'run-script': {
-        await this.sendRunCommand(messagefromUI.payload);
-        return;
-      }
+      // case 'run-script': {
+      //   await this.sendRunCommand(messagefromUI.payload);
+      //   return;
+      // }
 
       case 'set-focus': {
         await this.responseView.changeActiveEditor(constants.QUICK_RUN_DOCUMENT_NAME);

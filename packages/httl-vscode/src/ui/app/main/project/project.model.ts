@@ -159,45 +159,6 @@ export class ProjectModel {
   // }
 
   @Action()
-  public async runScript(scriptId: string, code?: string) {
-    if (code) {
-      await this.updateScript(scriptId, code);
-    }
-    await this.api.runScript(this.fileInfo!.path, scriptId);
-  }
-
-  @Action()
-  public showBodySchema(scriptId: string) {
-    this.api.showBodySchema(this.fileInfo!.path, scriptId);
-  }
-
-  @Action()
-  public showResponseSchema(scriptId: string) {
-    this.api.showResponseSchema(this.fileInfo!.path, scriptId);
-  }
-
-  @Action()
-  public updateScript(scriptId: string, code: string) {
-    const endpoint = this.endpoints.find(e => e.id === scriptId)!;
-    if (!endpoint?.scripts?.length) {
-      endpoint.scripts = [{
-        id: scriptId,
-        name: scriptId,
-        code: ''
-      }];
-    }
-    endpoint.scripts[0].code = code;
-    return this.api.updateScript(this.fileInfo!.path, scriptId, code);
-  }
-
-  @Action()
-  public async resetScript(scriptId: string) {
-    const endpoint = this.endpoints.find(e => e.id === scriptId)!;
-    endpoint.scripts = [];
-    await this.api.resetScript(this.fileInfo!.path, scriptId);
-  }
-
-  @Action()
   public updatePrestartScript(code: string) {
     this.api.updatePrestartScript(this.fileInfo!.path, code);
   }
@@ -210,13 +171,6 @@ export class ProjectModel {
     };
 
     this.appModel.saveState(ProjectModel.PROJECT_STATE, this.projectState);
-  }
-
-  @Action()
-  public async generateRequest(scriptId: string) {
-    const endpoint = this.endpoints.find(e => e.id === scriptId)!;
-    const script = await this.api.generateRequestScript(this.fileInfo!.path, scriptId);
-    endpoint.defaultScript = script;
   }
 
   private async setProject(project: HttlProjectViewData): Promise<void> {

@@ -94,7 +94,7 @@ export class HttlProjectService {
     }
 
     const code =
-      project.props.scripts.find(s => s.id === scriptId)?.code &&
+      project.props.scripts.find(s => s.id === scriptId)?.code ??
       project.generateRequestScript(scriptId);
 
     if (!code) {

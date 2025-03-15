@@ -2,16 +2,15 @@ import React from 'react';
 import { VscClose } from "react-icons/vsc";
 
 import { useProjectModel } from '../project.model';
-import * as s from './endpoints-panel.styles';
+import * as s from './endpoints.styles';
 import RunSvg from './run.svg';
 import { VscSparkle } from "react-icons/vsc";
 import { LoadingText } from '../../../../components/loading-text';
 import { HttlEditor } from '../../../../components/editor';
 import { MethodLabel } from '../../../../components/method-label';
-import { EndpointItem } from './endpoint-item';
+import { Endpoint } from '../endpoint';
 
-
-export const EndpointsPanel: React.FC = () => {
+export const Endpoints: React.FC = () => {
   const model = useProjectModel(({ endpointGoups }) =>
     ({ endpointGoups }));
 
@@ -33,7 +32,7 @@ export const EndpointsPanel: React.FC = () => {
             </s.EndpointTag>
             {
               group.endpoints.map((endpoint) => (
-                <EndpointItem
+                <Endpoint
                   key={endpoint.id}
                   endpoint={endpoint}
                 />

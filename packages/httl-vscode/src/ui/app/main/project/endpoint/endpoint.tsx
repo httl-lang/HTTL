@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { VscClose } from "react-icons/vsc";
 
 import { ApiEndpoint, useProjectModel } from '../project.model';
-import * as s from './endpoints-panel.styles';
+import * as s from './endpoint.styles';
 import RunSvg from '/media/run.svg';
 import { VscCircleFilled } from "react-icons/vsc";
 import { LoadingText } from '../../../../components/loading-text';
@@ -15,42 +15,40 @@ import { VscCode } from "react-icons/vsc";
 import { VscJson } from "react-icons/vsc";
 import { VscBracketDot } from "react-icons/vsc";
 import { VscSync } from "react-icons/vsc";
+import { EndpointContext, useEndpointModel } from './endpoint.model';
 
-interface EndpointItemProps {
-  endpoint: ApiEndpoint;
-}
-
-export const EndpointItem: React.FC<EndpointItemProps> = ({ endpoint }) => {
+const _Endpoint: React.FC = () => {
   const [showEditor, setShowEditor] = React.useState(false);
   const [editorBusy, setEditorBusy] = React.useState(false);
-  const model = useProjectModel(({ generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
-    ({ generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
+
+  const model = useEndpointModel(({ endpoint, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
+    ({ endpoint, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
 
   const onExpand = useCallback(() => {
     const expand = !showEditor;
     setShowEditor(expand);
 
-    if (expand && !endpoint.scripts.length) {
+    if (expand && !model.endpoint.scripts.length) {
       setEditorBusy(true);
-      model.generateRequest(endpoint.id).then(() => {
+      model.generateRequest(model.endpoint.id).then(() => {
         setEditorBusy(false); // Hide loading indicator
       });
     }
-  }, [showEditor, endpoint.id, model]);
+  }, [showEditor, model.endpoint.id, model]);
 
-  console.log(endpoint);
+  console.log(model.endpoint);
 
   return (
-    <s.Panel expanded={showEditor} title={endpoint.description}>
+    <s.Panel expanded={showEditor} title={model.endpoint.description}>
       <s.Header onClick={onExpand}>
         <s.Name>
-          <MethodLabel method={endpoint.method} /> {endpoint.path} <small>{endpoint.operationId}</small>
+          <MethodLabel method={model.endpoint.method} /> {model.endpoint.path} <small>{model.endpoint.operationId}</small>
         </s.Name>
-        <s.RunButton onClick={() => model.runScript(endpoint.id)}>
+        <s.RunButton onClick={() => model.runScript(model.endpoint.id)}>
           <RunSvg />
         </s.RunButton>
         {
-          endpoint.scripts.length > 0 &&
+          model.endpoint.scripts.length > 0 &&
           <s.HasScriptIndicator />
         }
       </s.Header>
@@ -59,7 +57,7 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({ endpoint }) => {
         <s.Expanded>
           <s.Editor height="70px">
             <HttlEditor
-              value={endpoint.scripts.at(0)?.code ?? endpoint.defaultScript ?? ""}
+              value={model.endpoint.scripts.at(0)?.code ?? model.endpoint.defaultScript ?? ""}
               options={{
                 overviewRulerLanes: 0,
                 lineNumbers: 'off',
@@ -72,8 +70,8 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({ endpoint }) => {
                   alwaysConsumeMouseWheel: false,
                 },
               }}
-              onChange={(code) => model.updateScript(endpoint.id, code)}
-              onRun={(code) => model.runScript(endpoint.id, code)}
+              onChange={(code) => model.updateScript(model.endpoint.id, code)}
+              onRun={(code) => model.runScript(model.endpoint.id, code)}
               onFocus={() => null}
             />
             {/* <s.FloatingBar>
@@ -86,13 +84,13 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({ endpoint }) => {
             </s.FloatingBar> */}
           </s.Editor>
           <s.ToolBar>
-            <Button onClick={() => model.resetScript(endpoint.id)} title="Reset to initial code">
+            <Button onClick={() => model.resetScript(model.endpoint.id)} title="Reset to initial code">
               <VscSync /> <span>Reset</span>
             </Button>
-            <Button onClick={() => model.showBodySchema(endpoint.id)}>
+            <Button onClick={() => model.showBodySchema(model.endpoint.id)}>
               <VscJson /> <span>Body</span>
             </Button>
-            <Button onClick={() => model.showResponseSchema(endpoint.id)}>
+            <Button onClick={() => model.showResponseSchema(model.endpoint.id)}>
               <VscBracketDot /> <span>Response</span>
             </Button>
           </s.ToolBar>
@@ -101,3 +99,9 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({ endpoint }) => {
     </s.Panel>
   );
 };
+
+export const Endpoint = ({ endpoint }: { endpoint: ApiEndpoint }) => (
+  <EndpointContext {...endpoint}>
+    <_Endpoint />
+  </EndpointContext>
+);

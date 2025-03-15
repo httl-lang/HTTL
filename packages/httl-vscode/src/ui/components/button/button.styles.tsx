@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Button = styled.a`
+export const Button = styled.a<{ disabled?: boolean }>`
     cursor: pointer;
     font: normal normal normal 16px / 1 codicon;
     text-align: center;
@@ -17,4 +17,9 @@ export const Button = styled.a`
     &:hover {
       background-color: var(--vscode-toolbar-hoverBackground);
     }
+
+    ${({ disabled }) => disabled && css`
+      pointer-events: none;
+      opacity: 0.5;
+    `}
 `;

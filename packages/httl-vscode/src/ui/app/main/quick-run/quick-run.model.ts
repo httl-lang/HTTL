@@ -1,6 +1,7 @@
 import { Action, Model, connect, store } from "react-storm";
 import { AppModel } from "../../app.model";
 import { commutator } from "../../../services/commutator";
+import { QuickRunApi } from "./quick-run.api";
 
 @Model()
 export class QuickRunModel {
@@ -14,10 +15,9 @@ export class QuickRunModel {
 
   public size = "100px";
 
-  public inProgress = false;
-
   constructor(
-    private readonly appModel = store(AppModel)
+    private readonly appModel = store(AppModel),
+    private readonly api = new QuickRunApi()
   ) { }
 
   public init() {
@@ -25,7 +25,7 @@ export class QuickRunModel {
     this.size = this.appModel.getState(QuickRunModel.STORE_SIZE_KEY) ?? "100px";
     commutator.onSetResponse(({ payload, file }) => {
       if (file === "quick-run-document") {
-        this.setProgress(false);
+        // this.setProgress(false);
       }
     });
   }
@@ -43,13 +43,10 @@ export class QuickRunModel {
   }
 
   @Action()
-  public run(script: string) {
-    this.inProgress = true;
+  public async run(script?: string) {
+    script ??= this.script;
     this.setScript(script);
-    vscode.postMessage({
-      command: 'run-script',
-      payload: script,
-    });
+    await this.api.runScript(script);
   }
 
   @Action()
@@ -57,11 +54,6 @@ export class QuickRunModel {
     vscode.postMessage({
       command: 'set-focus',
     });
-  }
-
-  @Action()
-  public setProgress(progress: boolean) {
-    this.inProgress = progress;
   }
 }
 

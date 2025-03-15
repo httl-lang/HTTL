@@ -10,8 +10,8 @@ import RunSvg from '/media/run.svg';
 
 const _QuickRunView: React.FC = () => {
   const editorRef = useRef<HTMLDivElement>(null);
-  const model = useQuickRunModel(({ run, setScript, setFocus, saveSize, inProgress, size, script }) =>
-    ({ run, setScript, setFocus, saveSize, inProgress, size, script }));
+  const model = useQuickRunModel(({ run, setScript, setFocus, saveSize, size, script }) =>
+    ({ run, setScript, setFocus, saveSize, size, script }));
 
   const onResize = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -39,7 +39,7 @@ const _QuickRunView: React.FC = () => {
       <s.Panel>
         <s.Description>
           Quick Run
-          <Button progress={model.inProgress} onClick={() => model.run(model.script)}>
+          <Button onClick={() => model.run()}>
             <RunSvg />
           </Button>
         </s.Description>

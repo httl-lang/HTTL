@@ -9,8 +9,8 @@ import * as s from './project.styles';
 import RunSvg from './run.svg';
 import { VscSparkle } from "react-icons/vsc";
 import { ProjectSelector } from './project-selector';
-import { EndpointsPanel } from './endpoints-panel';
-import { PrestartPanel } from './prestart-panel';
+import { Endpoints } from './endpoints';
+import { Prestart } from './prestart';
 
 const _ProjectView: React.FC = () => {
   // const model = useProjectModel(({ updateScript }) =>
@@ -20,9 +20,9 @@ const _ProjectView: React.FC = () => {
     <s.Container>
       <s.Panel>
         <ProjectSelector />
-        <PrestartPanel />
+        <Prestart />
       </s.Panel>
-      <EndpointsPanel />
+      <Endpoints />
     </s.Container>
   );
 };
