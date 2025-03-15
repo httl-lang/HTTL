@@ -19,7 +19,11 @@ export const Button = styled.a<{ disabled?: boolean }>`
     }
 
     ${({ disabled }) => disabled && css`
-      pointer-events: none;
-      opacity: 0.5;
+      cursor: not-allowed;
+      filter: brightness(0.5);
+
+      &:hover {
+        background-color: transparent;
+      }
     `}
 `;

@@ -21,8 +21,8 @@ const _Endpoint: React.FC = () => {
   const [showEditor, setShowEditor] = React.useState(false);
   const [editorBusy, setEditorBusy] = React.useState(false);
 
-  const model = useEndpointModel(({ endpoint, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
-    ({ endpoint, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
+  const model = useEndpointModel(({ endpoint, inProgress, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
+    ({ endpoint, inProgress, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
 
   const onExpand = useCallback(() => {
     const expand = !showEditor;
@@ -30,7 +30,7 @@ const _Endpoint: React.FC = () => {
 
     if (expand && !model.endpoint.scripts.length) {
       setEditorBusy(true);
-      model.generateRequest(model.endpoint.id).then(() => {
+      model.generateRequest(model.endpoint.id).finally(() => {
         setEditorBusy(false); // Hide loading indicator
       });
     }
@@ -44,7 +44,7 @@ const _Endpoint: React.FC = () => {
         <s.Name>
           <MethodLabel method={model.endpoint.method} /> {model.endpoint.path} <small>{model.endpoint.operationId}</small>
         </s.Name>
-        <s.RunButton onClick={() => model.runScript(model.endpoint.id)}>
+        <s.RunButton onClick={() => model.runScript(model.endpoint.id)} progress={model.inProgress}>
           <RunSvg />
         </s.RunButton>
         {
@@ -84,13 +84,28 @@ const _Endpoint: React.FC = () => {
             </s.FloatingBar> */}
           </s.Editor>
           <s.ToolBar>
-            <Button onClick={() => model.resetScript(model.endpoint.id)} title="Reset to initial code">
+            <Button
+              disabled={model.endpoint.scripts.length === 0}
+              disableLoading={true}
+              onClick={() => model.resetScript(model.endpoint.id)}
+              title={model.endpoint.scripts.length === 0 ? "Script is already in initial state" : "Reset script to initial state"}
+            >
               <VscSync /> <span>Reset</span>
             </Button>
-            <Button onClick={() => model.showBodySchema(model.endpoint.id)}>
+            <Button
+              disabled={!model.endpoint.hasBodySchema}
+              disableLoading={true}
+              onClick={() => model.showBodySchema(model.endpoint.id)}
+              title={model.endpoint.hasBodySchema ? "Show body schema" : "No body schema"}
+            >
               <VscJson /> <span>Body</span>
             </Button>
-            <Button onClick={() => model.showResponseSchema(model.endpoint.id)}>
+            <Button
+              disabled={!model.endpoint.hasResponseSchema}
+              disableLoading={true}
+              onClick={() => model.showResponseSchema(model.endpoint.id)}
+              title={model.endpoint.hasResponseSchema ? "Show response schema" : "No response schema"}
+            >
               <VscBracketDot /> <span>Response</span>
             </Button>
           </s.ToolBar>

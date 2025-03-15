@@ -14,6 +14,7 @@ export class QuickRunModel {
 # get /todos/1`;
 
   public size = "100px";
+  public inProgress = false;
 
   constructor(
     private readonly appModel = store(AppModel),
@@ -44,9 +45,14 @@ export class QuickRunModel {
 
   @Action()
   public async run(script?: string) {
-    script ??= this.script;
-    this.setScript(script);
+    if (script) {
+      this.inProgress = true;
+      this.setScript(script);
+    } else {
+      script = this.script;
+    }
     await this.api.runScript(script);
+    this.inProgress = false;
   }
 
   @Action()

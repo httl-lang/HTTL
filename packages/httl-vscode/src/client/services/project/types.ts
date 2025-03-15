@@ -48,6 +48,8 @@ export interface HttlProjectApiEndpoint {
   description?: string;
   operationId?: string;
   scripts: HttlProjectScript[];
+  hasBodySchema: boolean;
+  hasResponseSchema: boolean;
 }
 
 export interface UpdateEndpointScriptCode {

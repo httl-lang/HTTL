@@ -157,7 +157,9 @@ export class HttlProject {
           description: endpoint.description,
           operationId: endpoint.operationId,
           scripts: this.props.scripts.filter(script => script.id === id),
-        } as HttlProjectApiEndpoint;
+          hasBodySchema: endpoint.hasBodySchema(),
+          hasResponseSchema: endpoint.hasResponseSchema(),
+        } satisfies HttlProjectApiEndpoint;
       });
 
     return {

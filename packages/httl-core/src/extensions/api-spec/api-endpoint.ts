@@ -134,7 +134,7 @@ export class ApiEndpoint {
       : this.getMethodAndPath()
   }
 
-  public hasBody() {
+  public hasBodySchema() {
     return !!this.requestBody;
   }
 
@@ -142,7 +142,7 @@ export class ApiEndpoint {
     return this.requestBody?.generateBodyString();
   }
 
-  public hasResponse() {
+  public hasResponseSchema() {
     return !!this.responses && Object.keys(this.responses).length > 0;
   }
 

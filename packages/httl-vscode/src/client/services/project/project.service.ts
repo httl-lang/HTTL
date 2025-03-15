@@ -157,7 +157,7 @@ export class HttlProjectService {
     }
 
     const endpoint = project.getEndpoint(scriptId);
-    if (endpoint.hasBody()) {
+    if (endpoint.hasBodySchema()) {
       const document = await vscode.workspace.openTextDocument({
         content: endpoint.getBodyModel(),
         language: 'json',
@@ -174,7 +174,7 @@ export class HttlProjectService {
     }
 
     const endpoint = project.getEndpoint(scriptId);
-    if (endpoint.hasResponse()) {
+    if (endpoint.hasResponseSchema()) {
       const document = await vscode.workspace.openTextDocument({
         content: endpoint.getResponseModel(),
         language: 'json',

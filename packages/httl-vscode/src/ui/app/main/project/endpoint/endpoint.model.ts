@@ -6,6 +6,7 @@ import { ApiEndpoint, ProjectModel } from "../project.model";
 @Model()
 export class EndpointModel {
   public endpoint!: ApiEndpoint;
+  public inProgress = false;
 
   constructor(
     private readonly project = store(ProjectModel),
@@ -22,10 +23,15 @@ export class EndpointModel {
 
   @Action()
   public async runScript(scriptId: string, code?: string) {
-    if (code) {
-      await this.updateScript(scriptId, code);
+    if (code !== undefined) {
+      this.inProgress = true;
+
+      if (code !== this.endpoint.defaultScript) {
+        await this.updateScript(scriptId, code);
+      }
     }
     await this.api.runScript(this.project.fileInfo!.path, scriptId);
+    this.inProgress = false;
   }
 
   @Action()

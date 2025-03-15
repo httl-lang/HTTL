@@ -171,7 +171,7 @@ export const ToolBar = styled.div`
     padding: 3px 5px;
     border-radius: 3px;
 
-    opacity: 0.5;
+    opacity: 0.7;
 
     &:hover {
       opacity: 1;
@@ -183,6 +183,7 @@ export const ToolBar = styled.div`
 
     & span {
       margin-top: -1px;
+      pointer-events: none;
     }
   }
 `;
