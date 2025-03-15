@@ -19,10 +19,11 @@ export const appRouter = createHashRouter([
     children: [
       {
         index: true,
+        path: 'project',
         element: <ProjectView />,
       },
       {
-        path: 'run',
+        path: 'quick-run',
         element: <QuickRunView />,
       },
       {
@@ -33,6 +34,10 @@ export const appRouter = createHashRouter([
         path: 'tutorials',
         element: <TutorialsView />,
       },
+      {
+        path: '*',
+        element: <Navigate to="/main/project" replace />,
+      }
     ],
   },
   {

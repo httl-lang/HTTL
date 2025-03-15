@@ -55,8 +55,8 @@ const _HttlOutputView: FC = () => {
                 <s.Main>
                   <HttlOutputResponse
                     response={model.currentResponse}
-                    source={resModel.currentFile}
-                    onSourceClick={() => resModel.highlightCode(model.currentResponse.source!)}
+                    source={resModel.currentFile!}
+                    onSourceClick={() => resModel.highlightCode(model.currentResponse.source)}
                   />
                 </s.Main>
               </>
@@ -69,8 +69,6 @@ const _HttlOutputView: FC = () => {
     </>
   );
 };
-
-// const HttlOutput = (props: HttlOutputProps) => <HttlOutputContext {...props}><_HttlOutput /></HttlOutputContext>;
 
 export const HttlOutputView: FC = () => {
   const { viewData } = useResponseModel(({ viewData }) => ({ viewData }));

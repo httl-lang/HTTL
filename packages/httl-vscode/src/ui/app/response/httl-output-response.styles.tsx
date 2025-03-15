@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Toggle from '../../components/toggle';
 
 export const ResponseView = styled.div`
@@ -37,12 +37,44 @@ export const InfoItem = styled.div`
   cursor: default;
 `;
 
-export const SourceLink = styled.a`
+export const SourceLink = styled.a<{ type?: string }>`
   cursor: pointer;
+
   opacity: 0.7;
+
   &:hover {
     text-decoration: underline;
     opacity: 1;
+  }
+
+  /* ${props => props.type === 'quick-run' && css`
+    color: #ff6700;
+    font-variant-caps: all-petite-caps;
+    opacity: 1;
+  `} */
+
+  ${props => props.type === 'quick-run'
+    ? css`
+      color: #ff6700;
+      font-variant-caps: all-petite-caps;
+      opacity: 1;
+    `
+    : css`
+      color: var(--vscode-textLink-foreground);
+
+      &::before {
+        content: '${props.type}:';
+        color: var(--vscode-tab-inactiveForeground);
+        margin-right: 5px;
+        font-size: 12px;
+        font-variant-caps: all-petite-caps;
+        display: inline-block;
+
+        &:hover {
+          text-decoration: none !important;
+        }
+      }
+    `
   }
 `;
 

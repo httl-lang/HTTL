@@ -2,7 +2,6 @@ import { Action, Model, connect, store } from "react-storm";
 import { commutator } from "../../services/commutator";
 import { HttlOutputViewProps } from "./httl-output";
 import { AppModel } from "../app.model";
-// import { constants } from "../../../common";
 
 @Model()
 export class ResponseModel {
@@ -11,11 +10,6 @@ export class ResponseModel {
 
   public map = new Map<string, HttlOutputViewProps>();
   public currentFile?: string;
-
-  public get isQuickRunResponse() {
-    // TODO: fix - constants.QUICK_RUN_DOCUMENT causes import module (httl-core) error
-    return this.currentFile === "quick-run-document";
-  }
 
   constructor(
     private readonly appModel = store(AppModel)
@@ -58,27 +52,19 @@ export class ResponseModel {
     }
   }
 
-  public highlightCode(source: { start: number, end: number }, scroll = false) {
-    if (this.isQuickRunResponse) {
-      return;
-    }
-
+  public highlightCode(source?: { start: number, end: number }, scroll = false) {
     vscode.postMessage({
       command: "code-highlight",
       file: this.currentFile,
       payload: source
     });
 
-    if (scroll) {
+    if (scroll && source) {
       this.scrollToCode(source);
     }
   }
 
   public scrollToCode(source: { start: number, end: number }) {
-    if (this.isQuickRunResponse) {
-      return;
-    }
-    
     vscode.postMessage({
       command: "code-scroll",
       file: this.currentFile,

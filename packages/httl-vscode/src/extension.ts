@@ -20,7 +20,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// * UI
 		const httlResponseView = new HttlResponseViewProvider(httlContext);
-		const httlMainView = new HttlMainViewProvider(httlContext, client, httlResponseView);
+		const httlMainView = new HttlMainViewProvider(httlContext, client);
 
 		// * Commands
 		new HttlRunCommand(httlContext, client, httlResponseView);

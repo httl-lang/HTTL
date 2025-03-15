@@ -8,7 +8,6 @@ import { VscCircleFilled } from "react-icons/vsc";
 import { LoadingText } from '../../../../components/loading-text';
 import { HttlEditor } from '../../../../components/editor';
 import { MethodLabel } from '../../../../components/method-label';
-import { HttlProjectApiEndpoint } from '../../../../../client/views/main/services/project';
 import Button from '../../../../components/button';
 import { VscIssueReopened } from "react-icons/vsc";
 import { VscCode } from "react-icons/vsc";
@@ -16,8 +15,12 @@ import { VscJson } from "react-icons/vsc";
 import { VscBracketDot } from "react-icons/vsc";
 import { VscSync } from "react-icons/vsc";
 import { EndpointContext, useEndpointModel } from './endpoint.model';
+import { useSearchParams } from 'react-router';
 
 const _Endpoint: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const highlightedScriptId = searchParams.get("scriptId");
+
   const [showEditor, setShowEditor] = React.useState(false);
   const [editorBusy, setEditorBusy] = React.useState(false);
 
@@ -39,7 +42,7 @@ const _Endpoint: React.FC = () => {
   console.log(model.endpoint);
 
   return (
-    <s.Panel expanded={showEditor} title={model.endpoint.description}>
+    <s.Panel expanded={showEditor} title={model.endpoint.description} highlighted={highlightedScriptId === model.endpoint.id}>
       <s.Header onClick={onExpand}>
         <s.Name>
           <MethodLabel method={model.endpoint.method} /> {model.endpoint.path} <small>{model.endpoint.operationId}</small>

@@ -17,8 +17,7 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
 
   constructor(
     context: HttlExtensionContext,
-    private readonly client: HttlLanguageClient,
-    private readonly responseView: HttlResponseViewProvider,
+    private readonly client: HttlLanguageClient
   ) {
     super(
       context,
@@ -28,17 +27,25 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
       },
       {
         project: new HttlProjectService({
-          run: async (script: string) => {
-            await this.sendRunCommand(script);
+          run: async (script: string, source: string) => {
+            await this.sendRunCommand(script, source);
           }
         }),
         quickRun: new QuickRunService({
-          run: async (script: string) => {
-            await this.sendRunCommand(script);
+          run: async (script: string, source: string) => {
+            await this.sendRunCommand(script, source);
           }
         }),
       }
     );
+  }
+
+  public async highlightSection(panel: string, ...paths: string[]): Promise<void> {
+    await this.show();
+    await this.postMessage({
+      command: 'highlight-section',
+      payload: { panel, paths },
+    });
   }
 
   protected override async handleUIMessages(messagefromUI: any): Promise<void> {
@@ -65,12 +72,16 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
     }
   }
 
-  private async sendRunCommand(script: string) {
+  private get responseView() {
+    return this.getView(HttlResponseViewProvider.viewType) as HttlResponseViewProvider;
+  }
+
+  private async sendRunCommand(script: string, documentName: string) {
     await HttlRunCommand.execute(
       this.responseView,
       this.client,
       script,
-      constants.QUICK_RUN_DOCUMENT_NAME);
+      documentName);
   }
 
   private async startWorkspaceAnalyzing(message: any) {

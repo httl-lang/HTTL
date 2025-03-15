@@ -17,8 +17,9 @@ export class AppModel {
     });
   }
 
-  public navigateMain(path: string) {
-    this.router.navigate(`/main/${path}`);
+  public navigateMain(path?: string) {
+    const route = path ? `/main/${path}` : '/main';
+    this.router.navigate(route);
   }
 
   public navigateResponse(path: string) {

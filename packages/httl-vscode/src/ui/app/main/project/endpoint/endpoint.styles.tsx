@@ -35,7 +35,7 @@ export const Name = styled.div`
   }
 `;
 
-export const Panel = styled.div<{ expanded?: boolean }>`
+export const Panel = styled.div<{ expanded?: boolean, highlighted?: boolean }>`
   margin: 6px;
   background-color: var(--vscode-editor-background);
   border-radius: 5px;
@@ -43,6 +43,11 @@ export const Panel = styled.div<{ expanded?: boolean }>`
   flex-direction: column;
 
   outline: 1px solid var(--vscode-chat-requestBorder, var(--vscode-input-background, transparent));
+
+  ${p => p.highlighted && css`
+    box-shadow: 0 0 0 1px var(--vscode-textLink-activeForeground);
+    transition: box-shadow 0.2s;
+  `}
   
   &:hover {
     outline-color: var(--vscode-commandCenter-activeBorder);

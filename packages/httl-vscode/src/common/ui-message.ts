@@ -60,6 +60,13 @@ interface SetWorkspaceApiErrorMessage {
 export type SetWorkspaceApiErrorPayload = Omit<SetWorkspaceApiErrorMessage, 'command'>;
 
 
+interface HighlightViewSectionMessage {
+  command: 'highlight-section';
+  payload: { panel: string, paths: string[] };
+}
+export type HighlightViewSectionMessagePayload = Omit<HighlightViewSectionMessage, 'command'>;
+
+
 export type UIMessage = InitializeMessage |
   ChangeActiveEditorMessage |
   CloseResponseMessage |
@@ -68,7 +75,8 @@ export type UIMessage = InitializeMessage |
   SetWorkspaceApiProjectsMessage |
   SetWorkspaceApiControllersMessage |
   SetWorkspaceApiControllerSpecMessage |
-  SetWorkspaceApiErrorMessage;
+  SetWorkspaceApiErrorMessage |
+  HighlightViewSectionMessage;
 
 export type UIMessageType = UIMessage['command'];
 

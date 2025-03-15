@@ -3,6 +3,7 @@ import vscode from 'vscode';
 import { AppData, HttlExtensionContext, UIMessage } from '../../../common';
 import { Lang } from 'httl-core';
 import { HttlBaseViewProvider } from '../base-view';
+import { HttlMainViewProvider } from '../main';
 
 export class HttlResponseViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlResponseView';
@@ -39,6 +40,10 @@ export class HttlResponseViewProvider extends HttlBaseViewProvider {
     );
   }
 
+  private get mainView() {
+    return this.getView(HttlMainViewProvider.viewType) as HttlMainViewProvider;
+  }
+
   protected override async handleUIMessages(messagefromUI: any): Promise<void> {
     switch (messagefromUI.command) {
       case 'code-scroll': {
@@ -59,32 +64,37 @@ export class HttlResponseViewProvider extends HttlBaseViewProvider {
       }
 
       case 'code-highlight': {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-          vscode.window.showErrorMessage('No active editor found!');
-          return;
+        const [type, ...rest] = messagefromUI.file.split('::');
+        if (type === "project" || type === "quick-run") {
+          await this.mainView.highlightSection(type, ...rest);
+        } else {
+          const editor = vscode.window.activeTextEditor;
+          if (!editor) {
+            vscode.window.showErrorMessage('No active editor found!');
+            return;
+          }
+
+          this.editorsDecorationMap.get(editor.document.uri.fsPath)?.dispose();
+
+          const document = editor.document;
+          const startPosition = document.positionAt(messagefromUI.payload.start);
+          const endPosition = document.positionAt(messagefromUI.payload.end);
+
+          const range = new vscode.Range(startPosition, endPosition);
+
+          const decorationType = vscode.window.createTextEditorDecorationType({
+            backgroundColor: 'rgba(225, 255, 0, 0.14)',
+            border: '0.1px solid rgba(255, 255, 0, 0.2)',
+            borderRadius: '4px',
+          });
+
+          editor.setDecorations(decorationType, [range]);
+          this.editorsDecorationMap.set(editor.document.uri.fsPath, decorationType);
+
+          setTimeout(() => {
+            decorationType.dispose();
+          }, 4000);
         }
-
-        this.editorsDecorationMap.get(editor.document.uri.fsPath)?.dispose();
-
-        const document = editor.document;
-        const startPosition = document.positionAt(messagefromUI.payload.start);
-        const endPosition = document.positionAt(messagefromUI.payload.end);
-
-        const range = new vscode.Range(startPosition, endPosition);
-
-        const decorationType = vscode.window.createTextEditorDecorationType({
-          backgroundColor: 'rgba(225, 255, 0, 0.14)',
-          border: '0.1px solid rgba(255, 255, 0, 0.2)',
-          borderRadius: '4px',
-        });
-
-        editor.setDecorations(decorationType, [range]);
-        this.editorsDecorationMap.set(editor.document.uri.fsPath, decorationType);
-
-        setTimeout(() => {
-          decorationType.dispose();
-        }, 4000);
 
         return;
       }

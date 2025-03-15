@@ -1,5 +1,6 @@
 import { Model, connect, store } from "react-storm";
 import { AppModel } from "../app.model";
+import { commutator } from "../../services/commutator";
 
 @Model()
 export class MainModel {
@@ -10,6 +11,14 @@ export class MainModel {
 
   public init() {
     this.appModel.subscribeOnRouteChangedEvent();
+
+    commutator.onHighlightSection(({ payload }) => {
+      const path = payload.panel === 'project'
+        ? `${payload.panel}?project=${payload.paths[0]}&scriptId=${payload.paths[1]}`
+        : payload.panel;
+
+      this.appModel.navigateMain(path);
+    });
   }
 }
 

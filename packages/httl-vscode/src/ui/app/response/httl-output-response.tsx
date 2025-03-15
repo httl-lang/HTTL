@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 
 import { HttpResponse } from 'httl-core';
 import { Viewer } from '../../components/editor';
@@ -8,7 +8,7 @@ import StatusLabel from '../../components/status-label';
 
 export interface HttlOutputResponseProps {
   response: HttpResponse;
-  source?: string;
+  source: string;
   onSourceClick?: () => void;
 }
 
@@ -25,7 +25,27 @@ export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response, sour
         ? 'html'
         : 'json';
 
-  const sourceFileName = source?.split(/\/|\\/).pop();
+  const { type, name } = useMemo<{ type?: string, name?: string }>(() => {
+    const [type, ...rest] = source.split("::");
+    if (type === 'quick-run') {
+      return {
+        type,
+        name: 'Quick Run'
+      };
+    } else if (type === 'project') {
+      return {
+        type,
+        name: rest.pop()
+      };
+    }
+
+    const sourceFileName = source?.split(/\/|\\/).pop();
+    return {
+      type: 'file',
+      name: sourceFileName
+    };
+
+  }, [source]);
 
   return (
     <s.ResponseView>
@@ -38,8 +58,8 @@ export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response, sour
         </s.ToggleAction>
         <s.Information>
           <s.InfoItem>
-            <s.SourceLink title={source} onClick={onSourceClick}>
-              {sourceFileName}
+            <s.SourceLink type={type} title={source} onClick={onSourceClick}>
+              {name}
             </s.SourceLink>
           </s.InfoItem>
           <s.Circle />

@@ -4,10 +4,11 @@ import { AppData, HttlExtensionContext, UIMessage } from '../../common';
 import { Lang } from 'httl-core';
 
 export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider {
+  private static readonly views = new Map<string, HttlBaseViewProvider>();
+
   private isAppReady = false;
   protected view!: vscode.WebviewView;
   protected delayedMessages: UIMessage[] = [];
-
 
   constructor(
     protected readonly context: HttlExtensionContext,
@@ -15,6 +16,7 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
     protected readonly appData: Omit<AppData, 'baseUri'> | any,
     protected readonly services?: Record<string, any>,
   ) {
+    HttlBaseViewProvider.views.set(viewType, this);
     context.ext.subscriptions.push(
       vscode.window.registerWebviewViewProvider(
         viewType,
@@ -119,6 +121,10 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
 
   public async setResponse(file: string, payload: any) {
     await this.postMessage({ command: 'set-response', file, payload });
+  }
+
+  protected getView(viewType: string) {
+    return HttlBaseViewProvider.views.get(viewType);
   }
 
   protected async handleUIMessages(messagefromUI: any) { }

@@ -12,7 +12,7 @@ export class HttlProjectService {
   private workDir = FileSearch.getWorkspaceDirectory();
 
   constructor(
-    private scriptRunner: { run: (script: string) => void }
+    private scriptRunner: { run: (script: string, source: string) => void }
   ) { }
 
   public async resolveProjects({ search }: { search: string }): Promise<HttlProjectItem[]> {
@@ -103,9 +103,9 @@ export class HttlProjectService {
 
     // TODO: temporary solution
     const prestartScript = project.props.prestart.code;
-    const fianlScript = prestartScript + '\n' + code;
+    const finalScript = prestartScript + '\n' + code;
 
-    await this.scriptRunner.run(fianlScript);
+    await this.scriptRunner.run(finalScript, `project::${project.filePath}::${scriptId}`);
   }
 
   public async updateScript({ projectFile, scriptId, code }: UpdateEndpointScriptCode): Promise<void> {

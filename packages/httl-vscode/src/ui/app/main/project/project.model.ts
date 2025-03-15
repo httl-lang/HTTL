@@ -198,7 +198,6 @@ export class ProjectModel {
     this.endpointGoups = groupedEndpoints.entries().toArray()
       .sort(([tagA], [tagB]) => tagA.localeCompare(tagB))
       .map(([_, group]) => group);
-      
   }
 }
 
