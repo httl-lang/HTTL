@@ -68,7 +68,7 @@ export const Panel = styled.div<{ expanded?: boolean }>`
     } */
 
     & ${Name} {
-      opacity: 0.4;
+      opacity: 0.6;
     }
 
     & ${RunButton} {
