@@ -1,8 +1,8 @@
 
 import vscode from 'vscode';
-import { AppData, HttlExtensionContext, UIMessage } from '../../common';
+import { AppData, HttlExtensionContext, UIMessage } from '../../../common';
 import { Lang } from 'httl-core';
-import { HttlBaseViewProvider } from './base-view';
+import { HttlBaseViewProvider } from '../base-view';
 
 export class HttlResponseViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlResponseView';

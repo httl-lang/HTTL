@@ -24,11 +24,6 @@ export class QuickRunModel {
   public init() {
     this.script = this.appModel.getState(QuickRunModel.STORE_SCRIPT_KEY) ?? this.script;
     this.size = this.appModel.getState(QuickRunModel.STORE_SIZE_KEY) ?? "100px";
-    commutator.onSetResponse(({ payload, file }) => {
-      if (file === "quick-run-document") {
-        // this.setProgress(false);
-      }
-    });
   }
 
   @Action()

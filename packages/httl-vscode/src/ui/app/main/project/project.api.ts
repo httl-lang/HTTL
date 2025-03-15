@@ -4,7 +4,7 @@ import {
   EndpointScriptId,
   UpdateEndpointScriptCode,
   UpdatePrestartScriptCode
-} from "../../../../client/services/project";
+} from "../../../../client/views/main/services/project";
 import { Api } from "../../../services/api";
 
 export class ProjectApi extends Api {

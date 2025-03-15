@@ -1,14 +1,14 @@
 
 import vscode from 'vscode';
-import { constants, FileSearch, HttlExtensionContext } from '../../common';
+import { constants, FileSearch, HttlExtensionContext } from '../../../common';
 import { Lang } from 'httl-core';
-import { HttlBaseViewProvider } from './base-view';
-import { HttlResponseViewProvider } from './httl-response-view';
-import { HttlLanguageClient } from '../httl-language-client';
-import { HttlRunCommand } from '../commands/run-command';
-import { ApiWorkspaceAgent } from '../../ai/agents/api-workspace-agent';
-import { HttlProjectService } from '../services/project';
-import { QuickRunService } from '../services/quick-run';
+import { HttlBaseViewProvider } from '../base-view';
+import { HttlResponseViewProvider } from '../response/httl-response-view';
+import { HttlLanguageClient } from '../../httl-language-client';
+import { HttlRunCommand } from '../../commands/run-command';
+import { ApiWorkspaceAgent } from '../../../ai/agents/api-workspace-agent';
+import { HttlProjectService } from './services/project';
+import { QuickRunService } from './services/quick-run';
 
 export class HttlMainViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlMainView';
@@ -53,11 +53,6 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
         return;
       }
 
-      // case 'run-script': {
-      //   await this.sendRunCommand(messagefromUI.payload);
-      //   return;
-      // }
-
       case 'set-focus': {
         await this.responseView.changeActiveEditor(constants.QUICK_RUN_DOCUMENT_NAME);
         return;
@@ -73,10 +68,8 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
   private async sendRunCommand(script: string) {
     await HttlRunCommand.execute(
       this.responseView,
-      this,
       this.client,
       script,
-      constants.QUICK_RUN_DOCUMENT_NAME,
       constants.QUICK_RUN_DOCUMENT_NAME);
   }
 

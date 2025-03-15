@@ -5,7 +5,7 @@ import * as fsPath from 'path';
 import * as asyncFs from 'node:fs/promises';
 import { ApiSpec } from "httl-core";
 import { HttlUrl } from "httl-core/dist/common/url";
-import { FileSearch } from "../../../common";
+import { FileSearch } from "../../../../../common";
 
 export class HttlProject {
   public static isValid(obj: any) {

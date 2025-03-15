@@ -6,7 +6,7 @@ import { FindApiControllersStepResult } from "../../../../ai/agents/steps/find-a
 import { SetWorkspaceApiProjectsPayload, SetWorkspaceApiControllersPayload, SetWorkspaceApiControllerSpecPayload, SetWorkspaceApiErrorPayload } from "../../../../common";
 import { ControllerSpec } from "../../../../ai/agents/api-workspace-agent";
 import { ProjectApi } from "./project.api";
-import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData } from "../../../../client/services/project";
+import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData } from "../../../../client/views/main/services/project";
 
 interface ApiEndpointGroup {
   name: string;

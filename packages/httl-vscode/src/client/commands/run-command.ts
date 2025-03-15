@@ -1,21 +1,37 @@
 import vscode from 'vscode';
 import { HttlLanguageClient } from '../httl-language-client';
 import { HttlExtensionContext } from '../../common';
-import { HttlResponseViewProvider } from '../views/httl-response-view';
-import { HttlMainViewProvider } from '../views/httl-main-view';
+import { HttlResponseViewProvider } from '../views/response';
+import { HttlMainViewProvider } from '../views/main/httl-main-view';
 
 export class HttlRunCommand {
 
-  public static async execute(responseView: HttlResponseViewProvider, mainView: HttlMainViewProvider | null, client: HttlLanguageClient, text: string, documentUri: string, filePath: string) {
+  public static async execute(
+    responseView: HttlResponseViewProvider,
+    client: HttlLanguageClient,
+    text: string,
+    document: vscode.Uri | string,
+  ) {
+
+    const { fsPath, uri } = typeof document === 'string'
+      ? {
+        fsPath: document,
+        uri: document,
+      }
+      : {
+        fsPath: document.fsPath,
+        uri: document.toString(),
+      };
+
     await responseView.show();
-    await responseView.setProgress(filePath, true);
+    await responseView.setProgress(fsPath, true);
 
     const response = await client.sendRun(
-      documentUri,
+      uri,
       text,
     );
-    await responseView.setResponse(filePath, response);
-    await mainView?.setResponse(filePath, response); // TODO: temporary
+
+    await responseView.setResponse(fsPath, response);
   };
 
   constructor(
@@ -30,14 +46,12 @@ export class HttlRunCommand {
 
   private onExecute = async (textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit, args: any[]) => {
     const { document, selection } = textEditor;
-    const text = document.isUntitled ? document.getText() : '';
+    const script = document.isUntitled ? document.getText() : '';
 
     await HttlRunCommand.execute(
       this.responseView,
-      null, // TODO: temporary
       this.client,
-      text,
-      document.uri.toString(),
-      document.uri.fsPath);
+      script,
+      document.uri);
   };
 }

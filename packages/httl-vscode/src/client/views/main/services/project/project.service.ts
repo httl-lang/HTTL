@@ -3,7 +3,7 @@ import fs from "fs";
 import * as fsPath from "path";
 import { Json } from "httl-common";
 
-import { FileSearch } from "../../../common";
+import { FileSearch } from "../../../../../common";
 import { HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData, EndpointScriptId, UpdateEndpointScriptCode, UpdatePrestartScriptCode } from "./types";
 import { HttlProject } from "./project";
 

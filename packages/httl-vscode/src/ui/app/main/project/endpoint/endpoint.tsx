@@ -8,7 +8,7 @@ import { VscCircleFilled } from "react-icons/vsc";
 import { LoadingText } from '../../../../components/loading-text';
 import { HttlEditor } from '../../../../components/editor';
 import { MethodLabel } from '../../../../components/method-label';
-import { HttlProjectApiEndpoint } from '../../../../../client/services/project';
+import { HttlProjectApiEndpoint } from '../../../../../client/views/main/services/project';
 import Button from '../../../../components/button';
 import { VscIssueReopened } from "react-icons/vsc";
 import { VscCode } from "react-icons/vsc";

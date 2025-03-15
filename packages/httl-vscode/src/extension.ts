@@ -4,8 +4,8 @@ import { HttlLanguageClient, HttlRunCommand } from './client';
 import { HttlInlineCompletionItemProvider } from './client/providers/httl-inline-completion-provider';
 import { Logger } from './common/logger';
 import { HttlExtensionContext } from './common';
-import { HttlResponseViewProvider } from './client/views/httl-response-view';
-import { HttlMainViewProvider } from './client/views/httl-main-view';
+import { HttlResponseViewProvider } from './client/views/response';
+import { HttlMainViewProvider } from './client/views/main';
 
 let logger!: Logger;
 
