@@ -9,7 +9,8 @@ import {
   SetWorkspaceApiProjectsPayload,
   SetWorkspaceApiControllerSpecPayload,
   SetWorkspaceApiErrorPayload,
-  HighlightViewSectionMessagePayload
+  HighlightViewSectionMessagePayload,
+  ReloadProjectMessagePayload
 
 } from "../../common";
 
@@ -51,6 +52,10 @@ export class Commutator {
 
   public onHighlightSection(cb: (message: HighlightViewSectionMessagePayload) => void) {
     this.subscribe('highlight-section', cb);
+  }
+
+  public onReloadProject(cb: (message: ReloadProjectMessagePayload) => void) {
+    this.subscribe('reload-project', cb);
   }
 
   public onSetWorkspaceApiProjects(cb: (message: SetWorkspaceApiProjectsPayload) => void) {

@@ -173,6 +173,13 @@ export class ProjectModel {
     this.appModel.saveState(ProjectModel.PROJECT_STATE, this.projectState);
   }
 
+  @Action()
+  public async reloadPorject() {
+    this.setProject(
+      await this.api.openProject(this.fileInfo!.path)
+    );
+  }
+
   private async setProject(project: HttlProjectViewData): Promise<void> {
     this.fileInfo = project.fileInfo;
     this.description = project.description;

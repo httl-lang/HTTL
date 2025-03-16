@@ -9,6 +9,7 @@ import { HttlRunCommand } from '../../commands/run-command';
 import { ApiWorkspaceAgent } from '../../../ai/agents/api-workspace-agent';
 import { HttlProjectService } from './services/project';
 import { QuickRunService } from './services/quick-run';
+import { ProjectFileWatcher } from "../../../client/providers/project-file-watcher";
 
 export class HttlMainViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlMainView';
@@ -19,6 +20,12 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
     context: HttlExtensionContext,
     private readonly client: HttlLanguageClient
   ) {
+    const projectService = new HttlProjectService({
+      run: async (script: string, source: string) => {
+        await this.sendRunCommand(script, source);
+      }
+    });
+
     super(
       context,
       HttlMainViewProvider.viewType,
@@ -26,11 +33,7 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
         view: 'main',
       },
       {
-        project: new HttlProjectService({
-          run: async (script: string, source: string) => {
-            await this.sendRunCommand(script, source);
-          }
-        }),
+        project: projectService,
         quickRun: new QuickRunService({
           run: async (script: string, source: string) => {
             await this.sendRunCommand(script, source);
@@ -38,6 +41,17 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
         }),
       }
     );
+
+    ProjectFileWatcher.register(context, '**/*.json')({
+      onDidChange: async (filePath) => {
+        if (projectService.isSync(filePath) === false) {
+          await this.postMessage({
+            command: 'reload-project',
+            file: filePath,
+          });
+        }
+      },
+    });
   }
 
   public async highlightSection(panel: string, ...paths: string[]): Promise<void> {

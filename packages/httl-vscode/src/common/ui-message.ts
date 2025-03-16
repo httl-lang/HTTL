@@ -66,6 +66,14 @@ interface HighlightViewSectionMessage {
 }
 export type HighlightViewSectionMessagePayload = Omit<HighlightViewSectionMessage, 'command'>;
 
+interface ReloadProjectMessage {
+  command: 'reload-project';
+  file: string;
+}
+export type ReloadProjectMessagePayload = Omit<ReloadProjectMessage, 'command'>;
+
+
+
 
 export type UIMessage = InitializeMessage |
   ChangeActiveEditorMessage |
@@ -76,7 +84,8 @@ export type UIMessage = InitializeMessage |
   SetWorkspaceApiControllersMessage |
   SetWorkspaceApiControllerSpecMessage |
   SetWorkspaceApiErrorMessage |
-  HighlightViewSectionMessage;
+  HighlightViewSectionMessage |
+  ReloadProjectMessage;
 
 export type UIMessageType = UIMessage['command'];
 

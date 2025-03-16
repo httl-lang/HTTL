@@ -56,6 +56,16 @@ export class HttlProjectService {
     }
   }
 
+  public isSync(path: string): boolean | undefined {
+    const original = this.projects.get(path);
+    if (!original) {
+      return undefined;
+    }
+
+    const updated = HttlProject.open(path);
+    return original.equals(updated);
+  }
+
   public async openProject({ path }: { path: string }): Promise<HttlProjectViewData> {
     let project = this.projects.get(path);
 

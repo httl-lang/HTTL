@@ -2,16 +2,27 @@ import { Action, Model, connect, store } from "react-storm";
 import { ProjectApi } from "../project.api";
 import { ApiEndpoint, ProjectModel } from "../project.model";
 
+function debounce<T extends (...args: any[]) => any>(fn: T, wait: number) {
+  let timeout: NodeJS.Timeout;
+  return (...args: Parameters<T>): any => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), wait);
+  };
+}
 
 @Model()
 export class EndpointModel {
+  private readonly debouncedUpdateScript: typeof ProjectApi.prototype.updateScript;
+
   public endpoint!: ApiEndpoint;
   public inProgress = false;
 
   constructor(
     private readonly project = store(ProjectModel),
     private readonly api = new ProjectApi()
-  ) { }
+  ) {
+    this.debouncedUpdateScript = debounce(this.api.updateScript.bind(this.api), 2000);
+  }
 
   public async init(endpoint: ApiEndpoint) {
     this.endpoint = endpoint;
@@ -27,7 +38,7 @@ export class EndpointModel {
       this.inProgress = true;
 
       if (code !== this.endpoint.defaultScript) {
-        await this.updateScript(scriptId, code);
+        await this.updateScript(scriptId, code, true);
       }
     }
     await this.api.runScript(this.project.fileInfo!.path, scriptId);
@@ -53,7 +64,7 @@ export class EndpointModel {
   }
 
   @Action()
-  public updateScript(scriptId: string, code: string) {
+  public updateScript(scriptId: string, code: string, immediate = false) {
     if (!this.endpoint.scripts?.length) {
       this.endpoint.scripts = [{
         id: scriptId,
@@ -62,7 +73,11 @@ export class EndpointModel {
       }];
     }
     this.endpoint.scripts[0].code = code;
-    return this.api.updateScript(this.project.fileInfo!.path, scriptId, code);
+    if (immediate) {
+      return this.api.updateScript(this.project.fileInfo!.path, scriptId, code);
+    } else {
+      this.debouncedUpdateScript(this.project.fileInfo!.path, scriptId, code);
+    }
   }
 
   @Action()

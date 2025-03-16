@@ -27,9 +27,8 @@ export class HttlProject {
       throw new Error(`File not found: ${fullPath}`);
     }
 
-    const rawJson = Json.safeParse(
-      fs.readFileSync(fullPath, 'utf-8')
-    );
+    const content = fs.readFileSync(fullPath, 'utf-8');
+    const rawJson = Json.safeParse(content);
 
     if (!this.isValid(rawJson)) {
       throw new Error(`Invalid project file: ${fullPath}`);
@@ -38,6 +37,7 @@ export class HttlProject {
     return new HttlProject(
       path,
       rawJson,
+      content
     );
   }
 
@@ -71,6 +71,7 @@ export class HttlProject {
   constructor(
     public readonly filePath: string,
     public readonly props: HttlProjectProps,
+    private content?: string
   ) {
     if (!filePath) {
       throw new Error('Invalid file path');
@@ -90,8 +91,13 @@ export class HttlProject {
     };
   }
 
+  public equals(updated: HttlProject) {
+    return this.content === updated.content;
+  }
+
   public async save() {
-    await asyncFs.writeFile(this.fullPath, JSON.stringify(this.props, null, 2));
+    this.content = JSON.stringify(this.props, null, 2);
+    await asyncFs.writeFile(this.fullPath, this.content, 'utf-8');
   }
 
   public async sync() {
@@ -99,9 +105,8 @@ export class HttlProject {
       throw new Error(`File not found: ${this.fullPath}`);
     }
 
-    const rawJson = Json.safeParse(
-      await asyncFs.readFile(this.fullPath, 'utf-8')
-    );
+    this.content = await asyncFs.readFile(this.fullPath, 'utf-8');
+    const rawJson = Json.safeParse(this.content);
 
     if (!HttlProject.isValid(rawJson)) {
       throw new Error(`Invalid project file: ${this.fullPath}`);
