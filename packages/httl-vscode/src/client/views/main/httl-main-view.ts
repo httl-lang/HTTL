@@ -61,7 +61,7 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
       }
 
       case 'set-focus': {
-        await this.responseView.changeActiveEditor(constants.QUICK_RUN_DOCUMENT_NAME);
+        await this.responseView.changeActiveEditor(messagefromUI.file);
         return;
       }
 

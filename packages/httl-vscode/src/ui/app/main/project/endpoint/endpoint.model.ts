@@ -45,6 +45,14 @@ export class EndpointModel {
   }
 
   @Action()
+  public setFocus() {
+    vscode.postMessage({
+      command: 'set-focus',
+      file: `project::${this.project.fileInfo!.path}::${this.endpoint.id}` // TODO: move to common place
+    });
+  }
+
+  @Action()
   public updateScript(scriptId: string, code: string) {
     if (!this.endpoint.scripts?.length) {
       this.endpoint.scripts = [{

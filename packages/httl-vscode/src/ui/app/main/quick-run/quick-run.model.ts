@@ -54,6 +54,7 @@ export class QuickRunModel {
   public setFocus() {
     vscode.postMessage({
       command: 'set-focus',
+      file: 'quick-run::script'
     });
   }
 }

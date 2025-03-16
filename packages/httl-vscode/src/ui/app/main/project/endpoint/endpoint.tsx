@@ -29,8 +29,8 @@ const _Endpoint: React.FC = () => {
   const [editorBusy, setEditorBusy] = React.useState(false);
   const [highlighted, setHighlighted] = React.useState(false);
 
-  const model = useEndpointModel(({ endpoint, inProgress, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
-    ({ endpoint, inProgress, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
+  const model = useEndpointModel(({ endpoint, inProgress, setFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
+    ({ endpoint, inProgress, setFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
 
   useEffect(() => {
     if (highlightedScriptId === model.endpoint.id) {
@@ -40,6 +40,11 @@ const _Endpoint: React.FC = () => {
         clearTimeout(timeoutRef.current);
       }
       timeoutRef.current = setTimeout(() => setHighlighted(false), 3000);
+    } else {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      setHighlighted(false);
     }
 
   }, [highlightedScriptId, random]);
@@ -92,7 +97,7 @@ const _Endpoint: React.FC = () => {
               }}
               onChange={(code) => model.updateScript(model.endpoint.id, code)}
               onRun={(code) => model.runScript(model.endpoint.id, code)}
-              onFocus={() => null}
+              onFocus={() => model.setFocus()}
             />
             {/* <s.FloatingBar>
               {
