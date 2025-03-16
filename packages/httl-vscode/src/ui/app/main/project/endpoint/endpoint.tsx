@@ -52,6 +52,7 @@ const _Endpoint: React.FC = () => {
   const onExpand = useCallback(() => {
     const expand = !showEditor;
     setShowEditor(expand);
+    model.setFocus();
 
     if (expand && !model.endpoint.scripts.length) {
       setEditorBusy(true);
