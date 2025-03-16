@@ -14,14 +14,14 @@ export class MainModel {
 
     commutator.onHighlightSection(({ payload }) => {
       const path = payload.panel === 'project'
-        ? `${payload.panel}?scriptId=${payload.paths[1]}&random=${Math.random()}`
+        ? `${payload.panel}?scriptId=${payload.paths[1]}&scriptId_random=${Math.random()}`
         : payload.panel;
 
       this.appModel.navigateMain(path);
     });
 
     commutator.onReloadProject(({ file }) => {
-      this.appModel.navigateMain(`project?project=${file}&rnd=${Math.random()}`);
+      this.appModel.navigateMain(`project?project=${file}&project_random=${Math.random()}`);
     });
   }
 }

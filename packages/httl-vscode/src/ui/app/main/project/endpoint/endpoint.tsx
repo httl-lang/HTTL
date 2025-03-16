@@ -23,7 +23,7 @@ const _Endpoint: React.FC = () => {
 
   const [searchParams] = useSearchParams();
   const highlightedScriptId = searchParams.get("scriptId");
-  const random = searchParams.get("random");
+  const random = searchParams.get("scriptId_random");
 
   const [showEditor, setShowEditor] = React.useState(false);
   const [editorBusy, setEditorBusy] = React.useState(false);

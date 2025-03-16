@@ -85,6 +85,10 @@ export class ProjectModel {
     // });
   }
 
+  public get sourceType() {
+    return this.source?.startsWith('http') ? 'OpenApi' : 'Project';
+  }
+
   public resolveProjects(search: string): Promise<HttlProjectItem[]> {
     return this.api.resolveProjects(search);
   }
