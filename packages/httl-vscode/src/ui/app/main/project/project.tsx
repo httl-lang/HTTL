@@ -15,8 +15,8 @@ import { useSearchParams } from 'react-router';
 import { ProjectSource } from './source';
 
 const _ProjectView: React.FC = () => {
-  const model = useProjectModel(({ fileInfo, reloadPorject }) =>
-    ({ fileInfo, reloadPorject }));
+  const model = useProjectModel(({ fileInfo, reloadProject }) =>
+    ({ fileInfo, reloadProject }));
 
   const [searchParams] = useSearchParams();
   const project = searchParams.get("project");
@@ -24,7 +24,7 @@ const _ProjectView: React.FC = () => {
 
   useEffect(() => {
     if (model.fileInfo?.path === project) {
-      model.reloadPorject();
+      model.reloadProject();
       console.log('reload project');
     }
   }, [project, random, model.fileInfo]);

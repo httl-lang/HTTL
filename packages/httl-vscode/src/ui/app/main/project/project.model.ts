@@ -89,6 +89,10 @@ export class ProjectModel {
     return this.source?.startsWith('http') ? 'OpenApi' : 'Project';
   }
 
+  public get supportAgentAnalysis() {
+    return !this.source?.startsWith('http');
+  }
+
   public resolveProjects(search: string): Promise<HttlProjectItem[]> {
     return this.api.resolveProjects(search);
   }
@@ -109,18 +113,18 @@ export class ProjectModel {
     this.setProject(project);
   }
 
-  // @Action()
-  // public startWorkspaceAnalyzing() {
-  //   this.project = undefined;
-  //   this.controllers = [];
-  //   this.projectsProgress = true;
-  //   this.controllersProgress = false;
+  @Action()
+  public startAgentAnalysis() {
+    // this.project = undefined;
+    // this.controllers = [];
+    // this.projectsProgress = true;
+    // this.controllersProgress = false;
 
-  //   vscode.postMessage({
-  //     command: 'start-workspace-analyzing',
-  //     payload: '',
-  //   });
-  // }
+    vscode.postMessage({
+      command: 'start-workspace-analyzing',
+      payload: '',
+    });
+  }
 
   // @Action()
   // public setWorkspaceApiProjects(data: FindApiProjectsStepResult[]) {
@@ -178,7 +182,7 @@ export class ProjectModel {
   }
 
   @Action()
-  public async reloadPorject() {
+  public async reloadProject() {
     this.setProject(
       await this.api.openProject(this.fileInfo!.path)
     );

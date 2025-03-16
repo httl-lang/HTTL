@@ -47,7 +47,12 @@ export const Input = styled.input`
 `;
 
 export const Buttons = styled.div`
-  
+  margin: 1px;
+  display: flex;
+
+  & a {
+    color: var(--vscode-icon-foreground);
+  }
 `;
 
 export const PopupPanel = styled(Popup)`

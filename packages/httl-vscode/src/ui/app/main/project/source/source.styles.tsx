@@ -23,11 +23,6 @@ export const Body = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    opacity: 0.8;
-
-    &:hover {
-      opacity: 1;
-    }
   }
 `;
 

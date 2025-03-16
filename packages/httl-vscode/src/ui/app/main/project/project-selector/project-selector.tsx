@@ -1,5 +1,5 @@
 import React from 'react';
-import { VscSparkle } from "react-icons/vsc";
+import { VscRefresh, VscSparkle } from "react-icons/vsc";
 
 import ComboBox from '../../../../components/combobox';
 import Button from '../../../../components/button';
@@ -9,8 +9,8 @@ import * as s from './project-selector.styles';
 
 
 export const ProjectSelector: React.FC = () => {
-  const model = useProjectModel(({ fileInfo, resolveProjects, selectProject }) =>
-    ({ fileInfo, resolveProjects, selectProject }));
+  const model = useProjectModel(({ fileInfo, supportAgentAnalysis, reloadProject, resolveProjects, selectProject, startAgentAnalysis }) =>
+    ({ fileInfo, supportAgentAnalysis, reloadProject, resolveProjects, selectProject, startAgentAnalysis }));
 
   return (
     <s.Container>
@@ -34,11 +34,15 @@ export const ProjectSelector: React.FC = () => {
             </s.SubTitle>
           </s.Item>
         )}
-      // buttons={() => (
-      //   <Button progress={model.inProgress} onClick={() => model.startWorkspaceAnalyzing()}>
-      //     <VscSparkle />
-      //   </Button>
-      // )}
+        buttons={() => (
+          model.supportAgentAnalysis
+            ? <Button onClick={() => model.startAgentAnalysis()}>
+              <VscSparkle />
+            </Button>
+            : <Button onClick={() => model.reloadProject()}>
+              <VscRefresh />
+            </Button>
+        )}
       />
     </s.Container>
   );
