@@ -46,7 +46,6 @@ export const Panel = styled.div<{ expanded?: boolean, highlighted?: boolean }>`
 
   ${p => p.highlighted && css`
     box-shadow: 0 0 0 1px var(--vscode-textLink-activeForeground);
-    transition: box-shadow 0.2s;
   `}
   
   &:hover {

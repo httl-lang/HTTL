@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { VscClose } from "react-icons/vsc";
 
 import { ApiEndpoint, useProjectModel } from '../project.model';
@@ -18,14 +18,31 @@ import { EndpointContext, useEndpointModel } from './endpoint.model';
 import { useSearchParams } from 'react-router';
 
 const _Endpoint: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const [searchParams] = useSearchParams();
   const highlightedScriptId = searchParams.get("scriptId");
+  const random = searchParams.get("random");
 
   const [showEditor, setShowEditor] = React.useState(false);
   const [editorBusy, setEditorBusy] = React.useState(false);
+  const [highlighted, setHighlighted] = React.useState(false);
 
   const model = useEndpointModel(({ endpoint, inProgress, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
     ({ endpoint, inProgress, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
+
+  useEffect(() => {
+    if (highlightedScriptId === model.endpoint.id) {
+      setHighlighted(true);
+      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => setHighlighted(false), 3000);
+    }
+
+  }, [highlightedScriptId, random]);
 
   const onExpand = useCallback(() => {
     const expand = !showEditor;
@@ -42,7 +59,7 @@ const _Endpoint: React.FC = () => {
   console.log(model.endpoint);
 
   return (
-    <s.Panel expanded={showEditor} title={model.endpoint.description} highlighted={highlightedScriptId === model.endpoint.id}>
+    <s.Panel ref={ref} expanded={showEditor} title={model.endpoint.description} highlighted={highlighted}>
       <s.Header onClick={onExpand}>
         <s.Name>
           <MethodLabel method={model.endpoint.method} /> {model.endpoint.path} <small>{model.endpoint.operationId}</small>

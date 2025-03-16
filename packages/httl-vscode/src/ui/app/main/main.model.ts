@@ -14,7 +14,7 @@ export class MainModel {
 
     commutator.onHighlightSection(({ payload }) => {
       const path = payload.panel === 'project'
-        ? `${payload.panel}?project=${payload.paths[0]}&scriptId=${payload.paths[1]}`
+        ? `${payload.panel}?project=${payload.paths[0]}&scriptId=${payload.paths[1]}&random=${Math.random()}`
         : payload.panel;
 
       this.appModel.navigateMain(path);
