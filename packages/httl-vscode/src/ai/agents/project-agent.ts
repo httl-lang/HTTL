@@ -30,39 +30,51 @@ export interface ControllerSpec {
   spec: any;
 }
 
-export class ApiWorkspaceAgentResult {
-  public static apiProjects(projects: FindApiProjectsStepResult[]) {
-    return new ApiWorkspaceAgentResult('set-workspace-api-projects', projects);
-  }
-
-  public static apiControllers(controllers: FindApiControllersStepResult[]) {
-    return new ApiWorkspaceAgentResult('set-workspace-api-controllers', controllers);
-  }
-
-  public static controllerSpec(controllerSpec: ControllerSpec) {
-    return new ApiWorkspaceAgentResult('set-workspace-api-controller-spec', controllerSpec);
-  }
-
+export class ApiProjectListResult {
   constructor(
-    public readonly command: string,
-    public readonly payload: any,
-    // public readonly next: any,
+    public readonly projects: FindApiProjectsStepResult[]
   ) { }
 }
 
-// enum ApiWorkspaceAgent {
-//   apiProjects = 'set-workspace-api-projects',
-//   apiControllers = 'set-workspace-api-controllers',
-//   controllerSpec = 'set-workspace-api-controller-spec',
+export class ApiControllerListResult {
+  constructor(
+    public readonly controllers: FindApiControllersStepResult[]
+  ) { }
+}
+
+export class ApiControllerSpecResult {
+  constructor(
+    public readonly tag: string,
+    public readonly spec: any
+  ) { }
+}
+
+// export class ProjectAgentResult {
+//   public static apiProjects(projects: FindApiProjectsStepResult[]) {
+//     return new ProjectAgentResult('set-workspace-api-projects', projects);
+//   }
+
+//   public static apiControllers(controllers: FindApiControllersStepResult[]) {
+//     return new ProjectAgentResult('set-workspace-api-controllers', controllers);
+//   }
+
+//   public static controllerSpec(controllerSpec: ControllerSpec) {
+//     return new ProjectAgentResult('set-workspace-api-controller-spec', controllerSpec);
+//   }
+
+//   constructor(
+//     public readonly command: string,
+//     public readonly payload: any,
+//   ) { }
 // }
 
-export class ApiWorkspaceAgent {
+export class ProjectAgent {
 
   constructor(
     private readonly context: HttlExtensionContext,
   ) { }
 
-  public async *analyze(): AsyncGenerator<ApiWorkspaceAgentResult, any, any> {
+  public async *analyze(): AsyncGenerator<any, any, any> {
 
     const workDir = this.context.getWorkspaceDirectory();
     if (!workDir) {
@@ -78,23 +90,21 @@ export class ApiWorkspaceAgent {
     });
 
     const apiProjectsResult = await agent.run(FindApiProjectsStep);
-    yield ApiWorkspaceAgentResult.apiProjects(apiProjectsResult.result, );
+    yield new ApiProjectListResult(apiProjectsResult.result);
 
     const apiControllersResult = await agent.run(FindApiControllersStep);
     const apiControllers = apiControllersResult.result.sort((a, b) => a.tag.localeCompare(b.tag));
-    yield ApiWorkspaceAgentResult.apiControllers(apiControllers);
+    yield new ApiControllerListResult(apiControllers);
 
     const result: any[] = [];
     for (const controller of apiControllers) {
       const controllerSpec = await agent.run(GenerateSpecStep, controller);
       result.push(controllerSpec.result);
 
-      yield ApiWorkspaceAgentResult.controllerSpec({
-        tag: controller.tag,
-        spec: controllerSpec.result,
-      });
+      yield new ApiControllerSpecResult(
+        controller.tag,
+        controllerSpec.result,
+      );
     }
-
-    // yield result;
   }
 }

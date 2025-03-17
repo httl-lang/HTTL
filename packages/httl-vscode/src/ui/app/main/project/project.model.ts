@@ -4,7 +4,7 @@ import { commutator } from "../../../services/commutator";
 import { FindApiProjectsStepResult } from "../../../../ai/agents/steps/find-api-projects-step";
 import { FindApiControllersStepResult } from "../../../../ai/agents/steps/find-api-controllers-step";
 import { SetWorkspaceApiProjectsPayload, SetWorkspaceApiControllersPayload, SetWorkspaceApiControllerSpecPayload, SetWorkspaceApiErrorPayload } from "../../../../common";
-import { ControllerSpec } from "../../../../ai/agents/api-workspace-agent";
+import { ControllerSpec } from "../../../../ai/agents/project-agent";
 import { ProjectApi } from "./project.api";
 import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData } from "../../../../client/views/main/services/project";
 
@@ -114,16 +114,13 @@ export class ProjectModel {
   }
 
   @Action()
-  public startAgentAnalysis() {
+  public async startAgentAnalysis() {
     // this.project = undefined;
     // this.controllers = [];
     // this.projectsProgress = true;
     // this.controllersProgress = false;
 
-    vscode.postMessage({
-      command: 'start-workspace-analyzing',
-      payload: '',
-    });
+    await this.api.runAgentAnalysis(this.fileInfo!.path);
   }
 
   // @Action()

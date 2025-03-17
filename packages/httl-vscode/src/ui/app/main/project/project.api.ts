@@ -48,4 +48,8 @@ export class ProjectApi extends Api {
   public showResponseSchema(projectFile: string, scriptId: string): Promise<void> {
     return this.sendRequest('project.showResponseSchema', { projectFile, scriptId } satisfies EndpointScriptId);
   }
+
+  public runAgentAnalysis(projectFile: string): Promise<void> {
+    return this.sendRequest('project.runAgentAnalysis', { projectFile});
+  }
 }

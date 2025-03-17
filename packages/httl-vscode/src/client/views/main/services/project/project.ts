@@ -6,8 +6,12 @@ import * as asyncFs from 'node:fs/promises';
 import { ApiSpec } from "httl-core";
 import { HttlUrl } from "httl-core/dist/common/url";
 import { FileSearch } from "../../../../../common";
+import { FindApiControllersStepResult } from "../../../../../ai/agents/steps/find-api-controllers-step";
+import { ControllerSpec } from "../../../../../ai/agents/project-agent";
 
 export class HttlProject {
+
+
   public static isValid(obj: any) {
     return obj &&
       typeof obj === 'object' &&
@@ -15,6 +19,35 @@ export class HttlProject {
       typeof obj.source === 'string' &&
       typeof obj.prestart === 'object' &&
       Array.isArray(obj.scripts);
+  }
+
+  public static create(name: string, props: Partial<HttlProjectProps>): HttlProject {
+    const newFileName = './' + name.replace(/[<>:"/\\|?*\s]/g, '_').toLowerCase() + '_httl.json';
+
+    const project = new HttlProject(
+      newFileName,
+      {
+        name,
+        description: '',
+        source: '',
+        technologies: [],
+        spec: {
+          openapi: '3.0.0',
+          info: {
+            title: name,
+            version: '1.0.0',
+          },
+          tags: [],
+          paths: {},
+          definitions: {},
+        },
+        prestart: { code: '# e.g. @base: :3000' },
+        scripts: [],
+        ...props,
+      },
+    );
+
+    return project;
   }
 
   public static open(path: string) {
@@ -185,5 +218,56 @@ export class HttlProject {
     }
 
     return endpoint.generateFullRequest();
+  }
+
+  public mergeSpecForTag(tag: string, spec: any) {
+    this.props.spec ??= {};
+
+    // Validate spec
+    ApiSpec.parseSpec(spec);
+
+    // Merge paths
+    if (spec.paths) {
+      this.props.spec.paths ??= {};
+      this.props.spec.paths = {
+        ...this.props.spec.paths,
+        ...spec.paths,
+      };
+    }
+
+    // Merge components
+    if (spec.components) {
+      this.props.spec.components ??= { schemas: {} };
+      this.props.spec.components.schemas = {
+        ...this.props.spec.components.schemas,
+        ...spec.components.schemas,
+      };
+    }
+
+    // Merge definitions
+    if (spec.definitions) {
+      this.props.spec.definitions ??= {};
+      this.props.spec.definitions = {
+        ...this.props.spec.definitions,
+        ...spec.definitions,
+      };
+    }
+
+    // Merge paths
+    if (spec.securityDefinitions) {
+      this.props.spec.securityDefinitions ??= {};
+      this.props.spec.securityDefinitions = {
+        ...this.props.spec.securityDefinitions,
+        ...spec.securityDefinitions,
+      };
+    }
+  }
+
+  public addTags(controllers: FindApiControllersStepResult[]) {
+    this.props.spec ??= { tags: [] };
+
+    this.props.spec.tags = controllers.map(controller => ({
+      name: controller.tag,
+    }));
   }
 }

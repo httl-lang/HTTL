@@ -6,7 +6,6 @@ import { HttlBaseViewProvider } from '../base-view';
 import { HttlResponseViewProvider } from '../response/httl-response-view';
 import { HttlLanguageClient } from '../../httl-language-client';
 import { HttlRunCommand } from '../../commands/run-command';
-import { ApiWorkspaceAgent } from '../../../ai/agents/api-workspace-agent';
 import { HttlProjectService } from './services/project';
 import { QuickRunService } from './services/quick-run';
 import { ProjectFileWatcher } from "../../../client/providers/project-file-watcher";
@@ -14,15 +13,19 @@ import { ProjectFileWatcher } from "../../../client/providers/project-file-watch
 export class HttlMainViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlMainView';
 
-  private readonly workspaceAgent = new ApiWorkspaceAgent(this.context);
-
   constructor(
     context: HttlExtensionContext,
     private readonly client: HttlLanguageClient
   ) {
-    const projectService = new HttlProjectService({
+    const projectService = new HttlProjectService(context, {
       run: async (script: string, source: string) => {
         await this.sendRunCommand(script, source);
+      },
+      postMessage: async (command: string, props: any) => {
+        await this.postMessage({
+          command: command as any,
+          ...props,
+        });
       }
     });
 
@@ -78,11 +81,6 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
         await this.responseView.changeActiveEditor(messagefromUI.file);
         return;
       }
-
-      case 'start-workspace-analyzing': {
-        await this.startWorkspaceAnalyzing(messagefromUI);
-        return;
-      }
     }
   }
 
@@ -96,21 +94,5 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
       this.client,
       script,
       documentName);
-  }
-
-  private async startWorkspaceAnalyzing(message: any) {
-    try {
-      for await (const result of this.workspaceAgent.analyze()) {
-        await this.postMessage({
-          command: result.command as any, //TODO: fix this
-          payload: result.payload,
-        });
-      }
-    } catch (error: any) {
-      await this.postMessage({
-        command: 'set-workspace-api-error',
-        payload: error.message,
-      });
-    }
   }
 }

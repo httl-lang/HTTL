@@ -43,30 +43,10 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
 
     webviewView.webview.onDidReceiveMessage(
       async message => {
-        const { command, requestId, payload } = message;
+        const { command, requestId } = message;
 
         if (requestId) {
-          const [service, action] = command.split('.');
-          if (!service || !action) {
-            throw new Error(`Invalid Service action ${command}`);
-          }
-
-          if (!this.services) {
-            throw new Error('No services defined');
-          }
-
-          if (typeof this.services[service]?.[action] !== 'function') {
-            throw new Error(`API method ${command} is not defined`);
-          }
-
-          const response = await this.services[service][action](payload);
-
-          webviewView.webview.postMessage({
-            command,
-            requestId,
-            payload: response
-          });
-
+          await this.handleApiCommand(webviewView, message);
           return;
         }
 
@@ -136,6 +116,37 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
     }
 
     await this.view.webview.postMessage(message);
+  }
+
+  protected async handleApiCommand(webviewView: vscode.WebviewView, { command, requestId, payload }: any) {
+    const [service, action] = command.split('.');
+    if (!service || !action) {
+      throw new Error(`Invalid Service action ${command}`);
+    }
+
+    if (!this.services) {
+      throw new Error('No services defined');
+    }
+
+    if (typeof this.services[service]?.[action] !== 'function') {
+      throw new Error(`API method ${command} is not defined`);
+    }
+    try {
+      const response = await this.services[service][action](payload);
+
+      await webviewView.webview.postMessage({
+        command,
+        requestId,
+        payload: response
+      });
+
+    } catch (error: any) {
+      await webviewView.webview.postMessage({
+        command,
+        requestId,
+        payload: { error }
+      });
+    }
   }
 
   protected getHtmlForWebview(webview: vscode.Webview, appData: any): string {

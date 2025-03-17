@@ -3,17 +3,26 @@ import fs from "fs";
 import * as fsPath from "path";
 import { Json } from "httl-common";
 
-import { FileSearch } from "../../../../../common";
+import { FileSearch, HttlExtensionContext } from "../../../../../common";
 import { HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData, EndpointScriptId, UpdateEndpointScriptCode, UpdatePrestartScriptCode } from "./types";
 import { HttlProject } from "./project";
+import { ApiControllerListResult, ApiControllerSpecResult, ApiProjectListResult, ProjectAgent } from "../../../../../ai/agents/project-agent";
 
 export class HttlProjectService {
   private projects = new Map<string, HttlProject>();
-  private workDir = FileSearch.getWorkspaceDirectory();
+  private readonly projectAgent: ProjectAgent;
+  private readonly workDir: string;
 
   constructor(
-    private scriptRunner: { run: (script: string, source: string) => void }
-  ) { }
+    private readonly context: HttlExtensionContext,
+    private webProvider: {
+      run: (script: string, source: string) => void,
+      postMessage: (command: string, ...args: any[]) => void,
+    }
+  ) {
+    this.projectAgent = new ProjectAgent(this.context);
+    this.workDir = this.context.getWorkspaceDirectory()!;
+  }
 
   public async resolveProjects({ search }: { search: string }): Promise<HttlProjectItem[]> {
     try {
@@ -21,7 +30,7 @@ export class HttlProjectService {
 
       const infos: HttlProjectFileInfo[] = files
         .map(file => {
-          const fullPath = fsPath.join(this.workDir.fsPath, file);
+          const fullPath = fsPath.join(this.workDir, file);
           return {
             path: file,
             content: Json.safeParse(
@@ -115,7 +124,7 @@ export class HttlProjectService {
     const prestartScript = project.props.prestart.code;
     const finalScript = prestartScript + '\n' + code;
 
-    await this.scriptRunner.run(finalScript, `project::${project.filePath}::${scriptId}`);
+    await this.webProvider.run(finalScript, `project::${project.filePath}::${scriptId}`);
   }
 
   public async updateScript({ projectFile, scriptId, code }: UpdateEndpointScriptCode): Promise<void> {
@@ -191,6 +200,43 @@ export class HttlProjectService {
       });
 
       vscode.window.showTextDocument(document);
+    }
+  }
+
+  public async runAgentAnalysis({ projectFile }: { projectFile: string }): Promise<void> {
+    // const project = this.projects.get(projectFile);
+    // if (!project) {
+    //   throw new Error('Project not found');
+    // }
+
+    let project!: HttlProject;
+
+    for await (const result of this.projectAgent.analyze()) {
+
+      if (result instanceof ApiProjectListResult) {
+
+        if (result.projects.length === 0) {
+          throw new Error('No API projects found');
+        }
+
+        const selectedProject = result.projects.at(0)!;
+
+        project = HttlProject.create(selectedProject.name, {
+          name: selectedProject.name,
+          source: selectedProject.path,
+        });
+      }
+
+      if (result instanceof ApiControllerListResult) {
+        project.addTags(result.controllers);
+      }
+
+      if (result instanceof ApiControllerSpecResult) {
+        project.mergeSpecForTag(result.tag, result.spec);
+      }
+
+      await project.save();
+      await this.webProvider.postMessage('reload-project', { file: project.filePath });
     }
   }
 }

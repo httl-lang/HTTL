@@ -36,10 +36,10 @@ export const ProjectSelector: React.FC = () => {
         )}
         buttons={() => (
           model.supportAgentAnalysis
-            ? <Button onClick={() => model.startAgentAnalysis()}>
+            ? <Button onClick={() => model.startAgentAnalysis()} title='Start the project agent analysis. This will analyze the project and find all the endpoints'>
               <VscSparkle />
             </Button>
-            : <Button onClick={() => model.reloadProject()}>
+            : <Button onClick={() => model.reloadProject()} title='Reload the project from OpenAPI spec.'>
               <VscRefresh />
             </Button>
         )}
