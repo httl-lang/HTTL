@@ -100,14 +100,6 @@ const _Endpoint: React.FC = () => {
               onRun={(code) => model.runScript(model.endpoint.id, code)}
               onFocus={() => model.setFocus()}
             />
-            {/* <s.FloatingBar>
-              {
-                endpoint.scripts.length > 0 &&
-                <Button onClick={() => onChange?.()} title="Reset to initial code">
-                  <VscSync />
-                </Button>
-              }
-            </s.FloatingBar> */}
           </s.Editor>
           <s.ToolBar>
             <Button

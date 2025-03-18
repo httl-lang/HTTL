@@ -119,6 +119,7 @@ export class HttlProject {
 
   public getInfo(): HttlProjectFileInfo {
     return {
+      id: this.filePath,
       name: this.props.name,
       path: this.filePath,
     };

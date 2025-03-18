@@ -1,8 +1,11 @@
 import styled, { css } from 'styled-components';
 
-export const Button = styled.a<{ disabled?: boolean }>`
+export const Button = styled.a<{ disabled?: boolean, small?: boolean }>`
     cursor: pointer;
-    font: normal normal normal 16px / 1 codicon;
+    font: ${({ small }) => small
+      ? 'normal normal normal 12px / 1 codicon' 
+      : 'normal normal normal 16px / 1 codicon'
+    };
     text-align: center;
     text-decoration: none;
     text-rendering: auto;

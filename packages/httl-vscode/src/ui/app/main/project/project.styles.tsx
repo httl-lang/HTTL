@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
@@ -7,12 +7,6 @@ export const Container = styled.div`
   width: 100%;
   background-color: var(--vscode-diffEditor-unchangedRegionBackground);
   overflow: hidden;
-`;
-
-export const Panel = styled.div`
-  margin: 6px;
-  display: flex;
-  flex-direction: column;
 `;
 
 export const Label = styled.div<{ center?: boolean }>`

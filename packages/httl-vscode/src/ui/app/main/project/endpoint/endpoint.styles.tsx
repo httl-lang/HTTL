@@ -128,24 +128,6 @@ export const Expanded = styled.div`
 
 `;
 
-
-// export const FloatingBar = styled.div`
-//   position: absolute;
-//   top: 3px;
-//   right: 2px;
-//   opacity: 0.3;
-//   z-index: 100;
-
-//   &:hover {
-//     opacity: 1;
-//   }
-
-//   & a {
-//     color: var(--vscode-input-foreground);
-//     font-size: 12px;
-//   }
-// `;
-
 export const ToolBar = styled.div`
   display: flex;
   padding: 3px 10px 9px;
@@ -164,7 +146,6 @@ export const ToolBar = styled.div`
 
   & a {
     color: var(--vscode-input-foreground);
-    font-size: 12px;
     font-weight: var(--vscode-font-weight);
     font-family: var(--vscode-font-family);
 

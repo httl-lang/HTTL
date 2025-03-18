@@ -35,6 +35,10 @@ export const Label = styled.div`
   overflow: hidden;
 `;
 
+export const Placeholder = styled.div`
+  color: var(--vscode-input-placeholderForeground);
+`;
+
 export const Input = styled.input`
   background-color: inherit;
   height: 24px;
@@ -72,7 +76,14 @@ export const Select = styled.div`
   overflow-y: auto;
 `;
 
+export const Item = styled.div`
+  flex: 1;
+`;
+
 export const SelectItem = styled.div<{ focused?: boolean }>`
+  display: flex;
+  align-items: center;
+
   cursor: pointer;
   border-radius: 3px;
   padding: 3px 6px;
@@ -86,6 +97,9 @@ export const SelectItem = styled.div<{ focused?: boolean }>`
   ${({ focused }) => focused && css`
     background-color: var(--vscode-quickInputList-focusBackground) !important;
   `}
+`;
+
+export const ItemActions = styled.div`
 `;
 
 export const CircleLoader = styled(Loader)`

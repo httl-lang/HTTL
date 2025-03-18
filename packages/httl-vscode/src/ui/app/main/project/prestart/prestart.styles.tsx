@@ -5,7 +5,7 @@ export const Container = styled.div`
   margin-top: 6px;
   display: flex;
   flex-direction: column;
-  flex: 1;
+  margin: 6px;
 `;
 
 export const Editor = styled(ResizePanel)`

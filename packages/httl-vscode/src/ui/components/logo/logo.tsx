@@ -1,9 +1,15 @@
 import React from 'react';
 import LogoSvg from './logo.svg';
 
-const Logo: React.FC = () => {
+export interface LogoProps {
+  className?: string;
+}
+
+const Logo: React.FC<LogoProps> = ({ className }) => {
   return (
-    <LogoSvg />
+    className
+      ? <div className={className}> <LogoSvg />  </div >
+      : <LogoSvg />
   );
 };
 

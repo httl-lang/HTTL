@@ -10,9 +10,10 @@ export interface ButtonProps {
   className?: string;
   title?: string;
   disableLoading?: boolean;
+  small?: boolean;
 }
 
-const Button: FC<PropsWithChildren<ButtonProps>> = ({ onClick, disabled, children, className, progress, title, disableLoading }) => {
+const Button: FC<PropsWithChildren<ButtonProps>> = ({ onClick, disabled, children, className, progress, title, disableLoading, small = false }) => {
   const [loading, setLoading] = useState(progress);
 
   useEffect(() => {
@@ -37,6 +38,7 @@ const Button: FC<PropsWithChildren<ButtonProps>> = ({ onClick, disabled, childre
       title={title}
       onClick={handleOnClick}
       disabled={disabled}
+      small={small}
     >
       {
         disabled

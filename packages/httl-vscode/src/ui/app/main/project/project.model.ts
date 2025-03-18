@@ -185,6 +185,21 @@ export class ProjectModel {
     );
   }
 
+  @Action()
+  public closeProject() {
+    this.description = undefined;
+    this.fileInfo = undefined;
+    this.source = undefined;
+    this.technologies = undefined;
+    this.prestart = undefined;
+    this.endpoints = [];
+    this.endpointGoups = [];
+
+    this.setProjectState({
+      projectPath: undefined
+    });
+  }
+
   private async setProject(project: HttlProjectViewData): Promise<void> {
     this.fileInfo = project.fileInfo;
     this.description = project.description;

@@ -47,12 +47,14 @@ export class HttlProjectService {
           )
         )
         .map(file => ({
+          id: file.path,
           name: file.content.name,
           path: file.path,
         }));
 
       if (infos.length === 0 && URL.canParse(search)) {
         return [{
+          id: search,
           name: 'Import From OpenAPI Spec',
           specUrl: search,
         }];

@@ -1,7 +1,9 @@
+import Button from '../../../../components/button';
 import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
-  margin-top: 6px;
+  margin: 6px;
+  margin-top: 10px;
 `;
 
 export const Editor = styled.div`
@@ -18,6 +20,23 @@ export const Item = styled.div<{ nowrap?: boolean }>`
   display: flex;
   align-items: baseline;
   flex-wrap: ${(props) => props.nowrap ? 'nowrap' : 'wrap'}; 
+`;
+
+export const ActionButton = styled(Button)`
+  font-weight: var(--vscode-font-weight);
+  font-family: var(--vscode-font-family);
+
+  display: flex;
+  font-size: 10px;
+  gap: 3px;
+  font-variant-caps: all-petite-caps;
+  padding: 3px 5px;
+  border-radius: 3px;
+
+  & span {
+    margin-top: -1px;
+    pointer-events: none;
+  }
 `;
 
 export const Name = styled.span`

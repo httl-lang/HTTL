@@ -10,10 +10,18 @@ interface ComboBoxProps<TItem extends { [key: string]: any }> {
 
   render: (item: TItem, label?: boolean) => React.ReactNode;
   buttons?: () => React.ReactNode;
+  itemActions?: (item: TItem, current: boolean) => React.ReactNode;
 }
 
 function ComboBox<TItem extends { [key: string]: any }>(
-  { current, placeholder, options, render, buttons, onChange }: ComboBoxProps<TItem>
+  {
+    current,
+    placeholder,
+    keyField, itemActions,
+    options,
+    render,
+    buttons,
+    onChange }: ComboBoxProps<TItem>
 ) {
   const [showPopup, setShowPopup] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -42,6 +50,13 @@ function ComboBox<TItem extends { [key: string]: any }>(
 
   }, [searchText, showPopup]);
 
+  useEffect(() => {
+    if (!current) {
+      setShowPopup(false);
+      setItems(undefined);
+    }
+  }, [current]);
+
   const onLabelClick = useCallback(async () => {
     setShowPopup(true);
     setTimeout(() => {
@@ -62,7 +77,7 @@ function ComboBox<TItem extends { [key: string]: any }>(
           {
             current
               ? render(current, true)
-              : placeholder
+              : <s.Placeholder>{placeholder}</s.Placeholder>
           }
         </s.Label>
         {
@@ -86,11 +101,17 @@ function ComboBox<TItem extends { [key: string]: any }>(
             {
               items?.length === 0
                 ? <s.SelectItem>No projects found</s.SelectItem>
-                : items?.map((item, index) => (
-                  <s.SelectItem key={index} onClick={() => onSelect(item)} focused={items.length === 1}>
-                    {render(item)}
-                  </s.SelectItem>
-                ))
+                : items?.sort((a, b) => current?.[keyField] === a[keyField] ? -1 : 0)
+                  .map((item, index) => (
+                    <s.SelectItem key={index} onClick={() => onSelect(item)} focused={items.length === 1 || current?.[keyField] === item[keyField]}>
+                      <s.Item>
+                        {render(item)}
+                      </s.Item>
+                      <s.ItemActions>
+                        {itemActions && itemActions(item, current?.[keyField] === item[keyField])}
+                      </s.ItemActions>
+                    </s.SelectItem>
+                  ))
             }
           </s.Select>
         </s.PopupBody>

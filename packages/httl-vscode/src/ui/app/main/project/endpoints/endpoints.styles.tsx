@@ -16,7 +16,7 @@ export const Container = styled.div`
 
 export const Label = styled(LoadingText) <{ center?: boolean, dark?: boolean }>`
   font-size: 10px;
-  margin: 0 10px 0;
+  margin: 0 4px 0;
   display: flex;
   align-items: center;
   justify-content: ${p => p.center ? 'center' : 'flex-start'};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { VscRefresh, VscSparkle } from "react-icons/vsc";
+import { VscClose, VscRefresh, VscSparkle } from "react-icons/vsc";
 
 import ComboBox from '../../../../components/combobox';
 import Button from '../../../../components/button';
@@ -9,14 +9,14 @@ import * as s from './project-selector.styles';
 
 
 export const ProjectSelector: React.FC = () => {
-  const model = useProjectModel(({ fileInfo, supportAgentAnalysis, reloadProject, resolveProjects, selectProject, startAgentAnalysis }) =>
-    ({ fileInfo, supportAgentAnalysis, reloadProject, resolveProjects, selectProject, startAgentAnalysis }));
+  const model = useProjectModel(({ fileInfo, supportAgentAnalysis, reloadProject, resolveProjects, selectProject, closeProject, startAgentAnalysis }) =>
+    ({ fileInfo, supportAgentAnalysis, reloadProject, resolveProjects, selectProject, closeProject, startAgentAnalysis }));
 
   return (
     <s.Container>
       <ComboBox
         placeholder='Select project'
-        keyField='name'
+        keyField='id'
         current={model.fileInfo}
         options={(search) => model.resolveProjects(search)}
         onChange={(project) => model.selectProject(project)}
@@ -42,6 +42,12 @@ export const ProjectSelector: React.FC = () => {
             : <Button onClick={() => model.reloadProject()} title='Reload the project from OpenAPI spec.'>
               <VscRefresh />
             </Button>
+        )}
+        itemActions={(item, current) => (
+          current &&
+          <s.ActionButton onClick={() => model.closeProject()} title='Close project' small>
+            <VscClose /> <span>Close</span>
+          </s.ActionButton>
         )}
       />
     </s.Container>
