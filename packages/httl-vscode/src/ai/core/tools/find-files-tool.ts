@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import fs from "fs";
 import path from "path";
 import ignore, { Ignore } from "ignore";
-import { FileSearch } from '../../../common';
+import { FileService } from '../../../common';
 
 
 export const findFilesTool = {
@@ -40,7 +40,7 @@ export class FindFilesTool {
     //   "**/node_modules/**",
     //   undefined
     // );
-    const files = await FileSearch.search(pattern, baseUri);
+    const files = await FileService.search(pattern, baseUri);
 
     // const filePaths = files.map(x => x.fsPath);
     return {

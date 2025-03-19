@@ -3,7 +3,7 @@ import fs from "fs";
 import * as fsPath from "path";
 import { Json } from "httl-common";
 
-import { FileSearch, HttlExtensionContext, UIMessageType } from "../../../../../common";
+import { FileService, HttlExtensionContext, UIMessageType } from "../../../../../common";
 import { HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData, EndpointScriptId, UpdateEndpointScriptCode, UpdatePrestartScriptCode } from "./types";
 import { HttlProject } from "./project";
 import { ApiControllerListResult, ApiControllerSpecResult, ApiProjectListResult, ProjectAgent } from "../../../../../ai/agents/project-agent";
@@ -44,7 +44,7 @@ export class HttlProjectService {
 
   public async resolveProjects({ search }: { search: string }): Promise<HttlProjectItem[]> {
     try {
-      const files = await FileSearch.search('**/*.json', undefined, false);
+      const files = await FileService.search('**/*.json', undefined, false);
 
       const infos: HttlProjectFileInfo[] = files
         .map(file => {

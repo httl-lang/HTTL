@@ -3,4 +3,4 @@ export * from './logger';
 export * from './ui-message';
 export * from './types';
 export * from './constants';
-export * from './file-search';
+export * from './file-service';

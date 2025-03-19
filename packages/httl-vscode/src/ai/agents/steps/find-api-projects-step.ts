@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FileSearch } from '../../../common';
+import { FileService } from '../../../common';
 import { AgentStepBase } from '../../core/agent-step-base';
 import { LLM } from '../../core/llm';
 import { PROJECT_FOOTPRINTS } from './common';
@@ -30,8 +30,8 @@ export class FindApiProjectsStep extends AgentStepBase<FindApiProjectsStepResult
 
     const searches = Object.entries(PROJECT_FOOTPRINTS).flatMap(([technology, pattern]) => {
       return Array.isArray(pattern)
-        ? pattern.map(x => FileSearch.search(this.getSearchPattern(x)))
-        : FileSearch.search(this.getSearchPattern(pattern));
+        ? pattern.map(x => FileService.search(this.getSearchPattern(x)))
+        : FileService.search(this.getSearchPattern(pattern));
     });
 
     const findings = await Promise.all(searches);

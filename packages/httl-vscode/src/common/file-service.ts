@@ -5,12 +5,12 @@ import ignore, { Ignore } from 'ignore';
 import { glob, globSync, globStream, globStreamSync, Glob } from 'glob'
 
 
-export class FileSearch {
+export class FileService {
 
-  private static instance: FileSearch;
+  private static instance: FileService;
   public static search(pattern: string | string[], root?: string, absolute = true): Promise<string[]> {
     if (!this.instance) {
-      this.instance = new FileSearch();
+      this.instance = new FileService();
       this.instance.init();
     }
 
@@ -21,7 +21,7 @@ export class FileSearch {
   private workDir!: vscode.Uri;
 
   private init() {
-    this.workDir = FileSearch.getWorkspaceDirectory();
+    this.workDir = FileService.getWorkspaceDirectory();
     // this.ignoreRules = this.loadGitignoreRules(this.workDir.fsPath);
   }
 
@@ -65,5 +65,14 @@ export class FileSearch {
     }
 
     throw new Error('No workspace opened');
+  }
+
+  public static relative(base: string, absolute: string) {
+    const final = path.posix.relative(
+      base.split(path.sep).join(path.posix.sep).toLowerCase(),
+      absolute.split(path.sep).join(path.posix.sep).toLowerCase()
+    );
+
+    return final.startsWith('.') ? final : './' + final;
   }
 }

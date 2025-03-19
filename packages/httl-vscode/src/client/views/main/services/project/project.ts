@@ -5,8 +5,10 @@ import * as fsPath from 'path';
 import * as asyncFs from 'node:fs/promises';
 import { ApiSpec } from "httl-core";
 import { HttlUrl } from "httl-core/dist/common/url";
-import { FileSearch } from "../../../../../common";
+import { FileService } from "../../../../../common";
 import { FindApiControllersStepResult } from "../../../../../ai/agents/steps/find-api-controllers-step";
+import * as vscode from 'vscode';
+
 
 export class HttlProject {
 
@@ -18,7 +20,7 @@ export class HttlProject {
 
     for (let index = 0; index < 100; index++) {
       const validFileName = intendedFileName + (index ? `-${index}` : '');
-      const fullPath = fsPath.join(FileSearch.getWorkspaceDirectory().fsPath, validFileName + HttlProject.FILE_EXTENSION);
+      const fullPath = fsPath.join(FileService.getWorkspaceDirectory().fsPath, validFileName + HttlProject.FILE_EXTENSION);
       if (!fs.existsSync(fullPath)) {
         intendedFileName = validFileName + HttlProject.FILE_EXTENSION;
         break;
@@ -69,7 +71,7 @@ export class HttlProject {
   public static open(path: string) {
     let fullPath = path;
     if (!fsPath.isAbsolute(path)) {
-      fullPath = fsPath.join(FileSearch.getWorkspaceDirectory().fsPath, path);
+      fullPath = fsPath.join(FileService.getWorkspaceDirectory().fsPath, path);
     }
 
     if (!fs.existsSync(fullPath)) {
@@ -117,6 +119,8 @@ export class HttlProject {
   public spec!: ApiSpec;
   public fullPath!: string;
 
+  private workdir!: vscode.Uri;
+
   constructor(
     public readonly filePath: string,
     public readonly props: HttlProjectProps,
@@ -126,9 +130,11 @@ export class HttlProject {
       throw new Error('Invalid file path');
     }
 
+    this.workdir = FileService.getWorkspaceDirectory();
+
     this.fullPath = fsPath.isAbsolute(filePath)
       ? filePath
-      : fsPath.join(FileSearch.getWorkspaceDirectory().fsPath, filePath);
+      : fsPath.join(this.workdir.fsPath, filePath);
 
     this.spec = ApiSpec.fromSpec(props.spec, HttlUrl.parse(props.source));
   }
@@ -234,7 +240,7 @@ export class HttlProject {
     return {
       fileInfo: this.getInfo(),
       description: this.props.description,
-      source: this.props.source,
+      source: FileService.relative(this.workdir.fsPath, this.props.source),
       technologies: this.props.technologies,
       prestart: this.props.prestart.code,
       endpoints,
