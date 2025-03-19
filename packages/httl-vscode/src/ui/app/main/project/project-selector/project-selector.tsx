@@ -9,8 +9,8 @@ import * as s from './project-selector.styles';
 
 
 export const ProjectSelector: React.FC = () => {
-  const model = useProjectModel(({ fileInfo, supportAgentAnalysis, reloadProject, resolveProjects, selectProject, closeProject, startAgentAnalysis }) =>
-    ({ fileInfo, supportAgentAnalysis, reloadProject, resolveProjects, selectProject, closeProject, startAgentAnalysis }));
+  const model = useProjectModel(({ fileInfo, supportAgentAnalysis, agentProgress, reloadProject, resolveProjects, selectProject, closeProject, startAgentAnalysis }) =>
+    ({ fileInfo, supportAgentAnalysis, agentProgress, reloadProject, resolveProjects, selectProject, closeProject, startAgentAnalysis }));
 
   return (
     <s.Container>
@@ -20,6 +20,7 @@ export const ProjectSelector: React.FC = () => {
         current={model.fileInfo}
         options={(search) => model.resolveProjects(search)}
         onChange={(project) => model.selectProject(project)}
+        inProgress={model.agentProgress === 'project'}
         render={(item, isLabel) => (
           <s.Item nowrap={isLabel}>
             <s.Name>
@@ -36,7 +37,7 @@ export const ProjectSelector: React.FC = () => {
         )}
         buttons={() => (
           model.supportAgentAnalysis
-            ? <Button onClick={() => model.startAgentAnalysis()} title='Start the project agent analysis. This will analyze the project and find all the endpoints'>
+            ? <Button onClick={() => model.startAgentAnalysis()} title='Run the Copilot analysis.'>
               <VscSparkle />
             </Button>
             : <Button onClick={() => model.reloadProject()} title='Reload the project from OpenAPI spec.'>

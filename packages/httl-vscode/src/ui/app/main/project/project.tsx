@@ -10,8 +10,8 @@ import { ProjectSource } from './source';
 import { WelcomeView } from './welcome';
 
 const _ProjectView: React.FC = () => {
-  const model = useProjectModel(({ fileInfo, reloadProject }) =>
-    ({ fileInfo, reloadProject }));
+  const model = useProjectModel(({ fileInfo, agentProgress, reloadProject }) =>
+    ({ fileInfo, agentProgress, reloadProject }));
 
   const [searchParams] = useSearchParams();
   const project = searchParams.get("project");
@@ -34,6 +34,12 @@ const _ProjectView: React.FC = () => {
             <Endpoints />
           </>
           : <WelcomeView />
+      }
+      {
+        model.agentProgress === 'error' &&
+        <s.ErrorToast>
+          Oops! Something went wrong. Please try running the analysis again.
+        </s.ErrorToast>
       }
 
     </s.Container >

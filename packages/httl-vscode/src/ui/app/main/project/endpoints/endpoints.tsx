@@ -11,16 +11,12 @@ import { MethodLabel } from '../../../../components/method-label';
 import { Endpoint } from '../endpoint';
 
 export const Endpoints: React.FC = () => {
-  const model = useProjectModel(({ endpointGoups }) =>
-    ({ endpointGoups }));
+  const model = useProjectModel(({ endpointGoups, agentProgress }) =>
+    ({ endpointGoups, agentProgress }));
 
   return (
     <s.Container>
-      {/* <s.Label center dark loading={model.controllers.some(c => c.inProgress)}>
-        Endpoints
-      </s.Label> */}
-
-      <s.Label center dark>
+      <s.Label center dark loading={model.endpointGoups.some(c => c.inProgress) || model.agentProgress === 'tags'}>
         Endpoints
       </s.Label>
 

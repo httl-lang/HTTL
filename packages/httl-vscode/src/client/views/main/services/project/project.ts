@@ -10,7 +10,22 @@ import { FindApiControllersStepResult } from "../../../../../ai/agents/steps/fin
 import { ControllerSpec } from "../../../../../ai/agents/project-agent";
 
 export class HttlProject {
+  private static FILE_EXTENSION  = '.httl.json';
 
+  private static getFileName(name: string): string {
+    let intendedFileName = './' + name.replace(/[<>:"/\\|?*\s]/g, '_').toLowerCase();
+
+    for (let index = 0; index < 100; index++) {
+      const validFileName = intendedFileName + (index ? `-${index}` : '');
+      const fullPath = fsPath.join(FileSearch.getWorkspaceDirectory().fsPath, validFileName + HttlProject.FILE_EXTENSION);
+      if (!fs.existsSync(fullPath)) {
+        intendedFileName = validFileName + HttlProject.FILE_EXTENSION;
+        break;
+      }
+    }
+
+    return intendedFileName;
+  }
 
   public static isValid(obj: any) {
     return obj &&
@@ -22,10 +37,10 @@ export class HttlProject {
   }
 
   public static create(name: string, props: Partial<HttlProjectProps>): HttlProject {
-    const newFileName = './' + name.replace(/[<>:"/\\|?*\s]/g, '_').toLowerCase() + '_httl.json';
+    const newProjectFileName = this.getFileName(name);
 
     const project = new HttlProject(
-      newFileName,
+      newProjectFileName,
       {
         name,
         description: '',
@@ -78,10 +93,10 @@ export class HttlProject {
     const spec = ApiSpec.fromString(specContent, HttlUrl.parse(url));
     const apiInfo = spec.getApiInfo();
 
-    const filename = apiInfo.title.replace(/\s/g, '-').toLowerCase() + '-httl-project';
+    const filename = this.getFileName(apiInfo.title);
 
     const project = new HttlProject(
-      filename + '.json',
+      filename,
       {
         name: apiInfo.title,
         description: apiInfo.description,

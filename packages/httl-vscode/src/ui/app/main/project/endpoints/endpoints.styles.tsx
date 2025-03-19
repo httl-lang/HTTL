@@ -8,6 +8,7 @@ export const Container = styled.div`
   position: relative;
   flex: 1;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   scrollbar-color: auto;
   &::-webkit-scrollbar {
     width: 2px;

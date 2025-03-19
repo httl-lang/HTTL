@@ -8,7 +8,7 @@ export const Container = styled.div`
   flex-direction: column;
 `;
 
-export const Main = styled.div`
+export const Main = styled.div<{ progress?: boolean }>`
   overflow: hidden;
   background-color: var(--vscode-input-background);
   color: var(--vscode-input-foreground);
@@ -25,6 +25,22 @@ export const Main = styled.div`
   &:hover {
     border-color: var(--vscode-commandCenter-activeBorder);
   }
+
+  ${({ progress }) => progress && css`
+
+    background: linear-gradient(90deg, var(--vscode-input-background) 25%, var(--vscode-input-border) 50%, var(--vscode-input-background) 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite linear;
+
+    @keyframes loading {
+      0% {
+          background-position: 200% 0;
+      }
+      100% {
+          background-position: -200% 0;
+      }
+    }
+  `}
 `;
 
 export const Label = styled.div`
@@ -118,39 +134,3 @@ export const CircleLoader = styled(Loader)`
       }
   }
 `;
-
-
-// export const Loader = styled.div`
-//   overflow: hidden;
-//   padding: 3px 0 3px 6px;
-//   text-align: center;
-//   color: color-mix(in srgb, var(--vscode-input-foreground) 50%, transparent);
-//   border: 1px solid var(--vscode-input-border, transparent);
-//   border-radius: 2px;
-//   box-sizing: border-box;
-//   height: 24px;
-//   position: relative;
-//   background: linear-gradient(90deg, var(--vscode-input-background) 25%, var(--vscode-input-border) 50%, var(--vscode-input-background) 75%);
-//   background-size: 200% 100%;
-//   animation: loading 1.5s infinite linear, slide 0.1s ease-in-out;
-
-//   @keyframes loading {
-//     0% {
-//         background-position: 200% 0;
-//     }
-//     100% {
-//         background-position: -200% 0;
-//     }
-//   }
-
-//   @keyframes slide {
-//       from {
-//         height: 0;
-//         opacity: 0;
-//       }
-//       to {
-//         height: 24px;
-//         opacity: 1;
-//       }
-//   }
-// `;

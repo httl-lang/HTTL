@@ -5,10 +5,7 @@ import {
   UIMessageType,
   ChangeActiveEditorMessagePayload,
   CloseResponseMessagePayload,
-  SetWorkspaceApiControllersPayload,
-  SetWorkspaceApiProjectsPayload,
-  SetWorkspaceApiControllerSpecPayload,
-  SetWorkspaceApiErrorPayload,
+  AgentAnalysisEventPayload,
   HighlightViewSectionMessagePayload,
   ReloadProjectMessagePayload
 
@@ -58,20 +55,8 @@ export class Commutator {
     this.subscribe('reload-project', cb);
   }
 
-  public onSetWorkspaceApiProjects(cb: (message: SetWorkspaceApiProjectsPayload) => void) {
-    this.subscribe('set-workspace-api-projects', cb);
-  }
-
-  public onSetWorkspaceApiControllers(cb: (message: SetWorkspaceApiControllersPayload) => void) {
-    this.subscribe('set-workspace-api-controllers', cb);
-  }
-
-  public onSetWorkspaceApiControllerSpec(cb: (message: SetWorkspaceApiControllerSpecPayload) => void) {
-    this.subscribe('set-workspace-api-controller-spec', cb);
-  }
-
-  public onSetWorkspaceApiError(cb: (message: SetWorkspaceApiErrorPayload) => void) {
-    this.subscribe('set-workspace-api-error', cb);
+  public onAgentAnalysisEvent(cb: (message: AgentAnalysisEventPayload) => void) {
+    this.subscribe('agent-analysis-event', cb);
   }
 
   private subscribe(command: UIMessageType, cb: (...args: any[]) => void) {

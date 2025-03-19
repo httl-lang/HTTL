@@ -5,9 +5,10 @@ interface ComboBoxProps<TItem extends { [key: string]: any }> {
   current?: TItem;
   placeholder?: string;
   keyField: keyof TItem;
+  inProgress?: boolean;
+
   options: (search: string) => Promise<TItem[]>;
   onChange?: (value: TItem) => void;
-
   render: (item: TItem, label?: boolean) => React.ReactNode;
   buttons?: () => React.ReactNode;
   itemActions?: (item: TItem, current: boolean) => React.ReactNode;
@@ -17,7 +18,9 @@ function ComboBox<TItem extends { [key: string]: any }>(
   {
     current,
     placeholder,
-    keyField, itemActions,
+    keyField,
+    inProgress,
+    itemActions,
     options,
     render,
     buttons,
@@ -72,7 +75,7 @@ function ComboBox<TItem extends { [key: string]: any }>(
 
   return (
     <s.Container>
-      <s.Main>
+      <s.Main progress={inProgress}>
         <s.Label onClick={() => onLabelClick()}>
           {
             current

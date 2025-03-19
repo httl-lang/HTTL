@@ -36,7 +36,7 @@ export const Name = styled.div`
 `;
 
 export const Panel = styled.div<{ expanded?: boolean, highlighted?: boolean }>`
-  margin: 6px;
+  margin: 6px 6px 4px 6px;
   background-color: var(--vscode-editor-background);
   border-radius: 5px;
   display: flex;

@@ -34,31 +34,11 @@ interface SetProgressMessage {
 }
 export type SetProgressMessagePayload = Omit<SetProgressMessage, 'command'>;
 
-interface SetWorkspaceApiProjectsMessage {
-  command: 'set-workspace-api-projects';
-  payload: FindApiProjectsStepResult[];
+interface AgentAnalysisEventMessage {
+  command: 'agent-analysis-event';
+  payload: { type: string, data: any };
 }
-export type SetWorkspaceApiProjectsPayload = Omit<SetWorkspaceApiProjectsMessage, 'command'>;
-
-
-interface SetWorkspaceApiControllersMessage {
-  command: 'set-workspace-api-controllers';
-  payload: FindApiControllersStepResult[];
-}
-export type SetWorkspaceApiControllersPayload = Omit<SetWorkspaceApiControllersMessage, 'command'>;
-
-interface SetWorkspaceApiControllerSpecMessage {
-  command: 'set-workspace-api-controller-spec';
-  payload: ControllerSpec;
-}
-export type SetWorkspaceApiControllerSpecPayload = Omit<SetWorkspaceApiControllerSpecMessage, 'command'>;
-
-interface SetWorkspaceApiErrorMessage {
-  command: 'set-workspace-api-error';
-  payload: ControllerSpec;
-}
-export type SetWorkspaceApiErrorPayload = Omit<SetWorkspaceApiErrorMessage, 'command'>;
-
+export type AgentAnalysisEventPayload = Omit<AgentAnalysisEventMessage, 'command'>;
 
 interface HighlightViewSectionMessage {
   command: 'highlight-section';
@@ -72,18 +52,12 @@ interface ReloadProjectMessage {
 }
 export type ReloadProjectMessagePayload = Omit<ReloadProjectMessage, 'command'>;
 
-
-
-
 export type UIMessage = InitializeMessage |
   ChangeActiveEditorMessage |
   CloseResponseMessage |
   SetResponseMessage |
   SetProgressMessage |
-  SetWorkspaceApiProjectsMessage |
-  SetWorkspaceApiControllersMessage |
-  SetWorkspaceApiControllerSpecMessage |
-  SetWorkspaceApiErrorMessage |
+  AgentAnalysisEventMessage |
   HighlightViewSectionMessage |
   ReloadProjectMessage;
 

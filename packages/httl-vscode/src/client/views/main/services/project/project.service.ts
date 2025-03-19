@@ -3,7 +3,7 @@ import fs from "fs";
 import * as fsPath from "path";
 import { Json } from "httl-common";
 
-import { FileSearch, HttlExtensionContext } from "../../../../../common";
+import { FileSearch, HttlExtensionContext, UIMessageType } from "../../../../../common";
 import { HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData, EndpointScriptId, UpdateEndpointScriptCode, UpdatePrestartScriptCode } from "./types";
 import { HttlProject } from "./project";
 import { ApiControllerListResult, ApiControllerSpecResult, ApiProjectListResult, ProjectAgent } from "../../../../../ai/agents/project-agent";
@@ -17,7 +17,7 @@ export class HttlProjectService {
     private readonly context: HttlExtensionContext,
     private webProvider: {
       run: (script: string, source: string) => void,
-      postMessage: (command: string, ...args: any[]) => void,
+      postMessage: (command: UIMessageType, ...args: any[]) => void,
     }
   ) {
     this.projectAgent = new ProjectAgent(this.context);
@@ -205,7 +205,7 @@ export class HttlProjectService {
     }
   }
 
-  public async runAgentAnalysis({ projectFile }: { projectFile: string }): Promise<void> {
+  public async runAgentAnalysis({ projectFile }: { projectFile?: string }): Promise<void> {
     // const project = this.projects.get(projectFile);
     // if (!project) {
     //   throw new Error('Project not found');
@@ -216,29 +216,55 @@ export class HttlProjectService {
     for await (const result of this.projectAgent.analyze()) {
 
       if (result instanceof ApiProjectListResult) {
-
         if (result.projects.length === 0) {
           throw new Error('No API projects found');
         }
 
-        const selectedProject = result.projects.at(0)!;
+        for (const foundProject of result.projects) {
+          const newProject = HttlProject.create(foundProject.name, {
+            name: foundProject.name,
+            source: foundProject.path,
+          });
 
-        project = HttlProject.create(selectedProject.name, {
-          name: selectedProject.name,
-          source: selectedProject.path,
+          await newProject.save();
+          
+          // Take the first project
+          project ??= newProject;
+        }
+
+        if (!project) {
+          throw new Error('Project not found');
+        }
+        
+        await this.webProvider.postMessage('agent-analysis-event', {
+          payload: {
+            type: 'project-created',
+            data: project.filePath
+          }
         });
       }
 
       if (result instanceof ApiControllerListResult) {
         project.addTags(result.controllers);
+        await project.save();
+        await this.webProvider.postMessage('agent-analysis-event', {
+          payload: {
+            type: 'spec-tags-updated',  
+            data: result.controllers
+          }
+        });
       }
 
       if (result instanceof ApiControllerSpecResult) {
         project.mergeSpecForTag(result.tag, result.spec);
+        await project.save();
+        await this.webProvider.postMessage('agent-analysis-event', {
+          payload: {
+            type: 'spec-tag-endpoints-completed',
+            data: result.tag
+          }
+        });
       }
-
-      await project.save();
-      await this.webProvider.postMessage('reload-project', { file: project.filePath });
     }
   }
 }

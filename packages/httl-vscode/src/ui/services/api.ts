@@ -8,7 +8,7 @@ export abstract class Api {
       window.addEventListener('message', function listener(event) {
         if (event.data.command === command && event.data.requestId === requestId) {
           window.removeEventListener("message", listener, false);
-          if (event.data.error) {
+          if ('error' in event.data) {
             reject(event.data.error);
           } else {
             resolve(event.data.payload);

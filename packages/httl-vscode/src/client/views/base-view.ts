@@ -141,10 +141,11 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
       });
 
     } catch (error: any) {
+      console.error(error);
       await webviewView.webview.postMessage({
         command,
         requestId,
-        payload: { error }
+        error: error.message 
       });
     }
   }

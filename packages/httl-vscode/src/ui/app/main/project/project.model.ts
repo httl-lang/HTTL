@@ -1,10 +1,7 @@
 import { Action, Model, connect, store } from "react-storm";
 import { AppModel } from "../../app.model";
 import { commutator } from "../../../services/commutator";
-import { FindApiProjectsStepResult } from "../../../../ai/agents/steps/find-api-projects-step";
-import { FindApiControllersStepResult } from "../../../../ai/agents/steps/find-api-controllers-step";
-import { SetWorkspaceApiProjectsPayload, SetWorkspaceApiControllersPayload, SetWorkspaceApiControllerSpecPayload, SetWorkspaceApiErrorPayload } from "../../../../common";
-import { ControllerSpec } from "../../../../ai/agents/project-agent";
+import { AgentAnalysisEventPayload } from "../../../../common";
 import { ProjectApi } from "./project.api";
 import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData } from "../../../../client/views/main/services/project";
 
@@ -23,10 +20,15 @@ interface ProjectState {
   prestartEditorHeight: string;
 }
 
+type AgentProgressType = 'project' | 'tags' | 'endpoints' | 'error';
+
 @Model()
 export class ProjectModel {
-
   public static readonly PROJECT_STATE = 'project-state';
+
+  private agentTagsProgress: ApiEndpointGroup[] = [];
+
+  public agentProgress?: AgentProgressType;
 
   public fileInfo?: HttlProjectFileInfo;
   public description?: string;
@@ -38,19 +40,6 @@ export class ProjectModel {
   public endpointGoups: ApiEndpointGroup[] = [];
 
   public declare projectState: ProjectState;
-
-  // public controllers: ApiControllers[] = [];
-
-  // public projectsProgress = false;
-  // public controllersProgress = false;
-
-  // public get hasControllers() {
-  //   return this.controllers.length > 0;
-  // }
-
-  // public get inProgress() {
-  //   return this.projectsProgress || this.controllersProgress || this.controllers.some(c => c.inProgress);
-  // }
 
   constructor(
     private readonly appModel = store(AppModel),
@@ -68,21 +57,9 @@ export class ProjectModel {
       );
     }
 
-    // commutator.onSetWorkspaceApiProjects((result: SetWorkspaceApiProjectsPayload) => {
-    //   this.setWorkspaceApiProjects(result.payload);
-    // });
-
-    // commutator.onSetWorkspaceApiControllers((result: SetWorkspaceApiControllersPayload) => {
-    //   this.setWorkspaceApiControllers(result.payload);
-    // });
-
-    // commutator.onSetWorkspaceApiControllerSpec((result: SetWorkspaceApiControllerSpecPayload) => {
-    //   this.setWorkspaceApiControllerSpec(result.payload);
-    // });
-
-    // commutator.onSetWorkspaceApiError((result: SetWorkspaceApiErrorPayload) => {
-    //   this.setError();
-    // });
+    commutator.onAgentAnalysisEvent((result: AgentAnalysisEventPayload) => {
+      this.onAgentAnalysisEvent(result.payload);
+    });
   }
 
   public get sourceType() {
@@ -114,54 +91,68 @@ export class ProjectModel {
   }
 
   @Action()
-  public async startAgentAnalysis() {
-    // this.project = undefined;
-    // this.controllers = [];
-    // this.projectsProgress = true;
-    // this.controllersProgress = false;
+  public async openProject(filePath: string): Promise<void> {
+    const project = await this.api.openProject(filePath);
 
-    await this.api.runAgentAnalysis(this.fileInfo!.path);
+    this.setProjectState({
+      projectPath: project.fileInfo.path
+    });
+
+    this.setProject(project);
   }
 
-  // @Action()
-  // public setWorkspaceApiProjects(data: FindApiProjectsStepResult[]) {
-  //   // this.projectsProgress = false;
-  //   // this.controllersProgress = true;
+  @Action()
+  public async startAgentAnalysis() {
+    this.setAgentProgress('project');
+    try {
+      await this.api.runAgentAnalysis(this.fileInfo?.path);
+      this.setAgentProgress(false);
+      this.agentTagsProgress = [];
+    }
+    catch (error) {
+      this.setAgentProgress('error');
+    }
+  }
 
-  //   // this.projects = data;
-  // }
+  @Action()
+  public setAgentProgress(type?: AgentProgressType | boolean) {
+    this.agentProgress = type !== false ? type as AgentProgressType : undefined;
+  }
 
-  // @Action()
-  // public setWorkspaceApiControllers(data: FindApiControllersStepResult[]) {
-  //   // this.projectsProgress = false;
-  //   // this.controllersProgress = false;
+  @Action()
+  private async onAgentAnalysisEvent(event: { type: string, data: any }) {
+    switch (event.type) {
+      case 'project-created': {
+        await this.openProject(event.data);
+        this.setAgentProgress('tags');
+        break;
+      }
+      case 'spec-tags-updated': {
+        this.agentTagsProgress = event.data.map((group: any, index: number) => ({
+          name: group.tag,
+          inProgress: index === 0,
+          endpoints: []
+        }));
+        this.setAgentProgress(false);
+        break;
+      }
+      case 'spec-tag-endpoints-completed': {
+        const tagIndex = this.agentTagsProgress.findIndex(c => c.name === event.data);
+        if (tagIndex === -1) {
+          break;
+        }
 
-  //   // this.controllers = data;
-  //   // this.controllers[0].inProgress = true;
-  // }
+        const group = this.agentTagsProgress[tagIndex];
+        group.inProgress = false;
 
-  // @Action()
-  // public setWorkspaceApiControllerSpec(data: ControllerSpec) {
-  //   // const controllerIdx = this.controllers.findIndex(c => c.tag === data.tag);
-  //   // if (controllerIdx === -1)
-  //   //   return;
+        if (tagIndex + 1 < this.agentTagsProgress.length) {
+          this.agentTagsProgress[tagIndex + 1].inProgress = true;
+        }
 
-  //   // const controller = this.controllers[controllerIdx];
-  //   // controller.spec = data.spec;
-  //   // controller.inProgress = false;
-
-  //   // if (controllerIdx + 1 < this.controllers.length) {
-  //   //   this.controllers[controllerIdx + 1].inProgress = true;
-  //   // }
-  // }
-
-  // @Action()
-  // public setError() {
-  //   // this.projectsProgress = false;
-  //   // this.controllersProgress = false;
-
-  //   // this.controllers = [];
-  // }
+        break;
+      }
+    }
+  }
 
   @Action()
   public updatePrestartScript(code: string) {
@@ -194,6 +185,8 @@ export class ProjectModel {
     this.prestart = undefined;
     this.endpoints = [];
     this.endpointGoups = [];
+    this.agentTagsProgress = [];
+    this.agentProgress = undefined;
 
     this.setProjectState({
       projectPath: undefined
@@ -221,6 +214,15 @@ export class ProjectModel {
       return acc;
     }, new Map<string, ApiEndpointGroup>);
 
+    this.agentTagsProgress.forEach((agentGroup) => {
+      const tag = groupedEndpoints.get(agentGroup.name);
+      if (tag) {
+        tag.inProgress = agentGroup.inProgress;
+      }
+      else {
+        groupedEndpoints.set(agentGroup.name, agentGroup);
+      }
+    });
 
     this.endpointGoups = groupedEndpoints.entries().toArray()
       .sort(([tagA], [tagB]) => tagA.localeCompare(tagB))
