@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { FileSearch } from '../../../common';
 import { AgentStepBase } from '../../core/agent-step-base';
 import { LLM } from '../../core/llm';
+import { PROJECT_FOOTPRINTS } from './common';
 
 export interface FindApiProjectsStepResult {
   name: string;
@@ -10,26 +11,27 @@ export interface FindApiProjectsStepResult {
 }
 
 export class FindApiProjectsStep extends AgentStepBase<FindApiProjectsStepResult[]> {
-  public static readonly footprints = {
-    nodejs: 'package.json',
-    dotnet: '.csproj',
-    python: 'pyproject.toml',
-    go: 'go.mod',
-    java: ['pom.xml', 'build.gradle'],
-    ruby: 'Gemfile',
-    php: 'composer.json',
-    rust: 'Cargo.toml'
-  };
+  private get projectPath() {
+    return this.args.length > 0
+      ? this.args[0]
+      : undefined;
+  }
+
+  private getSearchPattern(file: string) {
+    return this.projectPath
+      ? `${this.projectPath}/${file}`
+      : `**/${file}`;
+  }
 
   protected override async startAction() {
     this.llm.addUserMessage(
       this.startMessage()
     );
 
-    const searches = Object.entries(FindApiProjectsStep.footprints).flatMap(([technology, pattern]) => {
+    const searches = Object.entries(PROJECT_FOOTPRINTS).flatMap(([technology, pattern]) => {
       return Array.isArray(pattern)
-        ? pattern.map(x => FileSearch.search(`**/*${x}`))
-        : FileSearch.search(`**/*${pattern}`);
+        ? pattern.map(x => FileSearch.search(this.getSearchPattern(x)))
+        : FileSearch.search(this.getSearchPattern(pattern));
     });
 
     const findings = await Promise.all(searches);
@@ -127,17 +129,6 @@ export class FindApiProjectsStep extends AgentStepBase<FindApiProjectsStepResult
   // 6. **Ensure a minified JSON response**:
   //    - The output must not contain new lines, spaces, indentation, or be wrapped in markdown (' \`\`\`json ').
   // `;
-
-
-  protected override parseResponse(response: string | undefined): any {
-    try {
-      return JSON.parse(response!);
-    } catch (error) {
-      const errorMessage = `Error parsing response: ${response}`;
-      console.error(errorMessage, error);
-      throw new Error(errorMessage);
-    }
-  }
 
   protected override resultMessage(projects: FindApiProjectsStepResult[]): string {
     const projectsText = projects.map((p) => `  - ${p.name}, path: ${p.path}, technology: ${p.technology};`).join('\n');

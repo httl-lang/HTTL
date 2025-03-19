@@ -24,19 +24,8 @@ export class GenerateSpecStep extends AgentStepBase<any> {
   - You must return plain **VALID JSON** string without wrapping in \`\`\`json\`\`\` block!
 `;
 
-// - The output MUST be a **VALID minified JSON** string:
-// \`\`\`json
-// {"openapi":"3.0.0","info":{"title":"Activity API","version":"1.0.0"}}
-// \`\`\`
-
-  protected override parseResponse(response: string | undefined): any {
-    try {
-      return eval(`(${response!})`);
-      // return JSON.parse(response!);
-    } catch (error) {
-      const errorMessage = `Error parsing response: ${response}`;
-      console.error(errorMessage, error);
-      throw new Error(errorMessage);
-    }
-  }
+  // - The output MUST be a **VALID minified JSON** string:
+  // \`\`\`json
+  // {"openapi":"3.0.0","info":{"title":"Activity API","version":"1.0.0"}}
+  // \`\`\`
 }

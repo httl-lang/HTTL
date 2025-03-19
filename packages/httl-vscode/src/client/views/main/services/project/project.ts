@@ -7,10 +7,11 @@ import { ApiSpec } from "httl-core";
 import { HttlUrl } from "httl-core/dist/common/url";
 import { FileSearch } from "../../../../../common";
 import { FindApiControllersStepResult } from "../../../../../ai/agents/steps/find-api-controllers-step";
-import { ControllerSpec } from "../../../../../ai/agents/project-agent";
 
 export class HttlProject {
-  private static FILE_EXTENSION  = '.httl.json';
+
+  private static FILE_EXTENSION = '.httl.json';
+
 
   private static getFileName(name: string): string {
     let intendedFileName = './' + name.replace(/[<>:"/\\|?*\s]/g, '_').toLowerCase();
@@ -114,7 +115,7 @@ export class HttlProject {
   }
 
   public spec!: ApiSpec;
-  private fullPath!: string;
+  public fullPath!: string;
 
   constructor(
     public readonly filePath: string,
@@ -163,6 +164,20 @@ export class HttlProject {
 
     Object.assign(this.props, rawJson);
     this.spec = ApiSpec.fromSpec(this.props.spec, HttlUrl.parse(this.props.source));
+  }
+
+  public setDefaultSpec() {
+    this.props.spec = {
+      openapi: '3.0.0',
+      info: {
+        title: this.props.name,
+        version: '1.0.0',
+      },
+      tags: [],
+      paths: {},
+      definitions: {},
+    };
+    this.spec = ApiSpec.fromSpec(this.props.spec, HttlUrl.parse(''));
   }
 
   public updatePrestartScript(code: string) {
@@ -279,7 +294,7 @@ export class HttlProject {
     }
   }
 
-  public addTags(controllers: FindApiControllersStepResult[]) {
+  public updateTags(controllers: FindApiControllersStepResult[]) {
     this.props.spec ??= { tags: [] };
 
     this.props.spec.tags = controllers.map(controller => ({

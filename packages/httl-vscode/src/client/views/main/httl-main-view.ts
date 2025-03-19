@@ -8,7 +8,6 @@ import { HttlLanguageClient } from '../../httl-language-client';
 import { HttlRunCommand } from '../../commands/run-command';
 import { HttlProjectService } from './services/project';
 import { QuickRunService } from './services/quick-run';
-import { ProjectFileWatcher } from "../../../client/providers/project-file-watcher";
 
 export class HttlMainViewProvider extends HttlBaseViewProvider {
   public static readonly viewType = 'httlMainView';
@@ -44,17 +43,6 @@ export class HttlMainViewProvider extends HttlBaseViewProvider {
         }),
       }
     );
-
-    ProjectFileWatcher.register(context, '**/*.json')({
-      onDidChange: async (filePath) => {
-        if (projectService.isSync(filePath) === false) {
-          await this.postMessage({
-            command: 'reload-project',
-            file: filePath,
-          });
-        }
-      },
-    });
   }
 
   public async highlightSection(panel: string, ...paths: string[]): Promise<void> {

@@ -1,4 +1,4 @@
-import { HttlExtensionContext } from '../../common';
+import { HttlExtensionContext } from '../../../../../common';
 import * as vscode from 'vscode';
 
 export class ProjectFileWatcher {

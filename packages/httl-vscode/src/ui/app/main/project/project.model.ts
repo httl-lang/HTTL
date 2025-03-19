@@ -27,7 +27,6 @@ export class ProjectModel {
   public static readonly PROJECT_STATE = 'project-state';
 
   private agentTagsProgress: ApiEndpointGroup[] = [];
-
   public agentProgress?: AgentProgressType;
 
   public fileInfo?: HttlProjectFileInfo;
@@ -36,7 +35,6 @@ export class ProjectModel {
   public technologies?: string[];
   public prestart?: string;
   public endpoints: ApiEndpoint[] = [];
-
   public endpointGoups: ApiEndpointGroup[] = [];
 
   public declare projectState: ProjectState;
@@ -122,9 +120,10 @@ export class ProjectModel {
   @Action()
   private async onAgentAnalysisEvent(event: { type: string, data: any }) {
     switch (event.type) {
-      case 'project-created': {
+      case 'project-setup': {
         await this.openProject(event.data);
         this.setAgentProgress('tags');
+
         break;
       }
       case 'spec-tags-updated': {
@@ -133,21 +132,22 @@ export class ProjectModel {
           inProgress: index === 0,
           endpoints: []
         }));
-        this.setAgentProgress(false);
+        await this.reloadProject();
+        this.setAgentProgress('endpoints');
         break;
       }
       case 'spec-tag-endpoints-completed': {
         const tagIndex = this.agentTagsProgress.findIndex(c => c.name === event.data);
-        if (tagIndex === -1) {
-          break;
+        if (tagIndex !== -1) {
+          const group = this.agentTagsProgress[tagIndex];
+          group.inProgress = false;
+
+          if (tagIndex + 1 < this.agentTagsProgress.length) {
+            this.agentTagsProgress[tagIndex + 1].inProgress = true;
+          }
         }
 
-        const group = this.agentTagsProgress[tagIndex];
-        group.inProgress = false;
-
-        if (tagIndex + 1 < this.agentTagsProgress.length) {
-          this.agentTagsProgress[tagIndex + 1].inProgress = true;
-        }
+        await this.reloadProject();
 
         break;
       }

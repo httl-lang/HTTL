@@ -20,16 +20,6 @@ export class FindApiControllersStep extends AgentStepBase<FindApiControllersStep
   - Provide final response in a plain json array of elements in a format { name: <controller_file_name>, tag: <controller_api_tag>, path: <controller_path> }
 `;
 
-  protected override parseResponse(response: string | undefined): any {
-    try {
-      return JSON.parse(response!);
-    } catch (error) {
-      const errorMessage = `Error parsing response: ${response}`;
-      console.error(errorMessage, error);
-      throw new Error(errorMessage);
-    }
-  }
-
   protected override resultMessage(controllers: FindApiControllersStepResult[]): string {
     const controllersText = controllers.map((p) => `  - ${p.name}, path: ${p.path};`).join('\n');
 

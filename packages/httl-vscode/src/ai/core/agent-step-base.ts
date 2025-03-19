@@ -102,7 +102,14 @@ export abstract class AgentStepBase<TResult> {
   protected abstract startMessage(): string;
 
   protected parseResponse(response: string | undefined): any {
-    return response;
+    try {
+      return eval(`(${response!})`);
+      // return JSON.parse(response!);
+    } catch (error) {
+      const errorMessage = `Error parsing response: ${response}`;
+      console.error(errorMessage, error);
+      throw new Error(errorMessage);
+    }
   }
 
   protected nextIteration(iteration: number) {

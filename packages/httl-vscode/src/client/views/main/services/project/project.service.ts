@@ -7,9 +7,11 @@ import { FileSearch, HttlExtensionContext, UIMessageType } from "../../../../../
 import { HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData, EndpointScriptId, UpdateEndpointScriptCode, UpdatePrestartScriptCode } from "./types";
 import { HttlProject } from "./project";
 import { ApiControllerListResult, ApiControllerSpecResult, ApiProjectListResult, ProjectAgent } from "../../../../../ai/agents/project-agent";
+import { ProjectFileWatcher } from "./project-file-watcher";
 
 export class HttlProjectService {
   private projects = new Map<string, HttlProject>();
+  private disableProjectSync = false;
   private readonly projectAgent: ProjectAgent;
   private readonly workDir: string;
 
@@ -22,7 +24,23 @@ export class HttlProjectService {
   ) {
     this.projectAgent = new ProjectAgent(this.context);
     this.workDir = this.context.getWorkspaceDirectory()!;
+
+    ProjectFileWatcher.register(context, '**/*.json')({
+      onDidChange: this.onProjectFileChange
+    });
   }
+
+  private onProjectFileChange = async (filePath: string) => {
+    if (this.disableProjectSync) {
+      return;
+    }
+
+    if (this.isSync(filePath) === false) {
+      await this.webProvider.postMessage('reload-project', {
+        file: filePath,
+      });
+    }
+  };
 
   public async resolveProjects({ search }: { search: string }): Promise<HttlProjectItem[]> {
     try {
@@ -206,65 +224,92 @@ export class HttlProjectService {
   }
 
   public async runAgentAnalysis({ projectFile }: { projectFile?: string }): Promise<void> {
-    // const project = this.projects.get(projectFile);
-    // if (!project) {
-    //   throw new Error('Project not found');
-    // }
-
     let project!: HttlProject;
 
-    for await (const result of this.projectAgent.analyze()) {
+    try {
+      this.disableProjectSync = true;
 
-      if (result instanceof ApiProjectListResult) {
-        if (result.projects.length === 0) {
-          throw new Error('No API projects found');
-        }
-
-        for (const foundProject of result.projects) {
-          const newProject = HttlProject.create(foundProject.name, {
-            name: foundProject.name,
-            source: foundProject.path,
-          });
-
-          await newProject.save();
-          
-          // Take the first project
-          project ??= newProject;
-        }
+      if (projectFile) {
+        project = this.projects.get(projectFile)!;
 
         if (!project) {
-          throw new Error('Project not found');
+          throw new Error(`Project ${projectFile} not found`);
         }
-        
-        await this.webProvider.postMessage('agent-analysis-event', {
-          payload: {
-            type: 'project-created',
-            data: project.filePath
-          }
-        });
       }
 
-      if (result instanceof ApiControllerListResult) {
-        project.addTags(result.controllers);
-        await project.save();
-        await this.webProvider.postMessage('agent-analysis-event', {
-          payload: {
-            type: 'spec-tags-updated',  
-            data: result.controllers
-          }
-        });
-      }
+      for await (const result of this.projectAgent.analyze(project?.props.source)) {
 
-      if (result instanceof ApiControllerSpecResult) {
-        project.mergeSpecForTag(result.tag, result.spec);
-        await project.save();
-        await this.webProvider.postMessage('agent-analysis-event', {
-          payload: {
-            type: 'spec-tag-endpoints-completed',
-            data: result.tag
+        if (result instanceof ApiProjectListResult) {
+          if (result.projects.length === 0) {
+            throw new Error('No API projects found');
           }
-        });
+
+          if (project) {
+
+            if (result.projects.length > 1) {
+              throw new Error('Multiple projects found in the same directory');
+            }
+
+            if (fsPath.normalize(fsPath.dirname(result.projects[0].path)).toLowerCase() !==
+              fsPath.normalize(fsPath.dirname(project.props.source)).toLowerCase()) {
+              throw new Error('Project path mismatch');
+            }
+
+            project.setDefaultSpec();
+            await project.save();
+          } else {
+
+            for (const foundProject of result.projects) {
+              const newProject = HttlProject.create(foundProject.name, {
+                name: foundProject.name,
+                source: foundProject.path,
+              });
+
+              await newProject.save();
+
+              // Take the first project
+              project ??= newProject;
+            }
+
+            if (!project) {
+              throw new Error('Project not found');
+            }
+
+            this.projects.set(project.filePath, project);
+          }
+
+          await this.webProvider.postMessage('agent-analysis-event', {
+            payload: {
+              type: 'project-setup',
+              data: project.filePath
+            }
+          });
+        }
+
+        if (result instanceof ApiControllerListResult) {
+          project.updateTags(result.controllers);
+          await project.save();
+          await this.webProvider.postMessage('agent-analysis-event', {
+            payload: {
+              type: 'spec-tags-updated',
+              data: result.controllers
+            }
+          });
+        }
+
+        if (result instanceof ApiControllerSpecResult) {
+          project.mergeSpecForTag(result.tag, result.spec);
+          await project.save();
+          await this.webProvider.postMessage('agent-analysis-event', {
+            payload: {
+              type: 'spec-tag-endpoints-completed',
+              data: result.tag
+            }
+          });
+        }
       }
+    } finally {
+      this.disableProjectSync = false;
     }
   }
 }

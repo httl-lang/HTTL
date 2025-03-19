@@ -49,32 +49,13 @@ export class ApiControllerSpecResult {
   ) { }
 }
 
-// export class ProjectAgentResult {
-//   public static apiProjects(projects: FindApiProjectsStepResult[]) {
-//     return new ProjectAgentResult('set-workspace-api-projects', projects);
-//   }
-
-//   public static apiControllers(controllers: FindApiControllersStepResult[]) {
-//     return new ProjectAgentResult('set-workspace-api-controllers', controllers);
-//   }
-
-//   public static controllerSpec(controllerSpec: ControllerSpec) {
-//     return new ProjectAgentResult('set-workspace-api-controller-spec', controllerSpec);
-//   }
-
-//   constructor(
-//     public readonly command: string,
-//     public readonly payload: any,
-//   ) { }
-// }
-
 export class ProjectAgent {
 
   constructor(
     private readonly context: HttlExtensionContext,
   ) { }
 
-  public async *analyze(): AsyncGenerator<any, any, any> {
+  public async *analyze(projectPath?: string): AsyncGenerator<any, any, any> {
 
     const workDir = this.context.getWorkspaceDirectory();
     if (!workDir) {
@@ -89,7 +70,7 @@ export class ProjectAgent {
       instructions,
     });
 
-    const apiProjectsResult = await agent.run(FindApiProjectsStep);
+    const apiProjectsResult = await agent.run(FindApiProjectsStep, projectPath);
     yield new ApiProjectListResult(apiProjectsResult.result);
 
     const apiControllersResult = await agent.run(FindApiControllersStep);
