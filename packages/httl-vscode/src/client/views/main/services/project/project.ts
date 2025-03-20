@@ -250,10 +250,7 @@ export class HttlProject {
     return {
       fileInfo: this.getInfo(),
       description: this.props.description,
-      source: this.props.source.startsWith('http')
-        ? this.props.source
-        : FileService.relative(this.workdir.fsPath, this.props.source),
-
+      source: this.props.source,
       technologies: this.props.technologies,
       prestart: this.props.prestart.code,
       endpoints,

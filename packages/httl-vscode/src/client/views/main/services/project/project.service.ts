@@ -120,7 +120,7 @@ export class HttlProjectService {
     await project.save();
 
     this.projects.set(project.filePath, project);
-    
+
     return project.getViewData();
   }
 
@@ -280,7 +280,9 @@ export class HttlProjectService {
             for (const foundProject of result.projects) {
               const newProject = HttlProject.create(foundProject.name, {
                 name: foundProject.name,
-                source: foundProject.path,
+                source: foundProject.path.startsWith('http')
+                  ? foundProject.path
+                  : FileService.relative(this.workDir, foundProject.path),
               });
 
               await newProject.save();
