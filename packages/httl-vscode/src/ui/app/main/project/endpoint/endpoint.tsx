@@ -68,7 +68,7 @@ const _Endpoint: React.FC = () => {
     <s.Panel ref={ref} expanded={showEditor} title={model.endpoint.description} highlighted={highlighted}>
       <s.Header onClick={onExpand}>
         <s.Name>
-          <MethodLabel method={model.endpoint.method} /> {model.endpoint.path} <small>{model.endpoint.operationId}</small>
+          <s.MethodLabelStyled method={model.endpoint.method} /> {model.endpoint.path} <small>{model.endpoint.operationId}</small>
         </s.Name>
         <s.RunButton onClick={() => model.runScript(model.endpoint.id)} progress={model.inProgress}>
           <RunSvg />

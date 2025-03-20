@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { ResizePanel } from '../../../../components/resize-panel';
 import Button from '../../../../components/button';
 import { VscCircleFilled } from 'react-icons/vsc';
+import { MethodLabel } from '../../../../components/method-label';
 
 export const Container = styled.div`
   position: relative;
@@ -33,6 +34,10 @@ export const Name = styled.div`
     font-size: 10px;
     margin-left: 10px;
   }
+`;
+
+export const MethodLabelStyled = styled(MethodLabel)`
+  font-size: 11px;
 `;
 
 export const Panel = styled.div<{ expanded?: boolean, highlighted?: boolean }>`

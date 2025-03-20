@@ -46,7 +46,7 @@ export class HttlProjectService {
     try {
       const files = await FileService.search('**/*.json', undefined, false);
 
-      const infos: HttlProjectFileInfo[] = files
+      const infos: HttlProjectItem[] = files
         .map(file => {
           const fullPath = fsPath.join(this.workDir, file);
           return {
@@ -70,12 +70,12 @@ export class HttlProjectService {
           path: file.path,
         }));
 
-      if (infos.length === 0 && URL.canParse(search)) {
-        return [{
+      if (URL.canParse(search)) {
+        infos.unshift({
           id: search,
           name: 'Import From OpenAPI Spec',
           specUrl: search,
-        }];
+        });
       }
 
       return infos;
@@ -95,11 +95,11 @@ export class HttlProjectService {
     return original.equals(updated);
   }
 
-  public async openProject({ path }: { path: string }): Promise<HttlProjectViewData> {
+  public async openProject({ path, fullSync }: { path: string, fullSync?: boolean }): Promise<HttlProjectViewData> {
     let project = this.projects.get(path);
 
     if (project) {
-      await project.sync();
+      await project.sync(fullSync);
     } else {
       project = HttlProject.open(path);
       this.projects.set(path, project);
@@ -119,6 +119,8 @@ export class HttlProjectService {
     const project = HttlProject.fromSpec(openApiSpec, url);
     await project.save();
 
+    this.projects.set(project.filePath, project);
+    
     return project.getViewData();
   }
 
@@ -238,9 +240,6 @@ export class HttlProjectService {
       vscode.window.showTextDocument(document);
     }
   }
-
-
-
 
   public async runAgentAnalysis({ projectFile }: { projectFile?: string }): Promise<void> {
     let project!: HttlProject;

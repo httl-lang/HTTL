@@ -19,7 +19,7 @@ export const ProjectSource: React.FC = ({ }) => {
         </s.Label>
         <s.SpecButton onClick={() => model.showOpenApiSpec()}>
           <VscCloudDownload />
-          <span>OpenApi</span>
+          <span>Spec</span>
         </s.SpecButton>
       </s.Bar>
       <s.Body title={model.source}>

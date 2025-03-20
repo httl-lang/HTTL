@@ -103,11 +103,11 @@ export class HttlProject {
       {
         name: apiInfo.title,
         description: apiInfo.description,
-        source: url,
+        source: url.toLowerCase(),
         technologies: [],
         spec: spec.getRaw(),
         prestart: {
-          code: '@base: ' + spec.getBasePath(),
+          code: '@base: ' + spec.getBasePath().fullUrl,
         },
         scripts: [],
       },
@@ -156,7 +156,7 @@ export class HttlProject {
     await asyncFs.writeFile(this.fullPath, this.content, 'utf-8');
   }
 
-  public async sync() {
+  public async sync(fullSync = false) {
     if (!fs.existsSync(this.fullPath)) {
       throw new Error(`File not found: ${this.fullPath}`);
     }
@@ -169,7 +169,17 @@ export class HttlProject {
     }
 
     Object.assign(this.props, rawJson);
-    this.spec = ApiSpec.fromSpec(this.props.spec, HttlUrl.parse(this.props.source));
+
+    if (fullSync && this.props.source.startsWith('http')) {
+      const response = await fetch(this.props.source);
+      const openApiSpec = await response.json();
+
+      this.spec = ApiSpec.fromSpec(openApiSpec, HttlUrl.parse(this.props.source));
+      this.props.spec = this.spec.getRaw();
+      await this.save();
+    } else {
+      this.spec = ApiSpec.fromSpec(this.props.spec, HttlUrl.parse(this.props.source));
+    }
   }
 
   public setDefaultSpec() {
@@ -240,7 +250,10 @@ export class HttlProject {
     return {
       fileInfo: this.getInfo(),
       description: this.props.description,
-      source: FileService.relative(this.workdir.fsPath, this.props.source),
+      source: this.props.source.startsWith('http')
+        ? this.props.source
+        : FileService.relative(this.workdir.fsPath, this.props.source),
+
       technologies: this.props.technologies,
       prestart: this.props.prestart.code,
       endpoints,

@@ -96,6 +96,12 @@ function ComboBox<TItem extends { [key: string]: any }>(
           <s.Input
             ref={inputRef}
             value={searchText}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && items?.length === 1) {
+                onSelect(items[0]);
+                setSearchText('');
+              }
+            }}
             placeholder={placeholder}
             onChange={(e) => setSearchText(e.target.value)}
           />

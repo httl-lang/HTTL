@@ -52,7 +52,7 @@ export const ProjectSelector: React.FC = () => {
             : (
               <Button
                 title='Reload the project from OpenAPI spec.'
-                onClick={() => model.reloadProject()}
+                onClick={() => model.reloadProject(true)}
               >
                 <VscRefresh />
               </Button>

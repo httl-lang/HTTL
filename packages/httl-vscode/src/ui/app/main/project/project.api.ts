@@ -13,8 +13,8 @@ export class ProjectApi extends Api {
     return this.sendRequest('project.resolveProjects', { search });
   }
 
-  public openProject(path: string): Promise<HttlProjectViewData> {
-    return this.sendRequest('project.openProject', { path });
+  public openProject(path: string, fullSync?: boolean): Promise<HttlProjectViewData> {
+    return this.sendRequest('project.openProject', { path, fullSync });
   }
 
   public importFromOpenApiSpec(url: string): Promise<HttlProjectViewData> {

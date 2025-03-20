@@ -178,9 +178,9 @@ export class ProjectModel {
   }
 
   @Action()
-  public async reloadProject() {
+  public async reloadProject(fullSync?: boolean) {
     this.setProject(
-      await this.api.openProject(this.fileInfo!.path)
+      await this.api.openProject(this.fileInfo!.path, fullSync)
     );
   }
 
