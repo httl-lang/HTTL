@@ -32,6 +32,8 @@ export const EndpointTag = styled(LoadingText) <{ dark?: boolean }>`
   font-size: 14px;
   margin: 0 10px 0;
   display: flex;
+  align-items: end;
+  gap: 5px;
   
   & h1 {
     font-weight: 500;
@@ -39,15 +41,14 @@ export const EndpointTag = styled(LoadingText) <{ dark?: boolean }>`
     font-size: 14px;
   }
 
-  & h1::before {
-    content: '📦';
-    margin-right: 3px;
-  }
-
   & small {
     color: color-mix(in srgb, var(--vscode-input-foreground) 70%, transparent);
     font-size: 10px;
     margin-left: 10px;
     line-height: 17px;
+  }
+
+  & svg {
+    color: color-mix(in srgb, var(--vscode-input-foreground) 70%, transparent);
   }
 `;

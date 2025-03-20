@@ -50,10 +50,15 @@ export class ApiControllerSpecResult {
 }
 
 export class ProjectAgent {
+  private agent?: Agent;
 
   constructor(
     private readonly context: HttlExtensionContext,
   ) { }
+
+  public stop() {
+    this.agent?.stop();
+  }
 
   public async *analyze(projectPath?: string): AsyncGenerator<any, any, any> {
 
@@ -65,21 +70,25 @@ export class ProjectAgent {
 
     const instructions = INSTRUCTIONS_PROMPT.replace('<directory>', workDir);
 
-    const agent = new Agent({
+    if (this.agent) {
+      this.agent.stop();
+    }
+
+    this.agent = new Agent({
       llm: await LLM.create(),
       instructions,
     });
 
-    const apiProjectsResult = await agent.run(FindApiProjectsStep, projectPath);
+    const apiProjectsResult = await this.agent.run(FindApiProjectsStep, projectPath);
     yield new ApiProjectListResult(apiProjectsResult.result);
 
-    const apiControllersResult = await agent.run(FindApiControllersStep);
+    const apiControllersResult = await this.agent.run(FindApiControllersStep);
     const apiControllers = apiControllersResult.result.sort((a, b) => a.tag.localeCompare(b.tag));
     yield new ApiControllerListResult(apiControllers);
 
     const result: any[] = [];
     for (const controller of apiControllers) {
-      const controllerSpec = await agent.run(GenerateSpecStep, controller);
+      const controllerSpec = await this.agent.run(GenerateSpecStep, controller);
       result.push(controllerSpec.result);
 
       yield new ApiControllerSpecResult(

@@ -223,6 +223,25 @@ export class HttlProjectService {
     }
   }
 
+  public async showOpenApiSpec({ projectFile }: EndpointScriptId): Promise<void> {
+    const project = this.projects.get(projectFile);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    if (project.props.spec) {
+      const document = await vscode.workspace.openTextDocument({
+        content: JSON.stringify(project.props.spec, null, 2),
+        language: 'json',
+      });
+
+      vscode.window.showTextDocument(document);
+    }
+  }
+
+
+
+
   public async runAgentAnalysis({ projectFile }: { projectFile?: string }): Promise<void> {
     let project!: HttlProject;
 
@@ -311,5 +330,9 @@ export class HttlProjectService {
     } finally {
       this.disableProjectSync = false;
     }
+  }
+
+  public stopAgentAnalysis() {
+    this.projectAgent.stop();
   }
 }

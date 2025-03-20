@@ -6,6 +6,7 @@ export const Container = styled.div`
   align-items: center;
   height: 16px;
   width: 16px;
+  position: relative;
 `;
 
 export const Loader = styled.svg`
@@ -72,6 +73,14 @@ export const ActiveCircle = styled.circle`
       stroke-dasharray: 0 360 1 360 0 360;
     }
   }
+`;
+
+export const StopIcon = styled.div`
+  height: 25%;
+  width: 25%;
+  position: absolute;
+  background-color: currentColor;
+  border-radius: 1px;
 `;
 
 export const TrackCircle = styled.circle`

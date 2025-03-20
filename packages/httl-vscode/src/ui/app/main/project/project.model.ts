@@ -113,6 +113,14 @@ export class ProjectModel {
   }
 
   @Action()
+  public async stopAgentAnalysis() {
+    await this.api.stopAgentAnalysis(this.fileInfo?.path);
+    this.setAgentProgress(false);
+    this.agentTagsProgress = [];
+    this.endpointGoups.forEach(group => group.inProgress = false);
+  }
+
+  @Action()
   public setAgentProgress(type?: AgentProgressType | boolean) {
     this.agentProgress = type !== false ? type as AgentProgressType : undefined;
   }
@@ -191,6 +199,11 @@ export class ProjectModel {
     this.setProjectState({
       projectPath: undefined
     });
+  }
+
+  @Action()
+  public showOpenApiSpec() {
+    this.api.showOpenApiSpec(this.fileInfo!.path);
   }
 
   private async setProject(project: HttlProjectViewData): Promise<void> {

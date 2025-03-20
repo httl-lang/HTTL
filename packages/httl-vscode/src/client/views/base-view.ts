@@ -2,6 +2,7 @@
 import vscode from 'vscode';
 import { AppData, HttlExtensionContext, UIMessage } from '../../common';
 import { Lang } from 'httl-core';
+import { AgentStopException } from '../../ai/core/agent';
 
 export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider {
   private static readonly views = new Map<string, HttlBaseViewProvider>();
@@ -142,11 +143,18 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
 
     } catch (error: any) {
       console.error(error);
-      await webviewView.webview.postMessage({
-        command,
-        requestId,
-        error: error.message 
-      });
+      if (error instanceof AgentStopException) {
+        await webviewView.webview.postMessage({
+          command,
+          requestId,
+        });
+      } else {
+        await webviewView.webview.postMessage({
+          command,
+          requestId,
+          error: error.message
+        });
+      }
     }
   }
 

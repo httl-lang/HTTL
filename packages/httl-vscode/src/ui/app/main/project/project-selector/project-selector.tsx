@@ -9,8 +9,8 @@ import * as s from './project-selector.styles';
 
 
 export const ProjectSelector: React.FC = () => {
-  const model = useProjectModel(({ fileInfo, supportAgentAnalysis, agentProgress, reloadProject, resolveProjects, selectProject, closeProject, startAgentAnalysis }) =>
-    ({ fileInfo, supportAgentAnalysis, agentProgress, reloadProject, resolveProjects, selectProject, closeProject, startAgentAnalysis }));
+  const model = useProjectModel(({ fileInfo, supportAgentAnalysis, agentProgress, reloadProject, resolveProjects, selectProject, closeProject, startAgentAnalysis, stopAgentAnalysis }) =>
+    ({ fileInfo, supportAgentAnalysis, agentProgress, reloadProject, resolveProjects, selectProject, closeProject, startAgentAnalysis, stopAgentAnalysis }));
 
   return (
     <s.Container>
@@ -37,12 +37,26 @@ export const ProjectSelector: React.FC = () => {
         )}
         buttons={() => (
           model.supportAgentAnalysis
-            ? <Button onClick={() => model.startAgentAnalysis()} title='Run the Copilot analysis.'>
-              <VscSparkle />
-            </Button>
-            : <Button onClick={() => model.reloadProject()} title='Reload the project from OpenAPI spec.'>
-              <VscRefresh />
-            </Button>
+            ? (
+              <Button
+                title='Run the Copilot analysis.'
+                onClick={(stop) => stop
+                  ? model.stopAgentAnalysis()
+                  : model.startAgentAnalysis()
+                }
+                allowStop
+              >
+                <VscSparkle />
+              </Button>
+            )
+            : (
+              <Button
+                title='Reload the project from OpenAPI spec.'
+                onClick={() => model.reloadProject()}
+              >
+                <VscRefresh />
+              </Button>
+            )
         )}
         itemActions={(item, current) => (
           current &&

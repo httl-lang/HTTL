@@ -1,5 +1,5 @@
 import React from 'react';
-import { VscClose } from "react-icons/vsc";
+import { VscClose, VscSymbolInterface } from "react-icons/vsc";
 
 import { useProjectModel } from '../project.model';
 import * as s from './endpoints.styles';
@@ -24,7 +24,7 @@ export const Endpoints: React.FC = () => {
         model.endpointGoups.map((group) => (
           <s.EndpointGroup>
             <s.EndpointTag dark={!group.inProgress} loading={group.inProgress}>
-              <h1>{group.name}</h1> {/*<small>{controller.name}</small> */}
+              <VscSymbolInterface />  <h1>{group.name}</h1>
             </s.EndpointTag>
             {
               group.endpoints.map((endpoint) => (

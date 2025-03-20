@@ -4,16 +4,17 @@ import * as s from './button.styles';
 import { Loader } from '../loader';
 
 export interface ButtonProps {
-  onClick: () => Promise<void> | void;
+  onClick: (stop?: boolean) => Promise<void> | void;
   disabled?: boolean;
   progress?: boolean;
   className?: string;
   title?: string;
   disableLoading?: boolean;
   small?: boolean;
+  allowStop?: boolean;
 }
 
-const Button: FC<PropsWithChildren<ButtonProps>> = ({ onClick, disabled, children, className, progress, title, disableLoading, small = false }) => {
+const Button: FC<PropsWithChildren<ButtonProps>> = ({ onClick, disabled, children, className, progress, title, disableLoading, allowStop, small = false }) => {
   const [loading, setLoading] = useState(progress);
 
   useEffect(() => {
@@ -23,14 +24,14 @@ const Button: FC<PropsWithChildren<ButtonProps>> = ({ onClick, disabled, childre
   const handleOnClick = useCallback(async (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.stopPropagation();
 
-    if (!disabled && !loading) {
-      const result = onClick();
+    if (!disabled && (!loading || allowStop)) {
+      const result = onClick(loading);
       if (result instanceof Promise && !disableLoading) {
         setLoading(true);
         result.finally(() => setLoading(false));
       }
     }
-  }, [disabled, loading, disableLoading]);
+  }, [disabled, loading, disableLoading, allowStop]);
 
   return (
     <s.Button
@@ -44,7 +45,7 @@ const Button: FC<PropsWithChildren<ButtonProps>> = ({ onClick, disabled, childre
         disabled
           ? children
           : loading
-            ? <Loader />
+            ? <Loader stopIcon={allowStop} />
             : children
       }
     </s.Button>

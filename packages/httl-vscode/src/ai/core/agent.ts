@@ -3,9 +3,11 @@ import { LLM } from "./llm";
 import { AgentStepBase, AgentStepResult, AgentStepType } from './agent-step-base';
 
 export class Agent {
+
   private readonly llm: LLM;
   private readonly instructions: string;
   private readonly context: AgentStepResult<any>[] = [];
+  private readonly cancellationToken: vscode.CancellationTokenSource;
 
   constructor(
     {
@@ -15,6 +17,7 @@ export class Agent {
   ) {
     this.llm = llm;
     this.instructions = instructions;
+    this.cancellationToken = new vscode.CancellationTokenSource();
 
     this.llm.addMessage(vscode.LanguageModelChatMessage.User(instructions));
   }
@@ -26,10 +29,14 @@ export class Agent {
 
       const chatResponse = await this.llm.sendRequest(
         step,
-        new vscode.CancellationTokenSource().token
+        this.cancellationToken.token
       );
 
       for await (const chunk of chatResponse.stream) {
+        if (this.cancellationToken.token.isCancellationRequested) {
+          throw new AgentStopException();
+        }
+
         if (chunk instanceof vscode.LanguageModelTextPart) {
           step.addResponse(chunk.value);
         } else if (chunk instanceof vscode.LanguageModelToolCallPart) {
@@ -65,16 +72,13 @@ export class Agent {
     return step.getResult();
   }
 
-  // public async run() {
-  //   for (const stepType of this.stepTypes) {
-  //     this.runStep(stepType); 
-  //   }
+  public stop() {
+    this.cancellationToken.cancel();
+  }
+}
 
-  //   const lastResponse = this.context.at(-1);
-  //   if (!lastResponse) {
-  //     throw new Error('Response is undefined');
-  //   }
-
-  //   return lastResponse.result;
-  // }
+export class AgentStopException extends Error {
+  constructor() {
+    super('Agent was stopped');
+  }
 }

@@ -1,5 +1,6 @@
-import { ResizePanel } from '../../../../components/resize-panel';
 import styled, { css } from 'styled-components';
+import Button from '../../../../components/button';
+import { ResizePanel } from '../../../../components/resize-panel';
 
 export const Container = styled.div`
   margin-top: 6px;
@@ -26,9 +27,32 @@ export const Body = styled.div`
   }
 `;
 
+export const Bar = styled.div`
+  display: flex;
+  margin: 0 0 3px 1px;
+  justify-content: space-between;
+`;
+
 export const Label = styled.div`
   font-size: 12px;
-  margin: 0 0 3px 1px;
   opacity: 0.6;
   user-select: none;
+`;
+
+
+export const SpecButton = styled(Button)`
+  font-weight: var(--vscode-font-weight);
+  font-family: var(--vscode-font-family);
+
+  display: flex;
+  font-size: 10px;
+  gap: 3px;
+  font-variant-caps: all-petite-caps;
+  padding: 3px 5px;
+  border-radius: 3px;
+
+  & span {
+    margin-top: -1px;
+    pointer-events: none;
+  }
 `;
