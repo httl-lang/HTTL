@@ -15,16 +15,11 @@ export interface ApiEndpoint extends HttlProjectApiEndpoint {
   defaultScript?: string;
 }
 
-interface ProjectState {
-  prestartEditorHeight: string;
-}
-
 type AgentProgressType = 'project' | 'tags' | 'endpoints';
 
 @Model()
 export class ProjectModel {
-  public static readonly PROJECT_STATE = (path: string) => `project:${path}:state`;
-
+  
   private agentTagsProgress: ApiEndpointGroup[] = [];
   public agentProgress?: AgentProgressType;
 
@@ -38,8 +33,6 @@ export class ProjectModel {
 
   public error?: string;
 
-  public declare projectState: ProjectState;
-
   constructor(
     private readonly app = store(AppModel),
     private readonly api = new ProjectApi()
@@ -49,10 +42,6 @@ export class ProjectModel {
     commutator.onAgentAnalysisEvent((result: AgentAnalysisEventPayload) => {
       this.onAgentAnalysisEvent(result.payload);
     });
-
-    this.projectState = {
-      prestartEditorHeight: '70px'
-    };
 
     await this.restoreProjectState();
   }
@@ -68,11 +57,6 @@ export class ProjectModel {
     if (!project) {
       this.showError(`Failed to open project: ${projectPath}`);
       return;
-    }
-
-    const savedProjectState = this.app.getState(ProjectModel.PROJECT_STATE(project.fileInfo.path));
-    if (savedProjectState) {
-      this.projectState = savedProjectState;
     }
 
     this.setProject(project);
@@ -188,16 +172,6 @@ export class ProjectModel {
   @Action()
   public updatePrestartScript(code: string) {
     this.api.updatePrestartScript(this.fileInfo!.path, code);
-  }
-
-  @Action()
-  public setProjectState(state: Partial<ProjectState>) {
-    this.projectState = {
-      ...this.projectState,
-      ...state
-    };
-
-    this.app.saveState(ProjectModel.PROJECT_STATE(this.fileInfo!.path), this.projectState);
   }
 
   @Action()

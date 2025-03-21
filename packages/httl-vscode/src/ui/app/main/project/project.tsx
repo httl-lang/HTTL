@@ -8,6 +8,7 @@ import { Endpoints } from './endpoints';
 import { Prestart } from './prestart';
 import { ProjectSource } from './source';
 import { WelcomeView } from './welcome';
+import { ProjectStateContext } from './project-state.model';
 
 const _ProjectView: React.FC = () => {
   const model = useProjectModel(({ fileInfo, error, reloadProject }) =>
@@ -28,11 +29,13 @@ const _ProjectView: React.FC = () => {
       <ProjectSelector />
       {
         !!model.fileInfo
-          ? <>
-            <ProjectSource />
-            <Prestart />
-            <Endpoints />
-          </>
+          ? (
+            <ProjectStateContext path={model.fileInfo.path}>
+              <ProjectSource />
+              <Prestart />
+              <Endpoints />
+            </ProjectStateContext>
+          )
           : <WelcomeView />
       }
       {
@@ -46,4 +49,8 @@ const _ProjectView: React.FC = () => {
   );
 };
 
-export const ProjectView = () => <ProjectContext><_ProjectView /></ProjectContext>;
+export const ProjectView = () => (
+  <ProjectContext>
+    <_ProjectView />
+  </ProjectContext>
+);

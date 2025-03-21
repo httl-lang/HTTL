@@ -60,6 +60,7 @@ export class AppModel {
     vscode.postMessage({
       command: 'clear-state',
     });
+    this.goHome();
   }
 
   @Action()

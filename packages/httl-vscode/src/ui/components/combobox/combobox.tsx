@@ -110,17 +110,17 @@ function ComboBox<TItem extends { [key: string]: any }>(
             {
               items?.length === 0
                 ? <s.SelectItem>No projects found</s.SelectItem>
-                : items?.sort((a, b) => current?.[keyField] === a[keyField] ? -1 : 0)
-                  .map((item, index) => (
-                    <s.SelectItem key={index} onClick={() => onSelect(item)} focused={items.length === 1 || current?.[keyField] === item[keyField]}>
-                      <s.Item>
-                        {render(item)}
-                      </s.Item>
-                      <s.ItemActions>
-                        {itemActions && itemActions(item, current?.[keyField] === item[keyField])}
-                      </s.ItemActions>
-                    </s.SelectItem>
-                  ))
+                // : items?.sort((a, b) => current?.[keyField] === a[keyField] ? -1 : 0)
+                : items?.map((item, index) => (
+                  <s.SelectItem key={index} onClick={() => onSelect(item)} focused={items.length === 1 || current?.[keyField] === item[keyField]}>
+                    <s.Item>
+                      {render(item)}
+                    </s.Item>
+                    <s.ItemActions>
+                      {itemActions && itemActions(item, current?.[keyField] === item[keyField])}
+                    </s.ItemActions>
+                  </s.SelectItem>
+                ))
             }
           </s.Select>
         </s.PopupBody>

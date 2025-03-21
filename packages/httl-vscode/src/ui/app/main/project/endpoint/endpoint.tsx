@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { VscJson, VscBracketDot, VscSync } from "react-icons/vsc";
 
@@ -19,12 +19,10 @@ const _Endpoint: React.FC = () => {
   const highlightedScriptId = searchParams.get("scriptId");
   const random = searchParams.get("scriptId_random");
 
-  const [showEditor, setShowEditor] = React.useState(false);
-  const [editorBusy, setEditorBusy] = React.useState(false);
-  const [highlighted, setHighlighted] = React.useState(false);
+  const [highlighted, setHighlighted] = useState(false);
 
-  const model = useEndpointModel(({ endpoint, inProgress, setFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
-    ({ endpoint, inProgress, setFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
+  const model = useEndpointModel(({ endpoint, inProgress, expanded, onExpand, height, onResize, setFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
+    ({ endpoint, inProgress, expanded, onExpand, height, onResize, setFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
 
   useEffect(() => {
     if (highlightedScriptId === model.endpoint.id) {
@@ -43,24 +41,11 @@ const _Endpoint: React.FC = () => {
 
   }, [highlightedScriptId, random]);
 
-  const onExpand = useCallback(() => {
-    const expand = !showEditor;
-    setShowEditor(expand);
-    model.setFocus();
-
-    if (expand && !model.endpoint.scripts.length) {
-      setEditorBusy(true);
-      model.generateRequest(model.endpoint.id).finally(() => {
-        setEditorBusy(false); // Hide loading indicator
-      });
-    }
-  }, [showEditor, model.endpoint.id, model]);
-
   console.log(model.endpoint);
 
   return (
-    <s.Panel ref={ref} expanded={showEditor} title={model.endpoint.description} highlighted={highlighted}>
-      <s.Header onClick={onExpand}>
+    <s.Panel ref={ref} expanded={model.expanded} title={model.endpoint.description} highlighted={highlighted}>
+      <s.Header onClick={() => model.onExpand()}>
         <s.Name>
           <s.MethodLabelStyled method={model.endpoint.method} /> {model.endpoint.path} <small>{model.endpoint.operationId}</small>
         </s.Name>
@@ -73,9 +58,9 @@ const _Endpoint: React.FC = () => {
         }
       </s.Header>
       {
-        showEditor &&
+        model.expanded &&
         <s.Expanded>
-          <s.Editor height="70px">
+          <s.Editor height={model.height} onResize={model.onResize}>
             <HttlEditor
               value={model.endpoint.scripts.at(0)?.code ?? model.endpoint.defaultScript ?? ""}
               options={{

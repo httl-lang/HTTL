@@ -5,17 +5,24 @@ import { HttlEditor } from '../../../../components/editor';
 import { useProjectModel } from '../project.model';
 import * as s from './prestart.styles';
 import { ResizePanel } from '../../../../components/resize-panel';
+import { useProjectStateModel } from '../project-state.model';
 
 export const Prestart: React.FC = ({ }) => {
-  const model = useProjectModel(({ prestart, projectState, updatePrestartScript, setProjectState }) =>
-    ({ prestart, projectState, updatePrestartScript, setProjectState }));
+  const model = useProjectModel(({ prestart, updatePrestartScript }) =>
+    ({ prestart, updatePrestartScript }));
+
+  const state = useProjectStateModel(({ prestartHeight, updateState }) =>
+    ({ prestartHeight, updateState }));
 
   return (
     <s.Container>
       <s.Label>
         Prestart script
       </s.Label>
-      <s.Editor height={model.projectState.prestartEditorHeight} onResize={height => model.setProjectState({ prestartEditorHeight: height })}>
+      <s.Editor
+        height={state.prestartHeight}
+        onResize={prestartHeight => state.updateState({ prestartHeight })}
+      >
         <HttlEditor
           value={model.prestart || ''}
           options={{
