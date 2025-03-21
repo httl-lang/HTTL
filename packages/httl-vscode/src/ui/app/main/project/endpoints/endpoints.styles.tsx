@@ -1,8 +1,5 @@
+import styled from 'styled-components';
 import { LoadingText } from '../../../../components/loading-text';
-import styled, { css } from 'styled-components';
-import { ResizePanel } from '../../../../components/resize-panel';
-import Button from '../../../../components/button';
-import { VscCircleFilled } from 'react-icons/vsc';
 
 export const Container = styled.div`
   position: relative;

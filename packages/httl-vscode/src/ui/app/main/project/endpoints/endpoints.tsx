@@ -1,14 +1,10 @@
 import React from 'react';
-import { VscClose, VscSymbolInterface } from "react-icons/vsc";
+import { VscSymbolInterface } from "react-icons/vsc";
 
 import { useProjectModel } from '../project.model';
-import * as s from './endpoints.styles';
-import RunSvg from './run.svg';
-import { VscSparkle } from "react-icons/vsc";
-import { LoadingText } from '../../../../components/loading-text';
-import { HttlEditor } from '../../../../components/editor';
-import { MethodLabel } from '../../../../components/method-label';
 import { Endpoint } from '../endpoint';
+
+import * as s from './endpoints.styles';
 
 export const Endpoints: React.FC = () => {
   const model = useProjectModel(({ endpointGoups, agentProgress }) =>

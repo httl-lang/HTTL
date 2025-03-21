@@ -49,6 +49,16 @@ export class HttlExtensionContext {
     );
   }
 
+  public async clearState() {
+    for (const key of this._context.globalState.keys()) {
+      await this._context.globalState.update(key, undefined);
+    }
+
+    for (const key of this._context.workspaceState.keys()) {
+      await this._context.workspaceState.update(key, undefined);
+    }
+  }
+
   public dispose() {
     this._logger.dispose();
   }

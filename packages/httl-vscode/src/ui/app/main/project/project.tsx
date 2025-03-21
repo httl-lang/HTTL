@@ -10,8 +10,8 @@ import { ProjectSource } from './source';
 import { WelcomeView } from './welcome';
 
 const _ProjectView: React.FC = () => {
-  const model = useProjectModel(({ fileInfo, agentProgress, reloadProject }) =>
-    ({ fileInfo, agentProgress, reloadProject }));
+  const model = useProjectModel(({ fileInfo, error, reloadProject }) =>
+    ({ fileInfo, error, reloadProject }));
 
   const [searchParams] = useSearchParams();
   const project = searchParams.get("project");
@@ -36,9 +36,9 @@ const _ProjectView: React.FC = () => {
           : <WelcomeView />
       }
       {
-        model.agentProgress === 'error' &&
+        model.error !== undefined &&
         <s.ErrorToast>
-          Oops! Something went wrong. Please try running the analysis again.
+          {model.error}
         </s.ErrorToast>
       }
 

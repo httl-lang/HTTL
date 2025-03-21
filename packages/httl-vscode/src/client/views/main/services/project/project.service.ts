@@ -268,8 +268,7 @@ export class HttlProjectService {
               throw new Error('Multiple projects found in the same directory');
             }
 
-            if (fsPath.normalize(fsPath.dirname(result.projects[0].path)).toLowerCase() !==
-              fsPath.normalize(fsPath.dirname(project.props.source)).toLowerCase()) {
+            if (FileService.relative(this.workDir, result.projects[0].path) !== project.props.source) {
               throw new Error('Project path mismatch');
             }
 

@@ -16,15 +16,14 @@ export interface ApiEndpoint extends HttlProjectApiEndpoint {
 }
 
 interface ProjectState {
-  projectPath?: string;
   prestartEditorHeight: string;
 }
 
-type AgentProgressType = 'project' | 'tags' | 'endpoints' | 'error';
+type AgentProgressType = 'project' | 'tags' | 'endpoints';
 
 @Model()
 export class ProjectModel {
-  public static readonly PROJECT_STATE = 'project-state';
+  public static readonly PROJECT_STATE = (path: string) => `project:${path}:state`;
 
   private agentTagsProgress: ApiEndpointGroup[] = [];
   public agentProgress?: AgentProgressType;
@@ -37,27 +36,61 @@ export class ProjectModel {
   public endpoints: ApiEndpoint[] = [];
   public endpointGoups: ApiEndpointGroup[] = [];
 
+  public error?: string;
+
   public declare projectState: ProjectState;
 
   constructor(
-    private readonly appModel = store(AppModel),
+    private readonly app = store(AppModel),
     private readonly api = new ProjectApi()
   ) { }
 
   public async init() {
-    this.projectState = this.appModel.getState(ProjectModel.PROJECT_STATE) ?? {
-      prestartEditorHeight: '100px'
-    };
-
-    if (this.projectState.projectPath) {
-      this.setProject(
-        await this.api.openProject(this.projectState.projectPath)
-      );
-    }
-
     commutator.onAgentAnalysisEvent((result: AgentAnalysisEventPayload) => {
       this.onAgentAnalysisEvent(result.payload);
     });
+
+    this.projectState = {
+      prestartEditorHeight: '70px'
+    };
+
+    await this.restoreProjectState();
+  }
+
+  private async restoreProjectState() {
+    // Get last opened project
+    const { projectPath } = this.app.getAppState();
+    if (!projectPath) {
+      return;
+    }
+
+    const project = await this.api.openProject(projectPath);
+    if (!project) {
+      this.showError(`Failed to open project: ${projectPath}`);
+      return;
+    }
+
+    const savedProjectState = this.app.getState(ProjectModel.PROJECT_STATE(project.fileInfo.path));
+    if (savedProjectState) {
+      this.projectState = savedProjectState;
+    }
+
+    this.setProject(project);
+  }
+
+  @Action()
+  public showError(error: string) {
+    this.error = error;
+    setTimeout(() => {
+      if (this.error === error) {
+        this.error = undefined;
+      }
+    }, 2000);
+  }
+
+  @Action()
+  public closeError() {
+    this.error = undefined;
   }
 
   public get sourceType() {
@@ -80,22 +113,12 @@ export class ProjectModel {
         : this.api.importFromOpenApiSpec(projectItem.specUrl);
 
     const project = await projectLoader;
-
-    this.setProjectState({
-      projectPath: project.fileInfo.path
-    });
-
     this.setProject(project);
   }
 
   @Action()
   public async openProject(filePath: string): Promise<void> {
     const project = await this.api.openProject(filePath);
-
-    this.setProjectState({
-      projectPath: project.fileInfo.path
-    });
-
     this.setProject(project);
   }
 
@@ -108,7 +131,7 @@ export class ProjectModel {
       this.agentTagsProgress = [];
     }
     catch (error) {
-      this.setAgentProgress('error');
+      this.showError(`Oops! Something went wrong. Please try running the analysis again.: ${error}`);
     }
   }
 
@@ -174,7 +197,7 @@ export class ProjectModel {
       ...state
     };
 
-    this.appModel.saveState(ProjectModel.PROJECT_STATE, this.projectState);
+    this.app.saveState(ProjectModel.PROJECT_STATE(this.fileInfo!.path), this.projectState);
   }
 
   @Action()
@@ -196,7 +219,7 @@ export class ProjectModel {
     this.agentTagsProgress = [];
     this.agentProgress = undefined;
 
-    this.setProjectState({
+    this.app.setAppState({
       projectPath: undefined
     });
   }
@@ -207,6 +230,10 @@ export class ProjectModel {
   }
 
   private async setProject(project: HttlProjectViewData): Promise<void> {
+    this.app.setAppState({
+      projectPath: project.fileInfo.path
+    });
+
     this.fileInfo = project.fileInfo;
     this.description = project.description;
     this.source = project.source;

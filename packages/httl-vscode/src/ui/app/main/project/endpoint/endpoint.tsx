@@ -1,21 +1,15 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { VscClose } from "react-icons/vsc";
-
-import { ApiEndpoint, useProjectModel } from '../project.model';
-import * as s from './endpoint.styles';
-import RunSvg from '/media/run.svg';
-import { VscCircleFilled } from "react-icons/vsc";
-import { LoadingText } from '../../../../components/loading-text';
-import { HttlEditor } from '../../../../components/editor';
-import { MethodLabel } from '../../../../components/method-label';
-import Button from '../../../../components/button';
-import { VscIssueReopened } from "react-icons/vsc";
-import { VscCode } from "react-icons/vsc";
-import { VscJson } from "react-icons/vsc";
-import { VscBracketDot } from "react-icons/vsc";
-import { VscSync } from "react-icons/vsc";
-import { EndpointContext, useEndpointModel } from './endpoint.model';
 import { useSearchParams } from 'react-router';
+import { VscJson, VscBracketDot, VscSync } from "react-icons/vsc";
+
+import RunSvg from '/media/run.svg';
+
+import { HttlEditor } from '../../../../components/editor';
+import Button from '../../../../components/button';
+import { ApiEndpoint } from '../project.model';
+
+import { EndpointContext, useEndpointModel } from './endpoint.model';
+import * as s from './endpoint.styles';
 
 const _Endpoint: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);

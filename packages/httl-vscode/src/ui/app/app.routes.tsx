@@ -7,6 +7,7 @@ import { TutorialsView } from "./main/tutorials";
 import { QuickRunView } from "./main/quick-run";
 import { UtilsView } from "./main/utils";
 import { ProjectView } from "./main/project";
+import { ErrorBoundary } from "../components/error-boundary";
 
 export const appRouter = createHashRouter([
   {
@@ -16,9 +17,13 @@ export const appRouter = createHashRouter([
   {
     path: '/main',
     element: <MainView />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         index: true,
+        element: <Navigate to='project' replace={true} />,
+      },
+      {
         path: 'project',
         element: <ProjectView />,
       },

@@ -69,6 +69,10 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
             await this.context.saveState(`ui.${this.appData.view}.${key}`, value, global);
             return;
           }
+          case 'clear-state': {
+            await this.context.clearState();
+            return;
+          }
         }
 
         await this.handleUIMessages(message);

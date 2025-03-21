@@ -1,8 +1,10 @@
-import { Model, connect } from "react-storm";
+import { Action, Model, connect } from "react-storm";
 import { appRouter } from "./app.routes";
 
 @Model()
 export class AppModel {
+  private static APP_STATE = 'app-state';
+
   private router = appRouter;
 
   public init() {
@@ -44,6 +46,30 @@ export class AppModel {
   public getState(key: string) {
     return (appData as any)[key];
   }
+
+  public getAppState(): AppState {
+    return this.getState(AppModel.APP_STATE) ?? {} as AppState;
+  }
+
+  public setAppState(state: AppState) {
+    return this.saveState(AppModel.APP_STATE, state);
+  }
+
+  @Action()
+  public clearAppState() {
+    vscode.postMessage({
+      command: 'clear-state',
+    });
+  }
+
+  @Action()
+  public goHome() {
+    this.router.navigate('/');
+  }
+}
+
+export interface AppState {
+  projectPath?: string;
 }
 
 const [AppContext, useAppModel] = connect(AppModel);
