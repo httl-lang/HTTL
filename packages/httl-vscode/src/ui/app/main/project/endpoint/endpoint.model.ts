@@ -19,6 +19,7 @@ export class EndpointModel {
   public inProgress = false;
   public expanded = false;
   public height = '70px';
+  public focused = false;
 
   constructor(
     private readonly project = store(ProjectModel),
@@ -37,7 +38,7 @@ export class EndpointModel {
     this.height = state.height || '70px';
 
     if (this.expanded && !this.endpoint.scripts.length) {
-      await this.generateRequest(this.endpoint.id);
+      this.generateRequest(this.endpoint.id);
     }
   }
 
@@ -69,7 +70,8 @@ export class EndpointModel {
   }
 
   @Action()
-  public setFocus() {
+  public onFocus() {
+    this.project.setFocusedEndpoint(this);
     vscode.postMessage({
       command: 'set-focus',
       file: `project::${this.project.fileInfo!.path}::${this.endpoint.id}` // TODO: move to common place
@@ -77,10 +79,20 @@ export class EndpointModel {
   }
 
   @Action()
+  public focus() {
+    this.focused = true;
+  }
+  
+  @Action()
+  public blur() {
+    this.focused = false;
+  }
+
+  @Action()
   public async onExpand() {
     this.expanded = !this.expanded;
 
-    this.setFocus();
+    this.onFocus();
 
     this.state.updateState({
       endpoints: {

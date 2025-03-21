@@ -193,7 +193,7 @@
 		"react-markdown": "^9.0.3",
 		"react-router": "^7.1.1",
 		"react-storm": "^0.5.1",
-		"react-top-loading-bar": "^2.3.1",
+		"react-top-loading-bar": "^3.0.2",
 		"stream-browserify": "^3.0.0",
 		"styled-components": "^6.1.13",
 		"use-sync-external-store": "^1.4.0",

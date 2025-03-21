@@ -4,6 +4,7 @@ import { commutator } from "../../../services/commutator";
 import { AgentAnalysisEventPayload } from "../../../../common";
 import { ProjectApi } from "./project.api";
 import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData } from "../../../../client/views/main/services/project";
+import { EndpointModel } from "./endpoint/endpoint.model";
 
 interface ApiEndpointGroup {
   name: string;
@@ -19,7 +20,6 @@ type AgentProgressType = 'project' | 'tags' | 'endpoints';
 
 @Model()
 export class ProjectModel {
-  
   private agentTagsProgress: ApiEndpointGroup[] = [];
   public agentProgress?: AgentProgressType;
 
@@ -32,6 +32,7 @@ export class ProjectModel {
   public endpointGoups: ApiEndpointGroup[] = [];
 
   public error?: string;
+  public focusedEndpoint?: EndpointModel;
 
   constructor(
     private readonly app = store(AppModel),
@@ -75,6 +76,12 @@ export class ProjectModel {
   @Action()
   public closeError() {
     this.error = undefined;
+  }
+
+  public setFocusedEndpoint(endpoint: EndpointModel) {
+    this.focusedEndpoint?.blur();
+    this.focusedEndpoint = endpoint;
+    this.focusedEndpoint.focus();
   }
 
   public get sourceType() {

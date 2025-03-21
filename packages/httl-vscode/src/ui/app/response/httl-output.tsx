@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from 'react';
-import LoadingBar from 'react-top-loading-bar';
+import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar';
 import { HttlOutput } from 'httl-core';
 
 import { HttlOutputContext, useHttlOutputModel } from './httl-output.model';
@@ -16,22 +16,27 @@ export interface HttlOutputViewProps {
 }
 
 const _HttlOutputView: FC = () => {
-  const ref = useRef(null);
+  const ref = useRef<LoadingBarRef>(null);
   const model = useHttlOutputModel(({ inProgress, currentResponse, errors, responses, selectResponse }) =>
     ({ inProgress, currentResponse, errors, responses, selectResponse }));
 
   const resModel = useResponseModel(({ currentFile, highlightCode }) => ({ currentFile, highlightCode }));
 
   useEffect(() => {
+    const indicator = ref.current;
+    if (!indicator) {
+      return;
+    }
+
     if (model.inProgress) {
-      // @ts-ignore
-      ref.current?.continuousStart();
+      ref.current.getProgress() > 0
+        ? ref.current.continuousStart()
+        : ref.current.start();
     } else {
-      // @ts-ignore
-      ref.current?.complete();
+      ref.current.getProgress() > 0 &&
+        ref.current.complete();
     }
   }, [model.inProgress]);
-
 
   return (
     <>

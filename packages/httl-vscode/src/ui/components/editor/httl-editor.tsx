@@ -11,6 +11,7 @@ interface EditorProps {
   onChange?: (value: string) => void;
   onRun?: (value: string) => void;
   onFocus?: () => void;
+  onBlur?: () => void;
   language?: string;
   theme?: string;
   options?: monaco.editor.IStandaloneEditorConstructionOptions;
@@ -39,6 +40,7 @@ export const HttlEditor: React.FC<EditorProps> = ({
   onChange,
   onRun,
   onFocus,
+  onBlur,
   language = "httl",
   theme = "vs-dark",
   options = defaultOptions,
@@ -85,9 +87,14 @@ export const HttlEditor: React.FC<EditorProps> = ({
       onFocus?.();
     });
 
+    const onDidBlurEditorText = editor.onDidBlurEditorText(() => {
+      onBlur?.();
+    });
+
     return () => {
       onDidFocusEditorText.dispose();
       onDidChangeContent?.dispose();
+      onDidBlurEditorText.dispose();
       editorRef.current?.dispose();
     };
   }, []);

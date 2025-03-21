@@ -21,13 +21,13 @@ const _Endpoint: React.FC = () => {
 
   const [highlighted, setHighlighted] = useState(false);
 
-  const model = useEndpointModel(({ endpoint, inProgress, expanded, onExpand, height, onResize, setFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
-    ({ endpoint, inProgress, expanded, onExpand, height, onResize, setFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
+  const model = useEndpointModel(({ endpoint, inProgress, expanded, focused, onExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
+    ({ endpoint, inProgress, expanded, focused, onExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
 
   useEffect(() => {
     if (highlightedScriptId === model.endpoint.id) {
       setHighlighted(true);
-      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -44,7 +44,13 @@ const _Endpoint: React.FC = () => {
   console.log(model.endpoint);
 
   return (
-    <s.Panel ref={ref} expanded={model.expanded} title={model.endpoint.description} highlighted={highlighted}>
+    <s.Panel
+      ref={ref}
+      expanded={model.expanded}
+      title={model.endpoint.description}
+      highlighted={highlighted || model.focused}
+      onClickCapture={model.onFocus}
+    >
       <s.Header onClick={() => model.onExpand()}>
         <s.Name>
           <s.MethodLabelStyled method={model.endpoint.method} /> {model.endpoint.path} <small>{model.endpoint.operationId}</small>
@@ -77,7 +83,7 @@ const _Endpoint: React.FC = () => {
               }}
               onChange={(code) => model.updateScript(model.endpoint.id, code)}
               onRun={(code) => model.runScript(model.endpoint.id, code)}
-              onFocus={() => model.setFocus()}
+              onFocus={model.onFocus}
             />
           </s.Editor>
           <s.ToolBar>
