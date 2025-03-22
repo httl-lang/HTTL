@@ -12,6 +12,18 @@ export const Container = styled.div`
   }
 `;
 
+export const ScrollShadow = styled.div`
+  box-shadow: var(--vscode-scrollbar-shadow) 0 6px 6px -6px inset;
+  height: 6px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  position: sticky;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+`;
+
 export const Label = styled(LoadingText) <{ center?: boolean, dark?: boolean }>`
   font-size: 10px;
   margin: 0 4px 0;
