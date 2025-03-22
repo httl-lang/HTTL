@@ -33,8 +33,11 @@ export const Information = styled.div`
   line-height: 12px;
 `;
 
-export const InfoItem = styled.div`
+export const InfoItem = styled.div<{ warning?: boolean }>`
   cursor: default;
+  ${props => props.warning && css`
+    color: #ff6700;
+  `}
 `;
 
 export const SourceLink = styled.a<{ type?: string }>`

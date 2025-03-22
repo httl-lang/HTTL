@@ -4,7 +4,7 @@ import * as fsPath from "path";
 import { Json } from "httl-common";
 
 import { FileService, HttlExtensionContext, UIMessageType } from "../../../../../common";
-import { HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData, EndpointScriptId, UpdateEndpointScriptCode, UpdatePrestartScriptCode } from "./types";
+import { HttlProjectItem, HttlProjectViewData, EndpointScriptId, UpdateEndpointScriptCode, UpdatePrestartScriptCode } from "./types";
 import { HttlProject } from "./project";
 import { ApiControllerListResult, ApiControllerSpecResult, ApiProjectListResult, ProjectAgent } from "../../../../../ai/agents/project-agent";
 import { ProjectFileWatcher } from "./project-file-watcher";

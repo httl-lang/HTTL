@@ -12,7 +12,6 @@ export interface HttpRequestOptions {
   method: string;
   body?: string | FormData;
   headers: http.OutgoingHttpHeaders;
-  rejectUnauthorized?: boolean;
 }
 
 export class HttpClient {
@@ -34,7 +33,7 @@ export class HttpClient {
       },
       timeout: constants.DEFAULT_INSTRUCTION_TIMEOUT,
       // @ts-ignore
-      rejectUnauthorized: options.rejectUnauthorized,
+      rejectUnauthorized: false,
     } satisfies http.RequestOptions;
 
     const textualBodySent = options.body instanceof FormData
@@ -50,7 +49,7 @@ export class HttpClient {
         const req = client.request(finalURL, reqOptions, (res) => {
           const warnings: HttpWarning[] = [];
 
-          if (options.rejectUnauthorized === false && res.socket instanceof tls.TLSSocket) {
+          if (res.socket instanceof tls.TLSSocket) {
             const cert = res.socket.getPeerCertificate();
             if (cert && !!cert.subject?.CN && (cert.subject?.CN === cert.issuer?.CN)) {
               warnings.push({

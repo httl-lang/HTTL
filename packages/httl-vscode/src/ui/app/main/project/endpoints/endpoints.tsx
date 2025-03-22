@@ -8,21 +8,21 @@ import * as s from './endpoints.styles';
 
 export const Endpoints: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const shadowRef = useRef<HTMLDivElement>(null);
   const model = useProjectModel(({ endpointGoups, agentProgress }) =>
     ({ endpointGoups, agentProgress }));
 
   return (
     <s.Container ref={scrollRef} onScroll={() => {
-      if (scrollRef.current) {
-        const shadow = scrollRef.current.querySelector('.shadow') as HTMLElement;
+      if (scrollRef.current && shadowRef.current) {
         if (scrollRef.current.scrollTop > 0) {
-          shadow.style.opacity = '1';
+          shadowRef.current.style.opacity = '1';
         } else {
-          shadow.style.opacity = '0';
+          shadowRef.current.style.opacity = '0';
         }
       }
     }}>
-      <s.ScrollShadow className='shadow' />
+      <s.ScrollShadow ref={shadowRef} />
       <s.Label center dark loading={model.endpointGoups.some(c => c.inProgress) || model.agentProgress === 'tags'}>
         Endpoints
       </s.Label>

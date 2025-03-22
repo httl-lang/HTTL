@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { LLM } from './llm';
-import { FindFilesTool, findFilesTool } from './tools/find-files-tool';
-import { GetFileContentTool, getFileContentTool } from './tools/get-file-content-tool';
+import { FindFilesTool, GetFileContentTool } from './tools';
 
 export type AgentStepType<TResult> = new (llm: LLM, args: any[]) => AgentStepBase<TResult>;
 
@@ -47,8 +46,8 @@ export abstract class AgentStepBase<TResult> {
     return {
       toolMode: vscode.LanguageModelChatToolMode.Auto,
       tools: [
-        findFilesTool,
-        getFileContentTool,
+        FindFilesTool.AGENT_INSTRUCTION,
+        GetFileContentTool.AGENT_INSTRUCTION,
       ],
     };
   }
@@ -58,14 +57,14 @@ export abstract class AgentStepBase<TResult> {
   }
 
   public async execute(tool: vscode.LanguageModelToolCallPart): Promise<string | undefined> {
-    if (tool.name === findFilesTool.name) {
+    if (tool.name === FindFilesTool.AGENT_INSTRUCTION.name) {
       const { pattern, baseUri, purpose } = tool.input as { pattern: string; baseUri: string, purpose: string; };
       const { files, message } = await FindFilesTool.invoke({ pattern, baseUri });
 
       return message;
     }
 
-    if (tool.name === getFileContentTool.name) {
+    if (tool.name === GetFileContentTool.AGENT_INSTRUCTION.name) {
       const tool_result = await GetFileContentTool.invoke(tool.input as any);
       return tool_result;
     }

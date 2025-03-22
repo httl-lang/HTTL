@@ -1,7 +1,3 @@
-import * as vscode from 'vscode';
-import { findFilesTool, FindFilesTool } from '../../core/tools/find-files-tool';
-import { getFileContentTool } from '../../core/tools/get-file-content-tool';
-import { LLM } from '../../core/llm';
 import { AgentStepBase } from '../../core/agent-step-base';
 
 export interface FindApiControllersStepResult {

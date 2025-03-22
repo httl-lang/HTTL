@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { FileService } from '../../../common';
 import { AgentStepBase } from '../../core/agent-step-base';
-import { LLM } from '../../core/llm';
 import { PROJECT_FOOTPRINTS } from './common';
 
 export interface FindApiProjectsStepResult {

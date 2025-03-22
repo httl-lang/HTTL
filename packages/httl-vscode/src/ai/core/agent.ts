@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { LLM } from "./llm";
-import { AgentStepBase, AgentStepResult, AgentStepType } from './agent-step-base';
+import { AgentStepResult, AgentStepType } from './agent-step-base';
 
 export class Agent {
 

@@ -17,7 +17,7 @@ export interface HttpResponseMessage {
 }
 
 export enum HttpWarningCode {
-  SELF_SIGNED_CERTIFICATE,
+  SELF_SIGNED_CERTIFICATE = 'SELF_SIGNED_CERTIFICATE',
 }
 
 export interface HttpWarning {

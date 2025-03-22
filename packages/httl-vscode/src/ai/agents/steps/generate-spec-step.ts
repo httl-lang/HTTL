@@ -1,9 +1,4 @@
-import * as vscode from 'vscode';
-import { AgentStepBase, AgentStepResult } from '../../core/agent-step-base';
-import { FindApiControllersStep, FindApiControllersStepResult } from './find-api-controllers-step';
-import { LLM } from '../../core/llm';
-
-// 2. Load tsconfig.json
+import { AgentStepBase } from '../../core/agent-step-base';
 
 export class GenerateSpecStep extends AgentStepBase<any> {
 
@@ -23,9 +18,4 @@ export class GenerateSpecStep extends AgentStepBase<any> {
   - Generate a valid OpenAPI 3.x JSON specification for the ${this.args[0].name} controller file.
   - You must return plain **VALID JSON** string without wrapping in \`\`\`json\`\`\` block!
 `;
-
-  // - The output MUST be a **VALID minified JSON** string:
-  // \`\`\`json
-  // {"openapi":"3.0.0","info":{"title":"Activity API","version":"1.0.0"}}
-  // \`\`\`
 }

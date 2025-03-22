@@ -1,5 +1,6 @@
+import * as vscode from 'vscode';
 import { Json } from "httl-common";
-import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectProps, HttlProjectScript, HttlProjectViewData } from "./types";
+import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectProps, HttlProjectViewData } from "./types";
 import * as fs from 'fs';
 import * as fsPath from 'path';
 import * as asyncFs from 'node:fs/promises';
@@ -7,7 +8,6 @@ import { ApiSpec } from "httl-core";
 import { HttlUrl } from "httl-core/dist/common/url";
 import { FileService } from "../../../../../common";
 import { FindApiControllersStepResult } from "../../../../../ai/agents/steps/find-api-controllers-step";
-import * as vscode from 'vscode';
 
 
 export class HttlProject {

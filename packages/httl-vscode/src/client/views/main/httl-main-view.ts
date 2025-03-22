@@ -1,6 +1,6 @@
 
 import vscode from 'vscode';
-import { constants, FileService, HttlExtensionContext } from '../../../common';
+import { HttlExtensionContext } from '../../../common';
 import { Lang } from 'httl-core';
 import { HttlBaseViewProvider } from '../base-view';
 import { HttlResponseViewProvider } from '../response/httl-response-view';

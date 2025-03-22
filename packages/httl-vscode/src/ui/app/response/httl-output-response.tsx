@@ -5,6 +5,8 @@ import { Viewer } from '../../components/editor';
 
 import * as s from './httl-output-response.styles';
 import StatusLabel from '../../components/status-label';
+import { VscWarning } from 'react-icons/vsc';
+import { Tooltip } from '../../components/tooltip';
 
 export interface HttlOutputResponseProps {
   response: HttpResponse;
@@ -71,6 +73,31 @@ export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response, sour
             {response.res.size.totalFormatted}
           </s.InfoItem>
           <s.Circle />
+          {
+            response.warnings.length > 0 && (
+              <>
+                <s.InfoItem warning>
+                  <Tooltip
+                    style={{ marginTop: '2px' }}
+                    content={
+                      <>
+                        {
+                          response.warnings.map((warning, index) => (
+                            <div key={index}>
+                              {warning.message}
+                            </div>
+                          ))
+                        }
+                      </>
+                    }
+                  >
+                    <VscWarning />
+                  </Tooltip>
+                </s.InfoItem>
+                <s.Circle />
+              </>
+            )
+          }
           <s.InfoItem>
             <StatusLabel value={response.statusCode} />
           </s.InfoItem>

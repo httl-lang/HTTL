@@ -11,9 +11,10 @@ export interface PopupProps {
   onClose?: () => void;
   style?: React.CSSProperties;
   className?: string;
+  hostStyle?: React.CSSProperties;
 }
 
-const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, showCloseButton, closeOnEscape = true, onClose, className }) => {
+const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, showCloseButton, closeOnEscape = true, onClose, className, hostStyle }) => {
   const hostRef = useRef<HTMLDivElement>(null);
   const [showState, setShowState] = useState(show);
 
@@ -65,7 +66,7 @@ const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, showC
   }, [showState, closeOnEscape]);
 
   return (
-    <s.Host ref={hostRef} show={+showState} >
+    <s.Host ref={hostRef} show={+showState} style={showState ? hostStyle : {}}>
       <s.Popup style={style} className={className}>
         {showCloseButton && (
           <s.Controls>
