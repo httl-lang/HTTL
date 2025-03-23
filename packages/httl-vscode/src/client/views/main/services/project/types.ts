@@ -2,12 +2,14 @@
 export interface HttlProjectFileInfo {
   id: string
   name: string;
+  divider?: boolean;
   path: string;
 }
 
 export interface OpenApiSpecImport {
   id: string
   name: string;
+  divider?: boolean;
   specUrl: string;
 }
 

@@ -94,6 +94,7 @@ export const Select = styled.div`
 
 export const Item = styled.div`
   flex: 1;
+  overflow: hidden;
 `;
 
 export const SelectItem = styled.div<{ focused?: boolean }>`
@@ -133,4 +134,10 @@ export const CircleLoader = styled(Loader)`
           opacity: 0.6;
       }
   }
+`;
+
+export const Divider = styled.div`
+  height: 1px;
+  background: var(--vscode-editorGroup-border);
+  margin: 3px 0;
 `;

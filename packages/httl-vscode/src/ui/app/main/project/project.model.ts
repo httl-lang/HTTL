@@ -54,13 +54,14 @@ export class ProjectModel {
       return;
     }
 
-    const project = await this.api.openProject(projectPath);
-    if (!project) {
-      this.showError(`Failed to open project: ${projectPath}`);
-      return;
+    try {
+      const project = await this.api.openProject(projectPath);
+      this.setProject(project);
     }
-
-    this.setProject(project);
+    catch (error) {
+      this.closeProject();
+      this.showError(`Failed to open project: ${projectPath}`);
+    }
   }
 
   @Action()
@@ -68,9 +69,9 @@ export class ProjectModel {
     this.error = error;
     setTimeout(() => {
       if (this.error === error) {
-        this.error = undefined;
+        this.closeError();
       }
-    }, 2000);
+    }, 5000);
   }
 
   @Action()
@@ -98,13 +99,17 @@ export class ProjectModel {
 
   @Action()
   public async selectProject(projectItem: HttlProjectItem): Promise<void> {
-    const projectLoader =
-      'path' in projectItem
-        ? this.api.openProject(projectItem.path)
-        : this.api.importFromOpenApiSpec(projectItem.specUrl);
+    try {
+      const projectLoader =
+        'path' in projectItem
+          ? this.api.openProject(projectItem.path)
+          : this.api.importFromOpenApiSpec(projectItem.specUrl);
 
-    const project = await projectLoader;
-    this.setProject(project);
+      const project = await projectLoader;
+      this.setProject(project);
+    } catch (error) {
+      this.showError(`Failed to open project: ${error}`);
+    }
   }
 
   @Action()

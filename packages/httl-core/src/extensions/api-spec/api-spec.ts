@@ -13,7 +13,10 @@ export interface IApiEndpointFilter {
 
 export class ApiSpec {
 
-  public static async fromUrl(url: HttlUrl): Promise<ApiSpec> {
+  public static async fromUrl(url: HttlUrl | string): Promise<ApiSpec> {
+    if (typeof url === 'string') {
+      url = HttlUrl.parse(url);
+    }
     const response = await HttpClient.request(url, { method: 'GET', headers: {} });
     if (response.statusCode !== 200) {
       throw new Error('Failed to fetch spec');

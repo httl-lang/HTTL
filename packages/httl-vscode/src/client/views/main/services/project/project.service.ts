@@ -75,6 +75,7 @@ export class HttlProjectService {
           id: search,
           name: 'Import From OpenAPI Spec',
           specUrl: search,
+          divider: infos.length > 0
         });
       }
 
@@ -113,10 +114,7 @@ export class HttlProjectService {
       throw new Error('Invalid URL');
     }
 
-    const response = await fetch(url);
-    const openApiSpec = await response.text();
-
-    const project = HttlProject.fromSpec(openApiSpec, url);
+    const project = await HttlProject.fromSpecUrl(url);
     await project.save();
 
     this.projects.set(project.filePath, project);

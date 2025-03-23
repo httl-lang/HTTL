@@ -57,6 +57,11 @@ export class AppModel {
 
   @Action()
   public clearAppState() {
+    for (const key in appData) {
+      if (key !== 'baseUri' && key !== 'view') {
+        delete (appData as any)[key];
+      }
+    }
     vscode.postMessage({
       command: 'clear-state',
     });

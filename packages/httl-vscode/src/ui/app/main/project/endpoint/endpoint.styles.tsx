@@ -67,14 +67,7 @@ export const Panel = styled.div<{ expanded?: boolean, highlighted?: boolean }>`
   }
   
   ${p => p.expanded && css`
-    /* background-color: var(--vscode-editor-background); //var(--vscode-input-background); */
     background-color: transparent;
-    /* border: 1px solid var(--vscode-input-background); */
-    /* outline: 1px solid var(--vscode-input-background);
-
-    &:hover {
-      outline-color: var(--vscode-commandCenter-activeBorder);
-    } */
 
     & ${Name} {
       opacity: 0.6;
@@ -109,7 +102,7 @@ export const HasScriptIndicator = styled(VscCircleFilled)`
   position: absolute;
   right: 0;
   top: 0;
-  opacity: 0.1;
+  opacity: 0.3;
   font-size: 9px;
 `;
 

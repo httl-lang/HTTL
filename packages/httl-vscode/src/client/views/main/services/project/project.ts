@@ -14,7 +14,6 @@ export class HttlProject {
 
   private static FILE_EXTENSION = '.httl.json';
 
-
   private static getFileName(name: string): string {
     let intendedFileName = './' + name.replace(/[<>:"/\\|?*\s]/g, '_').toLowerCase();
 
@@ -92,9 +91,12 @@ export class HttlProject {
     );
   }
 
-  public static fromSpec(specContent: string, url: string) {
-    const spec = ApiSpec.fromString(specContent, HttlUrl.parse(url));
-    const apiInfo = spec.getApiInfo();
+  public static fromSpec(spec: string | ApiSpec, url: string) {
+    const apiSpec = typeof spec === 'string'
+      ? ApiSpec.fromString(spec, HttlUrl.parse(url))
+      : spec;
+
+    const apiInfo = apiSpec.getApiInfo();
 
     const filename = this.getFileName(apiInfo.title);
 
@@ -105,15 +107,20 @@ export class HttlProject {
         description: apiInfo.description,
         source: url.toLowerCase(),
         technologies: [],
-        spec: spec.getRaw(),
+        spec: apiSpec.getRaw(),
         prestart: {
-          code: '@base: ' + spec.getBasePath().fullUrl,
+          code: '@base: ' + apiSpec.getBasePath().fullUrl,
         },
         scripts: [],
       },
     );
 
     return project;
+  }
+
+  public static async fromSpecUrl(url: string) {
+    const spec = await ApiSpec.fromUrl(url);
+    return this.fromSpec(spec, url);
   }
 
   public spec!: ApiSpec;
@@ -171,10 +178,7 @@ export class HttlProject {
     Object.assign(this.props, rawJson);
 
     if (fullSync && this.props.source.startsWith('http')) {
-      const response = await fetch(this.props.source);
-      const openApiSpec = await response.json();
-
-      this.spec = ApiSpec.fromSpec(openApiSpec, HttlUrl.parse(this.props.source));
+      this.spec = await ApiSpec.fromUrl(this.props.source);
       this.props.spec = this.spec.getRaw();
       await this.save();
     } else {
