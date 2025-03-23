@@ -55,19 +55,21 @@ function ComboBox<TItem extends { [key: string]: any }>(
   }, [searchText, showPopup]);
 
   useEffect(() => {
+    setFocused(
+      items?.length === 1
+        ? 0
+        : items?.findIndex(c => c[keyField] === current?.[keyField]) ?? -1
+    );
+  }, [items, current, keyField, showPopup]);
+
+
+  useEffect(() => {
     if (!current) {
       setShowPopup(false);
       setItems(undefined);
       setFocused(-1);
-    } else {
-      setFocused(
-        items?.length === 1
-          ? 0
-          : items?.findIndex(c => c[keyField] === current[keyField]) ?? -1
-      );
     }
-
-  }, [items, current, keyField, showPopup]);
+  }, [current]);
 
   const onLabelClick = useCallback(async () => {
     setShowPopup(true);

@@ -123,11 +123,13 @@ export class ProjectModel {
     this.setAgentProgress('project');
     try {
       await this.api.runAgentAnalysis(this.fileInfo?.path);
-      this.setAgentProgress(false);
-      this.agentTagsProgress = [];
     }
     catch (error) {
       this.showError(`Oops! Something went wrong. Please try running the analysis again.: ${error}`);
+    }
+    finally {
+      this.setAgentProgress(false);
+      this.agentTagsProgress = [];
     }
   }
 
