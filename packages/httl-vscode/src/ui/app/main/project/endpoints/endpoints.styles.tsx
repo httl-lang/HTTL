@@ -45,9 +45,9 @@ export const EndpointTag = styled(LoadingText) <{ dark?: boolean }>`
   gap: 5px;
   
   & h1 {
-    font-weight: 500;
     font-variant-caps: all-petite-caps;
-    font-size: 14px;
+    font-size: 15px;
+    color: var(--vscode-inputOption-activeForeground);
   }
 
   & small {

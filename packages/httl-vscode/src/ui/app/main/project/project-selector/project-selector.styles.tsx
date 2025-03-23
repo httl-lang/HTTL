@@ -18,6 +18,7 @@ export const Label = styled.div`
 
 export const Item = styled.div<{ nowrap?: boolean }>`
   display: flex;
+  flex-direction: ${(props) => props.nowrap ? 'row' : 'column'};
   align-items: baseline;
   flex-wrap: ${(props) => props.nowrap ? 'nowrap' : 'wrap'}; 
 `;
@@ -47,13 +48,15 @@ export const Name = styled.span`
 
 export const SubTitle = styled.span<{ short?: boolean }>`
   font-size: 10px;
-  margin-left: 10px;
+  padding-left: 10px;
   color: var(--vscode-foreground);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
 
   ${(props) => props.short && css`
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    width: auto;
   `}
 `;
 

@@ -90,6 +90,11 @@ export const Select = styled.div`
   margin-top: 3px;
   max-height: 300px;
   overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-color: auto;
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
 `;
 
 export const Item = styled.div`
