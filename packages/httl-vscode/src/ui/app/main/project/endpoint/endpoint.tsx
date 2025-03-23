@@ -25,7 +25,7 @@ const _Endpoint: React.FC = () => {
     ({ endpoint, inProgress, expanded, focused, onExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
 
   useEffect(() => {
-    if (highlightedScriptId === model.endpoint.id) {
+    if (highlightedScriptId === model.endpoint.endpointId) {
       setHighlighted(true);
       ref.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       if (timeoutRef.current) {
@@ -55,7 +55,7 @@ const _Endpoint: React.FC = () => {
         <s.Name>
           <s.MethodLabelStyled method={model.endpoint.method} /> {model.endpoint.path} <small>{model.endpoint.operationId}</small>
         </s.Name>
-        <s.RunButton onClick={() => model.runScript(model.endpoint.id)} progress={model.inProgress}>
+        <s.RunButton onClick={() => model.runScript(model.endpoint.endpointId)} progress={model.inProgress}>
           <RunSvg />
         </s.RunButton>
         {
@@ -81,16 +81,16 @@ const _Endpoint: React.FC = () => {
                   alwaysConsumeMouseWheel: false,
                 },
               }}
-              onChange={(code) => model.updateScript(model.endpoint.id, code)}
-              onRun={(code) => model.runScript(model.endpoint.id, code)}
-              onFocus={model.onFocus}
+              onChange={(code) => model.updateScript(model.endpoint.endpointId, code)}
+              onRun={(code) => model.runScript(model.endpoint.endpointId, code)}
+            // onFocus={model.onFocus}
             />
           </s.Editor>
           <s.ToolBar>
             <Button
               disabled={model.endpoint.scripts.length === 0}
               disableLoading={true}
-              onClick={() => model.resetScript(model.endpoint.id)}
+              onClick={() => model.resetScript(model.endpoint.endpointId)}
               title={model.endpoint.scripts.length === 0 ? "Script is already in initial state" : "Reset script to initial state"}
             >
               <VscSync /> <span>Reset</span>
@@ -98,7 +98,7 @@ const _Endpoint: React.FC = () => {
             <Button
               disabled={!model.endpoint.hasBodySchema}
               disableLoading={true}
-              onClick={() => model.showBodySchema(model.endpoint.id)}
+              onClick={() => model.showBodySchema(model.endpoint.endpointId)}
               title={model.endpoint.hasBodySchema ? "Show body schema" : "No body schema"}
             >
               <VscJson /> <span>Body</span>
@@ -106,7 +106,7 @@ const _Endpoint: React.FC = () => {
             <Button
               disabled={!model.endpoint.hasResponseSchema}
               disableLoading={true}
-              onClick={() => model.showResponseSchema(model.endpoint.id)}
+              onClick={() => model.showResponseSchema(model.endpoint.endpointId)}
               title={model.endpoint.hasResponseSchema ? "Show response schema" : "No response schema"}
             >
               <VscBracketDot /> <span>Response</span>
@@ -118,8 +118,8 @@ const _Endpoint: React.FC = () => {
   );
 };
 
-export const Endpoint = ({ endpoint }: { endpoint: ApiEndpoint }) => (
-  <EndpointContext {...endpoint}>
+export const Endpoint = ({ endpoint, id }: { endpoint: ApiEndpoint, id: string }) => (
+  <EndpointContext id={id} {...endpoint}>
     <_Endpoint />
   </EndpointContext>
 );

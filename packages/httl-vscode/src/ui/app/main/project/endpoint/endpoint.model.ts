@@ -32,13 +32,14 @@ export class EndpointModel {
   public async init(endpoint: ApiEndpoint) {
     this.endpoint = endpoint;
 
-    const state = this.state.endpoints[endpoint.id] || {};
+    const state = this.state.endpoints[endpoint.endpointId] || {};
 
     this.expanded = state.expanded || false;
     this.height = state.height || '70px';
+    this.focused = this.state.activeEndpoint === endpoint.endpointId;
 
     if (this.expanded && !this.endpoint.scripts.length) {
-      this.generateRequest(this.endpoint.id);
+      this.generateRequest(this.endpoint.endpointId);
     }
   }
 
@@ -74,15 +75,18 @@ export class EndpointModel {
     this.project.setFocusedEndpoint(this);
     vscode.postMessage({
       command: 'set-focus',
-      file: `project::${this.project.fileInfo!.path}::${this.endpoint.id}` // TODO: move to common place
+      file: `project::${this.project.fileInfo!.path}::${this.endpoint.endpointId}` // TODO: move to common place
     });
   }
 
   @Action()
   public focus() {
     this.focused = true;
+    this.state.updateState({
+      activeEndpoint: this.endpoint.endpointId
+    });
   }
-  
+
   @Action()
   public blur() {
     this.focused = false;
@@ -92,11 +96,9 @@ export class EndpointModel {
   public async onExpand() {
     this.expanded = !this.expanded;
 
-    this.onFocus();
-
     this.state.updateState({
       endpoints: {
-        [this.endpoint.id]: {
+        [this.endpoint.endpointId]: {
           expanded: this.expanded
         }
       }
@@ -104,7 +106,7 @@ export class EndpointModel {
 
     if (this.expanded && !this.endpoint.scripts.length) {
       // setEditorBusy(true);
-      await this.generateRequest(this.endpoint.id);
+      await this.generateRequest(this.endpoint.endpointId);
       // setEditorBusy(false);
     }
   }
@@ -113,7 +115,7 @@ export class EndpointModel {
   public onResize(height: string) {
     this.state.updateState({
       endpoints: {
-        [this.endpoint.id]: {
+        [this.endpoint.endpointId]: {
           height
         }
       }

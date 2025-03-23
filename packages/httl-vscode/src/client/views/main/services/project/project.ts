@@ -237,15 +237,15 @@ export class HttlProject {
     const endpoints = this.spec
       .getEndpoints()
       .map(endpoint => {
-        const id = `${endpoint.method} ${endpoint.path}`.toLowerCase();
+        const endpointId = `${endpoint.method} ${endpoint.path}`.toLowerCase();
         return {
-          id,
+          endpointId,
           method: endpoint.method,
           path: endpoint.path,
           tag: endpoint.tags?.[0] || 'default',
           description: endpoint.description,
           operationId: endpoint.operationId,
-          scripts: this.props.scripts.filter(script => script.id === id),
+          scripts: this.props.scripts.filter(script => script.id === endpointId),
           hasBodySchema: endpoint.hasBodySchema(),
           hasResponseSchema: endpoint.hasResponseSchema(),
         } satisfies HttlProjectApiEndpoint;

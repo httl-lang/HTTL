@@ -5,12 +5,16 @@ import { useProjectModel } from '../project.model';
 import { Endpoint } from '../endpoint';
 
 import * as s from './endpoints.styles';
+import { useProjectStateModel } from '../project-state.model';
 
 export const Endpoints: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const shadowRef = useRef<HTMLDivElement>(null);
-  const model = useProjectModel(({ endpointGoups, agentProgress }) =>
-    ({ endpointGoups, agentProgress }));
+  const state = useProjectStateModel(({ filePath }) => ({ filePath }));
+  
+  const model = useProjectModel(({ fileInfo, endpointGoups, agentProgress }) =>
+    ({ fileInfo, endpointGoups, agentProgress }));
+  
 
   return (
     <s.Container ref={scrollRef} onScroll={() => {
@@ -36,7 +40,8 @@ export const Endpoints: React.FC = () => {
             {
               group.endpoints.map((endpoint) => (
                 <Endpoint
-                  key={endpoint.id}
+                  key={`${model.fileInfo?.id}-${endpoint.endpointId}`}
+                  id={`${model.fileInfo?.id}-${endpoint.endpointId}`}
                   endpoint={endpoint}
                 />
               ))

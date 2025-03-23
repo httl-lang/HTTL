@@ -45,7 +45,7 @@ export interface HttlProjectViewData {
 }
 
 export interface HttlProjectApiEndpoint {
-  id: string;
+  endpointId: string;
   method: string;
   path: string;
   tag: string;

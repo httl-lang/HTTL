@@ -10,6 +10,7 @@ export interface EndpointState {
 
 export interface ProjectState {
   prestartHeight: string;
+  activeEndpoint?: string;
   endpoints: Record<string, EndpointState>;
 }
 
@@ -39,6 +40,7 @@ export class ProjectStateModel implements ProjectState {
 
   public prestartHeight: string = '70px';
   public endpoints: Record<string, EndpointState> = {};
+  public activeEndpoint?: string;
 
   constructor(
     private readonly app = store(AppModel),
@@ -56,6 +58,11 @@ export class ProjectStateModel implements ProjectState {
     if (savedProjectState) {
       this.prestartHeight = savedProjectState.prestartHeight;
       this.endpoints = savedProjectState.endpoints;
+      this.activeEndpoint = savedProjectState.activeEndpoint;
+    } else {
+      this.prestartHeight = '70px';
+      this.endpoints = {};
+      this.activeEndpoint = undefined;
     }
   }
 
@@ -69,8 +76,9 @@ export class ProjectStateModel implements ProjectState {
 
     this.app.saveState(ProjectStateModel.PROJECT_STATE(this.filePath!), {
       prestartHeight: this.prestartHeight,
-      endpoints: this.endpoints
-    });
+      endpoints: this.endpoints,
+      activeEndpoint: this.activeEndpoint
+    } satisfies ProjectState);
   }
 }
 
