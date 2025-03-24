@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { VscJson, VscBracketDot, VscSync, VscWand } from "react-icons/vsc";
+import { VscJson, VscBracketDot, VscSync, VscSparkleFilled } from "react-icons/vsc";
 
 import RunSvg from '/media/run.svg';
 
@@ -115,13 +115,14 @@ const _Endpoint: React.FC = () => {
             <s.MagicButton
               disabled={!model.endpoint.hasBodySchema}
               allowStop
+              small
               onClick={(stop) => stop
                 ? model.stopGeneratingAiRequest()
                 : model.generateAiRequest(model.endpoint.endpointId)
               }
-              title={model.endpoint.hasBodySchema ? "Generate request from body schema" : "No body schema"}
+              title={model.endpoint.hasBodySchema ? "Generate a request body using Copilot" : "No body schema"}
             >
-              <VscWand />
+              <VscSparkleFilled   />
             </s.MagicButton>
           </s.ToolBar>
         </s.Expanded>

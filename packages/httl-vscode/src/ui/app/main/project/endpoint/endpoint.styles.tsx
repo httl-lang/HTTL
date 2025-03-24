@@ -173,6 +173,8 @@ export const ToolBar = styled.div`
 
 export const MagicButton = styled(Button)`
   margin-left: auto;
+  opacity: 1 !important;
+  color: var(--vscode-editorBracketHighlight-foreground2) !important;
 `;
 
 

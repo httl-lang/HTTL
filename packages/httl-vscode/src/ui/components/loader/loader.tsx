@@ -4,11 +4,12 @@ import * as s from './loader.styles';
 export interface LoaderProps {
   className?: string;
   stopIcon?: boolean;
+  small?: boolean;
 }
 
-export function Loader({ className, stopIcon }: LoaderProps) {
+export function Loader({ className, stopIcon, small }: LoaderProps) {
   return (
-    <s.Container className={className}>
+    <s.Container className={className} small={small}>
       <s.Loader xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 384">
         <s.ActiveCircle
           r="176"

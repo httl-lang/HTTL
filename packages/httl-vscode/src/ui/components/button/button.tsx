@@ -45,7 +45,7 @@ const Button: FC<PropsWithChildren<ButtonProps>> = ({ onClick, disabled, childre
         disabled
           ? children
           : loading
-            ? <Loader stopIcon={allowStop} />
+            ? <Loader stopIcon={allowStop} small={small}/>
             : children
       }
     </s.Button>

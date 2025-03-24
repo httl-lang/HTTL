@@ -1,11 +1,21 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div<{ small?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 16px;
-  width: 16px;
+
+  ${({ small }) =>
+    small
+      ? css`
+          height: 10px;
+          width: 10px;
+        `
+      : css`
+          height: 16px;
+          width: 16px; 
+        `
+  }
   position: relative;
 `;
 
