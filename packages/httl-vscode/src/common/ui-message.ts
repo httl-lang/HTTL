@@ -1,7 +1,4 @@
 import { HttlOutput } from 'httl-core';
-import { FindApiProjectsStepResult } from '../ai/agents/steps/find-api-projects-step';
-import { FindApiControllersStepResult } from '../ai/agents/steps/find-api-controllers-step';
-import { ControllerSpec } from '../ai/agents/project-agent';
 
 interface InitializeMessage {
   command: 'initialize';

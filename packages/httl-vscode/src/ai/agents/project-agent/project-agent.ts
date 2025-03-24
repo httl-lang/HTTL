@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
-import { Agent } from '../core/agent';
-import { LLM } from '../core/llm';
+import { Agent } from '../../core/agent';
+import { LLM } from '../../core/llm';
 import { FindApiControllersStep, FindApiControllersStepResult } from './steps/find-api-controllers-step';
 import { GenerateSpecStep } from './steps/generate-spec-step';
 import { FindApiProjectsStep, FindApiProjectsStepResult } from './steps/find-api-projects-step';
-import { HttlExtensionContext } from '../../common';
+import { HttlExtensionContext } from '../../../common';
 
 const INSTRUCTIONS_PROMPT = `
 Purpose:
@@ -50,6 +50,7 @@ export class ApiControllerSpecResult {
 }
 
 export class ProjectAgent {
+
   private agent?: Agent;
 
   constructor(

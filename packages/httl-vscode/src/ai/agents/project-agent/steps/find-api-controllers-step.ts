@@ -1,4 +1,4 @@
-import { AgentStepBase } from '../../core/agent-step-base';
+import { AgentStepBase } from '../../../core/agent-step-base';
 
 export interface FindApiControllersStepResult {
   name: string;

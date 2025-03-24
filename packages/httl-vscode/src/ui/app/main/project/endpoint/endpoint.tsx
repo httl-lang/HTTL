@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { VscJson, VscBracketDot, VscSync } from "react-icons/vsc";
+import { VscJson, VscBracketDot, VscSync, VscWand } from "react-icons/vsc";
 
 import RunSvg from '/media/run.svg';
 
@@ -21,8 +21,8 @@ const _Endpoint: React.FC = () => {
 
   const [highlighted, setHighlighted] = useState(false);
 
-  const model = useEndpointModel(({ endpoint, inProgress, expanded, focused, onExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }) =>
-    ({ endpoint, inProgress, expanded, focused, onExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema }));
+  const model = useEndpointModel(({ endpoint, inProgress, expanded, focused, onExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema, generateAiRequest, stopGeneratingAiRequest }) =>
+    ({ endpoint, inProgress, expanded, focused, onExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema, generateAiRequest, stopGeneratingAiRequest }));
 
   useEffect(() => {
     if (highlightedScriptId === model.endpoint.endpointId) {
@@ -111,6 +111,18 @@ const _Endpoint: React.FC = () => {
             >
               <VscBracketDot /> <span>Response</span>
             </Button>
+
+            <s.MagicButton
+              disabled={!model.endpoint.hasBodySchema}
+              allowStop
+              onClick={(stop) => stop
+                ? model.stopGeneratingAiRequest()
+                : model.generateAiRequest(model.endpoint.endpointId)
+              }
+              title={model.endpoint.hasBodySchema ? "Generate request from body schema" : "No body schema"}
+            >
+              <VscWand />
+            </s.MagicButton>
           </s.ToolBar>
         </s.Expanded>
       }

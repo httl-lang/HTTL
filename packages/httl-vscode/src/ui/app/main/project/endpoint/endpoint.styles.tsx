@@ -128,7 +128,7 @@ export const Expanded = styled.div`
 
 export const ToolBar = styled.div`
   display: flex;
-  padding: 3px 10px 9px;
+  padding: 3px 10px 5px;
   gap: 10px;
   font-size: 9px;
   color: color-mix(in srgb, var(--vscode-input-foreground) 70%, transparent);
@@ -169,6 +169,10 @@ export const ToolBar = styled.div`
       pointer-events: none;
     }
   }
+`;
+
+export const MagicButton = styled(Button)`
+  margin-left: auto;
 `;
 
 

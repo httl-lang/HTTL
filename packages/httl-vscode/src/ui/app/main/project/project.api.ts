@@ -41,6 +41,14 @@ export class ProjectApi extends Api {
     return this.sendRequest('project.generateRequestScript', { projectFile, scriptId } satisfies EndpointScriptId);
   }
 
+  public generateAiRequestScript(projectFile: string, scriptId: string): Promise<string> {
+    return this.sendRequest('project.generateAiRequestScript', { projectFile, scriptId } satisfies EndpointScriptId);
+  }
+
+  public stopGenerateAiRequestScript(projectFile: string): Promise<string> {
+    return this.sendRequest('project.stopGenerateAiRequestScript', { projectFile });
+  }
+
   public showBodySchema(projectFile: string, scriptId: string): Promise<void> {
     return this.sendRequest('project.showBodySchema', { projectFile, scriptId } satisfies EndpointScriptId);
   }

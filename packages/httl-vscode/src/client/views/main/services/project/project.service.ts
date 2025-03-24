@@ -7,12 +7,14 @@ import { FileService, HttlExtensionContext, UIMessageType } from "../../../../..
 import { HttlProjectItem, HttlProjectViewData, EndpointScriptId, UpdateEndpointScriptCode, UpdatePrestartScriptCode } from "./types";
 import { HttlProject } from "./project";
 import { ApiControllerListResult, ApiControllerSpecResult, ApiProjectListResult, ProjectAgent } from "../../../../../ai/agents/project-agent";
+import { RequestAgent } from "../../../../../ai/agents/request-agent";
 import { ProjectFileWatcher } from "./project-file-watcher";
 
 export class HttlProjectService {
   private projects = new Map<string, HttlProject>();
   private disableProjectSync = false;
   private readonly projectAgent: ProjectAgent;
+  private readonly requestAgent: RequestAgent;
   private readonly workDir: string;
 
   constructor(
@@ -23,6 +25,7 @@ export class HttlProjectService {
     }
   ) {
     this.projectAgent = new ProjectAgent(this.context);
+    this.requestAgent = new RequestAgent(this.context);
     this.workDir = this.context.getWorkspaceDirectory()!;
 
     ProjectFileWatcher.register(context, '**/*.json')({
@@ -187,6 +190,29 @@ export class HttlProjectService {
     }
 
     return project.generateRequestScript(scriptId);
+  }
+
+  public async generateAiRequestScript({ projectFile, scriptId }: EndpointScriptId): Promise<string> {
+    const project = this.projects.get(projectFile);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    const endpoint = project.getEndpoint(scriptId);
+
+    if (!endpoint.hasBodySchema()) {
+      throw new Error('Endpoint has no body schema');
+    }
+
+    const generatedBody = await this.requestAgent.generateRequest(endpoint.getBodyModel());
+
+    const result = `${endpoint.getMethodAndPath()} ${JSON.stringify(generatedBody, null, 2)}`;
+
+    return result;
+  }
+
+  public async stopGenerateAiRequestScript() {
+    this.requestAgent.stop();
   }
 
   public async showBodySchema({ projectFile, scriptId }: EndpointScriptId): Promise<void> {

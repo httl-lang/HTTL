@@ -7,7 +7,7 @@ import * as asyncFs from 'node:fs/promises';
 import { ApiSpec } from "httl-core";
 import { HttlUrl } from "httl-core/dist/common/url";
 import { FileService } from "../../../../../common";
-import { FindApiControllersStepResult } from "../../../../../ai/agents/steps/find-api-controllers-step";
+import { FindApiControllersStepResult } from "../../../../../ai/agents/project-agent/steps/find-api-controllers-step";
 
 
 export class HttlProject {

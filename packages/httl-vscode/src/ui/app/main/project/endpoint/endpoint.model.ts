@@ -143,6 +143,26 @@ export class EndpointModel {
     const script = await this.api.generateRequestScript(this.project.fileInfo!.path, scriptId);
     this.endpoint.defaultScript = script;
   }
+
+  @Action()
+  public async generateAiRequest(scriptId: string) {
+    const code = await this.api.generateAiRequestScript(this.project.fileInfo!.path, scriptId);
+    if (!this.endpoint.scripts?.length) {
+      this.endpoint.scripts = [{
+        id: scriptId,
+        name: 'AI',
+        code: ''
+      }];
+    }
+
+    this.endpoint.scripts[0].code = code;
+    return await this.api.updateScript(this.project.fileInfo!.path, scriptId, code);
+  }
+
+  @Action()
+  public async stopGeneratingAiRequest() {
+    await this.api.stopGenerateAiRequestScript(this.project.fileInfo!.path);
+  }
 }
 
 const [EndpointContext, useEndpointModel] = connect(EndpointModel);
