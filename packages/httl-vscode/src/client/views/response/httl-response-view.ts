@@ -47,6 +47,11 @@ export class HttlResponseViewProvider extends HttlBaseViewProvider {
   protected override async handleUIMessages(messagefromUI: any): Promise<void> {
     switch (messagefromUI.command) {
       case 'code-scroll': {
+        const [type, ...rest] = messagefromUI.file.split('::');
+        if (type === "project" || type === "quick-run") {
+          return;
+        }
+        
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
           vscode.window.showErrorMessage('No active editor found!');

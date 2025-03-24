@@ -113,6 +113,10 @@ export class ProjectModel {
 
   @Action()
   public async selectProject(projectItem: HttlProjectItem): Promise<void> {
+    vscode.postMessage({
+      command: 'set-focus',
+    });
+
     try {
       const projectLoader =
         'path' in projectItem

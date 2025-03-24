@@ -27,7 +27,7 @@ const _Endpoint: React.FC = () => {
   useEffect(() => {
     if (highlightedScriptId === model.endpoint.endpointId) {
       setHighlighted(true);
-      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }

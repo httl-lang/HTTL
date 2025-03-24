@@ -2,6 +2,7 @@
 
 const path = require('path');
 const webpack = require("webpack");
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 
@@ -142,7 +143,7 @@ const uiConfig = {
   plugins: [
     new MonacoWebpackPlugin({
       features: ['format'],
-      languages: ['json', 'xml', 'html'],
+      languages: [],
     }),
     new webpack.ProvidePlugin({
       Buffer: ["buffer", "Buffer"],
@@ -151,6 +152,7 @@ const uiConfig = {
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
     }),
+    new BundleAnalyzerPlugin(),
   ],
 
   devtool: 'source-map',

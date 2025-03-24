@@ -53,10 +53,6 @@ export class ResponseModel {
   }
 
   public highlightCode(source?: { start: number, end: number }, scroll = false) {
-    if (this.currentFile?.includes('::')) {
-      return;
-    }
-
     vscode.postMessage({
       command: "code-highlight",
       file: this.currentFile,

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { HttpResponse } from 'httl-core';
 
 import { HttlResponseListContext, useHttlResponseListModel } from './httl-response-list.model';
-import { BiExpandVertical } from "react-icons/bi";
+import BiExpandVertical from "./expand.svg";
 
 import * as s from './httl-response-list.styles';
 import Toggle from '../../components/toggle';
