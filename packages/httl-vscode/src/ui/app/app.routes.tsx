@@ -8,6 +8,7 @@ import { QuickRunView } from "./main/quick-run";
 import { UtilsView } from "./main/utils";
 import { ProjectView } from "./main/project";
 import { ErrorBoundary } from "../components/error-boundary";
+import { NoRequestsYetView } from "./response/no-requests-yet";
 
 export const appRouter = createHashRouter([
   {
@@ -56,6 +57,10 @@ export const appRouter = createHashRouter([
       {
         path: ':editorPath',
         element: <HttlOutputView />,
+      },
+      {
+        path: 'no-requests-yet',
+        element: <NoRequestsYetView />,
       },
     ],
   },

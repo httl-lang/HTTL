@@ -48,7 +48,7 @@ export class ResponseModel {
       console.log('setViewData', viewData);
       this.appModel.navigateResponse(this.currentFile!);
     } else {
-      this.appModel.navigateDefault();
+      this.appModel.navigateNoRequestsYet();
     }
   }
 

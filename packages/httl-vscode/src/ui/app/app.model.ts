@@ -28,6 +28,10 @@ export class AppModel {
     this.router.navigate(`/response/show`);
   }
 
+  public navigateNoRequestsYet() {
+    this.router.navigate('/response/no-requests-yet');
+  }
+
   public navigateDefault() {
     this.router.navigate('/' + appData.view);
   }
