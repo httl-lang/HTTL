@@ -1,5 +1,7 @@
-import Button from '../../../../components/button';
 import styled, { css } from 'styled-components';
+
+import Button from '../../../../components/button';
+
 
 export const Container = styled.div`
   margin: 6px;

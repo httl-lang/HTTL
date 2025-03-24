@@ -1,6 +1,5 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Button from '../../../../components/button';
-import { ResizePanel } from '../../../../components/resize-panel';
 
 export const Container = styled.div`
   margin-top: 6px;

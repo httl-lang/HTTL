@@ -12,7 +12,6 @@ export const Container = styled.div`
 
 export const Label = styled.div<{ center?: boolean }>`
   font-size: 10px;
-  /* color: #535353; */
   margin: 0 10px 0;
   opacity: 0.3;
   user-select: none;

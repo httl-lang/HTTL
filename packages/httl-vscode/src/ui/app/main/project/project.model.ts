@@ -221,6 +221,7 @@ export class ProjectModel {
     this.agentTagsProgress = [];
     this.agentProgress = undefined;
     this.projectState = undefined;
+    this.focusedEndpoint = undefined;
 
     this.app.setAppState({
       projectPath: undefined
@@ -251,6 +252,7 @@ export class ProjectModel {
     this.technologies = project.technologies;
     this.prestart = project.prestart;
     this.endpoints = project.endpoints;
+    this.focusedEndpoint = undefined;
 
     this.projectState = this.app.getState(ProjectModel.PROJECT_STATE(project.fileInfo.path)) ?? {
       prestartHeight: '70px',

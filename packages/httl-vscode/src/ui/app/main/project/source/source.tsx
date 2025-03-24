@@ -1,11 +1,8 @@
 import React from 'react';
-
-import { HttlEditor } from '../../../../components/editor';
+import { VscCloudDownload } from 'react-icons/vsc';
 
 import { useProjectModel } from '../project.model';
 import * as s from './source.styles';
-import { ResizePanel } from '../../../../components/resize-panel';
-import { VscCloudDownload } from 'react-icons/vsc';
 
 export const ProjectSource: React.FC = ({ }) => {
   const model = useProjectModel(({ source, sourceType, showOpenApiSpec }) =>

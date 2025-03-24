@@ -1,5 +1,4 @@
-import { VscCopilot, VscSparkle } from 'react-icons/vsc';
-import Logo from '../../../../components/logo';
+import { VscSparkle } from 'react-icons/vsc';
 import * as s from './welcome.styles';
 
 export const WelcomeView = () => {

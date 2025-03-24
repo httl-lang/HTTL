@@ -1,15 +1,7 @@
 import { Action, Model, connect, store } from "react-storm";
 import { ProjectApi } from "../project.api";
 import { ApiEndpoint, ProjectModel } from "../project.model";
-import { ProjectStateModel } from "../project-state.model";
-
-function debounce<T extends (...args: any[]) => any>(fn: T, wait: number) {
-  let timeout: NodeJS.Timeout;
-  return (...args: Parameters<T>): any => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => fn(...args), wait);
-  };
-}
+import { debounce } from "../../../../utils/misc";
 
 @Model()
 export class EndpointModel {
@@ -36,6 +28,7 @@ export class EndpointModel {
     this.expanded = state.expanded || false;
     this.height = state.height || '70px';
     this.focused = this.project.projectState?.activeEndpoint === endpoint.endpointId;
+    this.project.focusedEndpoint = this.focused ? this : this.project.focusedEndpoint;
 
     if (this.expanded && !this.endpoint.scripts.length) {
       this.generateRequest(this.endpoint.endpointId);

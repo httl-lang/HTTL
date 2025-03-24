@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { VscSymbolInterface } from "react-icons/vsc";
 
 import { useProjectModel } from '../project.model';
