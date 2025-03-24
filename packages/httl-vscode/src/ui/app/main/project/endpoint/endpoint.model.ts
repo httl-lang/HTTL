@@ -24,7 +24,6 @@ export class EndpointModel {
   constructor(
     private readonly project = store(ProjectModel),
     private readonly api = new ProjectApi(),
-    private readonly state = store(ProjectStateModel),
   ) {
     this.debouncedUpdateScript = debounce(this.api.updateScript.bind(this.api), 2000);
   }
@@ -32,11 +31,11 @@ export class EndpointModel {
   public async init(endpoint: ApiEndpoint) {
     this.endpoint = endpoint;
 
-    const state = this.state.endpoints[endpoint.endpointId] || {};
+    const state = this.project.projectState?.endpoints[endpoint.endpointId] || {};
 
     this.expanded = state.expanded || false;
     this.height = state.height || '70px';
-    this.focused = this.state.activeEndpoint === endpoint.endpointId;
+    this.focused = this.project.projectState?.activeEndpoint === endpoint.endpointId;
 
     if (this.expanded && !this.endpoint.scripts.length) {
       this.generateRequest(this.endpoint.endpointId);
@@ -82,7 +81,7 @@ export class EndpointModel {
   @Action()
   public focus() {
     this.focused = true;
-    this.state.updateState({
+    this.project.updateState({
       activeEndpoint: this.endpoint.endpointId
     });
   }
@@ -96,7 +95,7 @@ export class EndpointModel {
   public async onExpand() {
     this.expanded = !this.expanded;
 
-    this.state.updateState({
+    this.project.updateState({
       endpoints: {
         [this.endpoint.endpointId]: {
           expanded: this.expanded
@@ -113,7 +112,7 @@ export class EndpointModel {
 
   @Action()
   public onResize(height: string) {
-    this.state.updateState({
+    this.project.updateState({
       endpoints: {
         [this.endpoint.endpointId]: {
           height

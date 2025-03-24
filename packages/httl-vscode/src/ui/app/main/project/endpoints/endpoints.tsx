@@ -5,12 +5,10 @@ import { useProjectModel } from '../project.model';
 import { Endpoint } from '../endpoint';
 
 import * as s from './endpoints.styles';
-import { useProjectStateModel } from '../project-state.model';
 
 export const Endpoints: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const shadowRef = useRef<HTMLDivElement>(null);
-  const state = useProjectStateModel(({ filePath }) => ({ filePath }));
   
   const model = useProjectModel(({ fileInfo, endpointGoups, agentProgress }) =>
     ({ fileInfo, endpointGoups, agentProgress }));

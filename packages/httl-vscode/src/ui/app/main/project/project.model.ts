@@ -5,6 +5,7 @@ import { AgentAnalysisEventPayload } from "../../../../common";
 import { ProjectApi } from "./project.api";
 import { HttlProjectApiEndpoint, HttlProjectFileInfo, HttlProjectItem, HttlProjectViewData } from "../../../../client/views/main/services/project";
 import { EndpointModel } from "./endpoint/endpoint.model";
+import { merge } from "../../../utils/object";
 
 interface ApiEndpointGroup {
   name: string;
@@ -15,11 +16,23 @@ interface ApiEndpointGroup {
 export interface ApiEndpoint extends HttlProjectApiEndpoint {
   defaultScript?: string;
 }
+export interface ProjectState {
+  prestartHeight: string;
+  activeEndpoint?: string;
+  endpoints: Record<string, EndpointState>;
+}
+
+export interface EndpointState {
+  height?: string
+  expanded?: boolean
+}
 
 type AgentProgressType = 'project' | 'tags' | 'endpoints';
 
 @Model()
 export class ProjectModel {
+  public static readonly PROJECT_STATE = (path: string) => `project:${path}:state`;
+
   private agentTagsProgress: ApiEndpointGroup[] = [];
   public agentProgress?: AgentProgressType;
 
@@ -30,6 +43,7 @@ export class ProjectModel {
   public prestart?: string;
   public endpoints: ApiEndpoint[] = [];
   public endpointGoups: ApiEndpointGroup[] = [];
+  public projectState?: ProjectState;
 
   public error?: string;
   public focusedEndpoint?: EndpointModel;
@@ -206,6 +220,7 @@ export class ProjectModel {
     this.endpointGoups = [];
     this.agentTagsProgress = [];
     this.agentProgress = undefined;
+    this.projectState = undefined;
 
     this.app.setAppState({
       projectPath: undefined
@@ -215,6 +230,14 @@ export class ProjectModel {
   @Action()
   public showOpenApiSpec() {
     this.api.showOpenApiSpec(this.fileInfo!.path);
+  }
+  
+
+  @Action()
+  public updateState(state: Partial<ProjectState>) {
+    merge(this.projectState, state);
+
+    this.app.saveState(ProjectModel.PROJECT_STATE(this.fileInfo?.path!), this.projectState);
   }
 
   private async setProject(project: HttlProjectViewData): Promise<void> {
@@ -228,6 +251,12 @@ export class ProjectModel {
     this.technologies = project.technologies;
     this.prestart = project.prestart;
     this.endpoints = project.endpoints;
+
+    this.projectState = this.app.getState(ProjectModel.PROJECT_STATE(project.fileInfo.path)) ?? {
+      prestartHeight: '70px',
+      endpoints: {},
+      activeEndpoint: undefined
+    };
 
     const groupedEndpoints = project.endpoints.reduce((acc, endpoint) => {
       const group = acc.get(endpoint.tag) || {
