@@ -26,7 +26,9 @@ export class HttlResponseViewProvider extends HttlBaseViewProvider {
     context.ext.subscriptions.push(
       vscode.window.onDidChangeActiveTextEditor((editor) => {
         if (editor) {
-          this.changeActiveEditor(editor.document.uri.fsPath);
+          if (editor.document.languageId === Lang.LANG_ID) {
+            this.changeActiveEditor(editor.document.uri.fsPath);
+          }
         }
       })
     );
@@ -34,7 +36,9 @@ export class HttlResponseViewProvider extends HttlBaseViewProvider {
     context.ext.subscriptions.push(
       vscode.workspace.onDidCloseTextDocument((document) => {
         if (document.isUntitled) {
-          this.closeResponse(document.uri.fsPath);
+          if (document.languageId === Lang.LANG_ID) {
+            this.closeResponse(document.uri.fsPath);
+          }
         }
       })
     );
@@ -51,7 +55,7 @@ export class HttlResponseViewProvider extends HttlBaseViewProvider {
         if (type === "project" || type === "quick-run") {
           return;
         }
-        
+
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
           vscode.window.showErrorMessage('No active editor found!');
