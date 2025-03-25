@@ -24,6 +24,7 @@ export const Button = styled.a<{ disabled?: boolean, small?: boolean }>`
     ${({ disabled }) => disabled && css`
       cursor: not-allowed;
       filter: brightness(0.5);
+      color: var(--vscode-foreground) !important;
 
       &:hover {
         background-color: transparent;

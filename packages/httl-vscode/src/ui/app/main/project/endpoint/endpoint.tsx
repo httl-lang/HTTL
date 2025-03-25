@@ -99,7 +99,7 @@ const _Endpoint: React.FC = () => {
               disabled={!model.endpoint.hasBodySchema}
               disableLoading={true}
               onClick={() => model.showBodySchema(model.endpoint.endpointId)}
-              title={model.endpoint.hasBodySchema ? "Show body schema" : "No body schema"}
+              title={model.endpoint.hasBodySchema ? "Show body schema" : "Request does not have a body schema"}
             >
               <VscJson /> <span>Body</span>
             </Button>
@@ -107,7 +107,7 @@ const _Endpoint: React.FC = () => {
               disabled={!model.endpoint.hasResponseSchema}
               disableLoading={true}
               onClick={() => model.showResponseSchema(model.endpoint.endpointId)}
-              title={model.endpoint.hasResponseSchema ? "Show response schema" : "No response schema"}
+              title={model.endpoint.hasResponseSchema ? "Show response schema" : "Request does not have a response schema"}
             >
               <VscBracketDot /> <span>Response</span>
             </Button>
@@ -120,9 +120,9 @@ const _Endpoint: React.FC = () => {
                 ? model.stopGeneratingAiRequest()
                 : model.generateAiRequest(model.endpoint.endpointId)
               }
-              title={model.endpoint.hasBodySchema ? "Generate a request body using Copilot" : "No body schema"}
+              title={model.endpoint.hasBodySchema ? "Generate a request body using Copilot" : "Request does not have a body schema"}
             >
-              <VscSparkleFilled   />
+              <VscSparkleFilled />
             </s.MagicButton>
           </s.ToolBar>
         </s.Expanded>
