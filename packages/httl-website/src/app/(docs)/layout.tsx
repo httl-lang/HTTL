@@ -24,7 +24,7 @@ const navbar = (
     projectLink="https://github.com/httl-lang/HTTL"
   />
 )
-const footer = <Footer>HTTL License {new Date().getFullYear()} © HTTL.</Footer>
+const footer = <Footer>MIT License {new Date().getFullYear()} © HTTL.</Footer>
 
 export default async function RootLayout({ children }: any) {
   return (

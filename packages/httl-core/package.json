@@ -14,7 +14,7 @@
   },
   "keywords": [],
   "author": "Evgen Mykhailenko",
-  "license": "HTTL License",
+  "license": "MIT License",
   "description": "Core library for HTTL",
   "dependencies": {
     "antlr4": "^4.13.2",

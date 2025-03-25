@@ -46,4 +46,4 @@ We welcome contributions! Please see the [contributing guidelines](https://httl.
 
 ## License
 
-HTTL LICENSE.
+MIT LICENSE.
