@@ -1,6 +1,6 @@
 {
   "name": "httl-cli",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "author": "Evgen Mykhailenko",
   "license": "MIT License",
   "description": "HTTL Command Line Interface",

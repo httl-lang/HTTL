@@ -9,7 +9,7 @@
 	"bugs": {
 		"url": "https://github.com/httl-lang/httl/issues"
 	},
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"publisher": "HTTL",
 	"author": {
 		"name": "Evgen Mykhailenko"
