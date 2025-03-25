@@ -19,10 +19,13 @@ const UpdatesNotification: FC = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <Markdown>
           {
-            `### **Updated to ${model.currentVersion} 🚀**
+            `### **🚀 Updated to ${model.currentVersion}**
 
 What's new: 
-- [HTTL + Copilot = HTTL Project, generate requests from your project or OpenAPI spec](https://httl.dev/docs/release-notes#VSCODE-0.1.9)
+- 💡[Introducing the New HTTL Project - Now with **Copilot** Integration!](https://httl.dev/docs/release-notes#VSCODE-0.1.9)
+  - Let **Copilot** automatically generate API requests from your codebase.
+  - Import API requests from your existing OpenAPI specs.
+  - Get smart, realistic request bodies based on your data models.
 
 Bugfix:
 - Fixed issue with HTTPS requests failing when using a self-signed certificate`

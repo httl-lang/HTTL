@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Popup from '../../../components/popup';
 
 export const UpdatesNotificationPopup = styled(Popup)`
-    font-size: 12px;
+    font-size: 10px;
     bottom: 10px;
     position: fixed;
     top: auto;
@@ -19,5 +19,9 @@ export const UpdatesNotificationPopup = styled(Popup)`
             transform: translateY(0);
             opacity: 1;
         }
+    }
+
+    & > h3 {
+        font-size: 12px;
     }
 `;
