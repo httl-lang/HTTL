@@ -76,7 +76,7 @@ export class HttlProjectService {
       if (URL.canParse(search)) {
         infos.unshift({
           id: search,
-          name: 'Import From OpenAPI Spec',
+          name: 'Import from OpenAPI Spec',
           specUrl: search,
           divider: infos.length > 0
         });

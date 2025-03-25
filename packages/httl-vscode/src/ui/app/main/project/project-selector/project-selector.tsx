@@ -15,7 +15,7 @@ export const ProjectSelector: React.FC = () => {
   return (
     <s.Container>
       <ComboBox
-        placeholder='Select project'
+        placeholder='Select project or paste OpenAPI URL'
         keyField='id'
         current={model.fileInfo}
         options={(search) => model.resolveProjects(search)}
@@ -35,11 +35,27 @@ export const ProjectSelector: React.FC = () => {
             </s.SubTitle>
           </s.Item>
         )}
+        noItemsRender={(close) => (
+          <s.NoItems>
+            <s.Name>
+              No projects found. Try
+            </s.Name>
+            <Button
+              small
+              disableLoading={true}
+              title='Run the Copilot analysis.'
+              onClick={() => { model.startAgentAnalysis(); close(); }}
+            >
+              run the Copilot analysis.
+            </Button>
+          </s.NoItems>
+        )}
         buttons={() => (
           model.supportAgentAnalysis
             ? (
               <Button
                 title='Run the Copilot analysis.'
+                progress={!!model.agentProgress}
                 onClick={(stop) => stop
                   ? model.stopAgentAnalysis()
                   : model.startAgentAnalysis()

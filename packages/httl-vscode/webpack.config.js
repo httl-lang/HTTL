@@ -152,7 +152,8 @@ const uiConfig = {
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
     }),
-    new BundleAnalyzerPlugin(),
+    // process.env.NODE_ENV === 'development' &&
+    // new BundleAnalyzerPlugin(),
   ],
 
   devtool: 'source-map',

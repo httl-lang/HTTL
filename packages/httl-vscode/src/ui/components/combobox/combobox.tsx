@@ -10,6 +10,7 @@ interface ComboBoxProps<TItem extends { [key: string]: any, divider?: boolean }>
   options: (search: string) => Promise<TItem[]>;
   onChange?: (value: TItem) => void;
   render: (item: TItem, label?: boolean) => React.ReactNode;
+  noItemsRender?: (close: () => void) => React.ReactNode;
   buttons?: () => React.ReactNode;
   itemActions?: (item: TItem, current: boolean) => React.ReactNode;
 }
@@ -23,6 +24,7 @@ function ComboBox<TItem extends { [key: string]: any }>(
     itemActions,
     options,
     render,
+    noItemsRender,
     buttons,
     onChange }: ComboBoxProps<TItem>
 ) {
@@ -139,8 +141,16 @@ function ComboBox<TItem extends { [key: string]: any }>(
           <s.Select>
             {
               items?.length === 0
-                ? <s.SelectItem>No projects found</s.SelectItem>
-                // : items?.sort((a, b) => current?.[keyField] === a[keyField] ? -1 : 0)
+                ? (
+                  <s.SelectItem>
+                    {
+                      noItemsRender
+                        ? noItemsRender(() => setShowPopup(false))
+                        : "Not found"
+                    }
+                  </s.SelectItem>
+                )
+
                 : items?.flatMap((item, index) => (
                   [
                     <s.SelectItem key={index}

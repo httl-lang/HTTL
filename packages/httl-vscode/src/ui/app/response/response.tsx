@@ -3,13 +3,17 @@ import { Outlet } from 'react-router';
 
 import { ResponseContext } from './response.model';
 import * as s from './response.styles';
-import News from './news';
+import UpdatesNotification from './updates-notification';
+import DebugPanel from '../../components/debug-panel';
 
 const _ResponseView: React.FC = () => {
   return (
     <s.Container>
       <Outlet />
-      <News />
+      <UpdatesNotification />
+      {
+        process.env.NODE_ENV === 'development' && <DebugPanel />
+      }
     </s.Container>
   );
 };

@@ -25,6 +25,20 @@ export const Item = styled.div<{ nowrap?: boolean }>`
   flex-wrap: ${(props) => props.nowrap ? 'nowrap' : 'wrap'}; 
 `;
 
+export const NoItems = styled.div`
+  cursor: default;
+  
+  & a {
+    font-weight: var(--vscode-font-weight);
+    font-family: var(--vscode-font-family);
+
+    &:hover {
+      text-decoration: underline;
+      background-color: transparent;
+    }
+  }
+`;
+
 export const ActionButton = styled(Button)`
   font-weight: var(--vscode-font-weight);
   font-family: var(--vscode-font-family);

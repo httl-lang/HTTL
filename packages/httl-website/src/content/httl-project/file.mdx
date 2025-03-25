@@ -1,0 +1,26 @@
+# Run a HTTL file
+ 
+To run a HTTL file, use the following command:
+
+```bash
+httl < file >
+```
+
+Where:
+-  **`file`** - the path to the HTTL file
+
+## Alternatively, you can use input redirection 
+
+```bash
+httl < file_path
+```
+
+## Or even heredoc syntax
+
+```bash
+httl <<EOF
+@base: https://httl.dev/api
+@auth-basic: admin admin
+post /auth
+EOF
+```
