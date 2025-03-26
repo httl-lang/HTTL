@@ -5,7 +5,7 @@ import { debounce } from "../../../../utils/misc";
 
 @Model()
 export class EndpointModel {
-  private readonly debouncedUpdateScript: typeof ProjectApi.prototype.updateScript;
+  private readonly debouncedUpdateScript;
 
   public endpoint!: ApiEndpoint;
   public inProgress = false;
@@ -47,6 +47,10 @@ export class EndpointModel {
       if (code !== this.endpoint.defaultScript) {
         await this.updateScript(scriptId, code, true);
       }
+    } else {
+      this.debouncedUpdateScript.cancel();
+      code = this.endpoint.scripts?.[0]?.code ?? this.endpoint.defaultScript;
+      await this.updateScript(scriptId, code, true);
     }
     await this.api.runScript(this.project.fileInfo!.path, scriptId);
     this.inProgress = false;

@@ -42,19 +42,14 @@ export const InfoItem = styled.div<{ warning?: boolean }>`
 
 export const SourceLink = styled.a<{ type?: string }>`
   cursor: pointer;
-
+  margin-bottom: 2px;
+  display: inline-block;
   opacity: 0.7;
 
   &:hover {
     text-decoration: underline;
     opacity: 1;
   }
-
-  /* ${props => props.type === 'quick-run' && css`
-    color: #ff6700;
-    font-variant-caps: all-petite-caps;
-    opacity: 1;
-  `} */
 
   ${props => props.type === 'quick-run'
     ? css`
