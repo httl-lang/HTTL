@@ -26,4 +26,7 @@ export const Controls = styled.div`
     gap: 5px;
     z-index: 100;
     padding: 2px;
+    & a {
+        color: #5d5d5d !important;
+    }
 `;

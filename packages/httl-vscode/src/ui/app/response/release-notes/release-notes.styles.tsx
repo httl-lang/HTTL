@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Popup from '../../../components/popup';
 
-export const UpdatesNotificationPopup = styled(Popup)`
+export const ReleaseNotesPopup = styled(Popup)`
     font-size: 10px;
     bottom: 10px;
     position: fixed;

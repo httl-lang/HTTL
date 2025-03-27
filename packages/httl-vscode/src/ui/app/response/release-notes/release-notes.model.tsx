@@ -3,7 +3,7 @@ import { AppModel } from "../../app.model";
 import { version } from "../../../../../package.json";
 
 @Model()
-export class UpdatesNotificationModel {
+export class ReleaseNotesModel {
   private static readonly LAST_RELEASE = 'news-last-release';
 
   public show = false;
@@ -15,7 +15,7 @@ export class UpdatesNotificationModel {
   ) { }
 
   public init() {
-    this.lastRelease = this.appModel.getState(UpdatesNotificationModel.LAST_RELEASE);
+    this.lastRelease = this.appModel.getState(ReleaseNotesModel.LAST_RELEASE);
     const lastReleaseParts = (this.lastRelease || '0.0.0').split('.');
     const currentVersionParts = version.split('.');
 
@@ -30,11 +30,11 @@ export class UpdatesNotificationModel {
   @Action()
   public aknowledgeReleaseNote() {
     this.lastRelease = version;
-    this.appModel.saveState(UpdatesNotificationModel.LAST_RELEASE, this.lastRelease, true);
+    this.appModel.saveState(ReleaseNotesModel.LAST_RELEASE, this.lastRelease, true);
     this.show = false;
   }
 }
 
-const [UpdatesNotificationContext, useUpdatesNotificationModel] = connect(UpdatesNotificationModel);
+const [ReleaseNotesContext, useReleaseNotesModel] = connect(ReleaseNotesModel);
 
-export { UpdatesNotificationContext, useUpdatesNotificationModel };
+export { ReleaseNotesContext, useReleaseNotesModel };
