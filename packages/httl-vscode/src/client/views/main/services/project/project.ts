@@ -225,7 +225,7 @@ export class HttlProject {
 
   public getEndpoint(scriptId: string) {
     const [method, path] = scriptId.split(' ');
-    const endpoint = this.spec.getEndpoints({ method, path })?.[0];
+    const endpoint = this.spec.getEndpoints({ method, path, strict: true })?.[0];
     if (!endpoint) {
       throw new Error(`Endpoint not found: ${scriptId}`);
     }
@@ -263,7 +263,7 @@ export class HttlProject {
 
   public generateRequestScript(scriptId: string) {
     const [method, path] = scriptId.split(' ');
-    const [endpoint] = this.spec.getEndpoints({ method, path }) || [];
+    const [endpoint] = this.spec.getEndpoints({ method, path, strict: true }) || [];
     if (!endpoint) {
       throw new Error(`Endpoint not found: ${scriptId}`);
     }

@@ -178,6 +178,8 @@ export class ApiEndpoint {
   public readonly operationId?: string;
 
   public readonly parameters: Parameter[];
+  public readonly queryParameters: Parameter[];
+  
   public readonly requestBody: ApiEndpointBody;
   public readonly responses: ApiEndpointResponse;
 
@@ -196,6 +198,7 @@ export class ApiEndpoint {
     this.operationId = operation.operationId;
 
     this.parameters = operation.parameters || [];
+    this.queryParameters = this.parameters.filter(x => x.in.toLowerCase() === 'query');
     this.requestBody = operation.requestBody && new ApiEndpointBody(operation.requestBody, schemaResolver);
     this.responses = operation.responses && new ApiEndpointResponse(operation.responses, schemaResolver);
 
@@ -210,9 +213,21 @@ export class ApiEndpoint {
   }
 
   public generateFullRequest() {
-    return !!this.requestBody
-      ? `${this.getMethodAndPath()} ${this.requestBody?.generateBodyString()}`
-      : this.getMethodAndPath()
+    let result = this.getMethodAndPath();
+
+    if (this.queryParameters?.length > 0) {
+      const params = this.queryParameters.map(param => {
+        return `${param.name}={${param.name}}`;
+      }).join('&');
+
+      result += `?${params}`;
+    }
+
+    if (!!this.requestBody) {
+      result += ` ${this.requestBody.generateBodyString()}`;
+    }
+
+    return result;
   }
 
   public hasBodySchema() {

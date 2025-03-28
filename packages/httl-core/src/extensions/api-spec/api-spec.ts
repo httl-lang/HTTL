@@ -9,6 +9,7 @@ import { Swagger_2_x } from "./versions/swagger_2_x";
 export interface IApiEndpointFilter {
   path?: string,
   method?: string,
+  strict?: boolean,
 }
 
 export class ApiSpec {
@@ -86,7 +87,12 @@ export class ApiSpec {
 
       return (
         (!filter.method || endpoint.method === filter.method) &&
-        (!filter.path || endpoint.path.toLocaleLowerCase().includes(filter.path.toLocaleLowerCase()))
+        (!filter.path || (
+          filter.strict
+            ? endpoint.path.toLocaleLowerCase() === filter.path.toLocaleLowerCase()
+            : endpoint.path.toLocaleLowerCase().startsWith(filter.path.toLocaleLowerCase())
+        )
+        )
       )
     });
   }

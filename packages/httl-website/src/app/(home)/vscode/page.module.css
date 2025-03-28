@@ -25,7 +25,7 @@
   pointer-events: none;
   z-index: 1;
   filter: blur(15vw);
-  overflow: hidden;
+  overflow: auto;
   /* opacity: 0.8; */
 }
 
