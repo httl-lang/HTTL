@@ -3,6 +3,15 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { HttlHead } from "@/components/head";
 import { HttlAnalytics } from "@/components/analytics";
+import { Nav } from "@/components/nav";
+
+const navigation = [
+  { name: 'Home', href: '/', current: false },
+  { name: 'VS Code', href: '/vscode', current: false },
+  { name: 'CLI', href: 'https://www.npmjs.com/package/httl-cli', current: false },
+
+  { name: 'Docs', href: '/docs', current: false, right: true },
+]
 
 export const metadata: Metadata = {
   title: "HTTL Website",
@@ -20,7 +29,10 @@ export default function RootLayout({
         <HttlHead />
       </head>
       <body>
-        {children}
+        <div>
+          <Nav navigation={navigation} />
+          {children}
+        </div>
       </body>
       <HttlAnalytics />
     </html>

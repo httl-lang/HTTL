@@ -1,18 +1,8 @@
 import { Metadata } from "next";
 
 import QuickRun from "@/components/quick-run";
-import { Nav } from "@/components/nav";
+import { ReleaseLabel } from "@/components/release-label";
 
-import releases from '../../../../../releases.json';
-
-import styles from './page.module.css';
-
-
-const navigation = [
-  { name: 'Docs', href: '/docs', current: false },
-  { name: 'VS Code Extension', href: 'https://marketplace.visualstudio.com/items?itemName=HTTL.httl-vscode', current: false },
-  { name: 'CLI', href: 'https://www.npmjs.com/package/httl-cli', current: false },
-]
 
 export const metadata: Metadata = {
   title: "HTTL",
@@ -21,11 +11,11 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div>
-      <Nav navigation={navigation} />
-      <div className={`${styles.pageBG} mx-auto max-w-6xl absolute -z-10 transform-gpu overflow-hidden blur-3xl`}>
+    <>
+      <div className={`pageBG mx-auto max-w-6xl absolute -z-10 transform-gpu overflow-hidden blur-3xl`}>
         <div />
       </div>
+
       <div className="relative isolate px-6 pt-14 lg:px-8">
         <div className="mx-auto max-w-4xl py-8">
           <div className="flex items-center sm:mb-8 justify-center ">
@@ -35,11 +25,9 @@ export default function Home() {
               className="h-12 w-auto"
             />
           </div>
-          <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-            <a href={`/docs/release-notes#${releases[0].date}`} className="relative rounded-full px-3 py-1 text-sm/6 text-gray-400 ring-1 ring-gray-200/10">
-              <span className="text-gray-500">Release</span> #{releases[0].date}
-            </a>
-          </div>
+
+          <ReleaseLabel />
+
           <div className="text-center">
             <h1 className="mt-14 font-display text-5xl font-semibold text-white">
               First HTTP programming language
@@ -65,6 +53,6 @@ export default function Home() {
           <QuickRun />
         </div>
       </div>
-    </div>
+    </>
   );
 }
