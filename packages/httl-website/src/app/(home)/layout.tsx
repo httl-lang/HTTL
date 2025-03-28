@@ -6,11 +6,11 @@ import { HttlAnalytics } from "@/components/analytics";
 import { Nav } from "@/components/nav";
 
 const navigation = [
-  { name: 'Home', href: '/', current: false },
-  { name: 'VS Code', href: '/vscode', current: false },
-  { name: 'CLI', href: 'https://www.npmjs.com/package/httl-cli', current: false },
+  { name: 'Home', href: '/' },
+  { name: 'VS Code', href: '/vscode' },
+  { name: 'CLI', href: 'https://www.npmjs.com/package/httl-cli' },
 
-  { name: 'Docs', href: '/docs', current: false, right: true },
+  { name: 'Docs', href: '/docs', right: true },
 ]
 
 export const metadata: Metadata = {

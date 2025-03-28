@@ -1,3 +1,6 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
@@ -6,10 +9,12 @@ function classNames(...classes: any[]) {
 }
 
 interface NavProps {
-  navigation: { name: string, href: string, current: boolean, right?: boolean }[]
+  navigation: { name: string, href: string, right?: boolean }[]
 }
 
 export function Nav({ navigation }: NavProps) {
+  const pathname = usePathname();
+
   return (
     <Disclosure as="nav">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -39,9 +44,9 @@ export function Nav({ navigation }: NavProps) {
                     key={item.name}
                     href={item.href}
                     target={item.href.startsWith('http') ? '_blank' : undefined}
-                    aria-current={item.current ? 'page' : undefined}
+                    aria-current={item.href === pathname ? 'page' : undefined}
                     className={classNames(
-                      item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      item.href === pathname ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                       'rounded-md px-3 py-2 text-lg font-medium',
                     )}
                   >
@@ -51,16 +56,26 @@ export function Nav({ navigation }: NavProps) {
               </div>
             </div>
           </div>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0  gap-1">
+            <a
+              type="button"
+              href='https://discord.gg/5C6hdPVE'
+              target='_blank'
+              className="relative p-1 hover:bg-gray-600 rounded-full bg-gray-800 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+            >
+              <span className="absolute -inset-1.5" />
+              <img src="./discord.svg" className="size-6 opacity-40" />
+            </a>
             <a
               type="button"
               href='https://github.com/httl-lang/HTTL'
               target='_blank'
-              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+              className="relative p-1 hover:bg-gray-600 rounded-full bg-gray-800 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
             >
               <span className="absolute -inset-1.5" />
               <img src="./github-mark.svg" className="size-6 opacity-40" />
             </a>
+
           </div>
         </div>
       </div>
