@@ -21,8 +21,9 @@ export const Label = styled.div`
 export const Item = styled.div<{ nowrap?: boolean }>`
   display: flex;
   flex-direction: ${(props) => props.nowrap ? 'row' : 'column'};
-  align-items: baseline;
+  align-items: ${(props) => props.nowrap ? 'center' : 'flex-start'};
   flex-wrap: ${(props) => props.nowrap ? 'nowrap' : 'wrap'}; 
+  height: 100%;
 `;
 
 export const NoItems = styled.div`

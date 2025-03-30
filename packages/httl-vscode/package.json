@@ -1,7 +1,7 @@
 {
 	"name": "httl-vscode",
 	"displayName": "HTTL",
-	"description": "A Visual Studio Code extension for HTTL (Hypertext Template Language)",
+	"description": "A Visual Studio Code extension for HTTL (HyperText Transfer Language)",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/httl-lang/httl.git"
@@ -15,7 +15,7 @@
 		"name": "Evgen Mykhailenko"
 	},
 	"engines": {
-		"vscode": "^1.93.0"
+		"vscode": "^1.97.0"
 	},
 	"main": "./dist/extension.js",
 	"icon": "media/logo.png",

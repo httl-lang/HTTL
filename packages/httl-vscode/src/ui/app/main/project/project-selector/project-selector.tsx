@@ -38,15 +38,15 @@ export const ProjectSelector: React.FC = () => {
         noItemsRender={(close) => (
           <s.NoItems>
             <s.Name>
-              No projects found. Try
+              No projects found. 
             </s.Name>
             <Button
               small
               disableLoading={true}
-              title='Run the Copilot analysis.'
+              title='Let Copilot analyze the project and create OpenAPI spec.'
               onClick={() => { model.startAgentAnalysis(); close(); }}
             >
-              run the Copilot analysis.
+              Run Copilot Analysis.
             </Button>
           </s.NoItems>
         )}
