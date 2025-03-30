@@ -18,8 +18,11 @@ export interface ApiEndpoint extends HttlProjectApiEndpoint {
 }
 export interface ProjectState {
   prestartHeight: string;
-  activeEndpoint?: string;
   endpoints: Record<string, EndpointState>;
+}
+
+export interface ProjectSessionState {
+  focusedEndpoint?: string;
 }
 
 export interface EndpointState {
@@ -44,6 +47,7 @@ export class ProjectModel {
   public endpoints: ApiEndpoint[] = [];
   public endpointGoups: ApiEndpointGroup[] = [];
   public projectState?: ProjectState;
+  public sessionState?: ProjectSessionState;
 
   public error?: string;
   public focusedEndpoint?: EndpointModel;
@@ -97,6 +101,8 @@ export class ProjectModel {
     this.focusedEndpoint?.blur();
     this.focusedEndpoint = endpoint;
     this.focusedEndpoint.focus();
+
+    this.updateSessionState({ focusedEndpoint: endpoint.endpoint.endpointId });
   }
 
   public get sourceType() {
@@ -225,6 +231,8 @@ export class ProjectModel {
     this.agentTagsProgress = [];
     this.agentProgress = undefined;
     this.projectState = undefined;
+    this.sessionState = undefined;
+
     this.focusedEndpoint = undefined;
 
     this.app.setAppState({
@@ -236,13 +244,21 @@ export class ProjectModel {
   public showOpenApiSpec() {
     this.api.showOpenApiSpec(this.fileInfo!.path);
   }
-  
 
   @Action()
   public updateState(state: Partial<ProjectState>) {
     merge(this.projectState, state);
 
     this.app.saveState(ProjectModel.PROJECT_STATE(this.fileInfo?.path!), this.projectState);
+  }
+
+  private updateSessionState(state: Partial<ProjectSessionState>) {
+    const sessionState = this.getSessionState();
+    sessionStorage.setItem(ProjectModel.PROJECT_STATE(this.fileInfo?.path!), JSON.stringify(merge(sessionState, state)));
+  }
+
+  private getSessionState(): ProjectSessionState {
+    return JSON.parse(sessionStorage.getItem(ProjectModel.PROJECT_STATE(this.fileInfo?.path!)) || '{}') as ProjectSessionState;
   }
 
   private async setProject(project: HttlProjectViewData): Promise<void> {
@@ -257,6 +273,7 @@ export class ProjectModel {
     this.prestart = project.prestart;
     this.endpoints = project.endpoints;
     this.focusedEndpoint = undefined;
+    this.sessionState = this.getSessionState();
 
     this.projectState = this.app.getState(ProjectModel.PROJECT_STATE(project.fileInfo.path)) ?? {
       prestartHeight: '70px',

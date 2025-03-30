@@ -27,7 +27,8 @@ export class EndpointModel {
 
     this.expanded = state.expanded || false;
     this.height = state.height || '70px';
-    this.focused = this.project.projectState?.activeEndpoint === endpoint.endpointId;
+    this.focused = this.project.sessionState?.focusedEndpoint === endpoint.endpointId;
+    // TODO: temporary fix for focused endpoint
     this.project.focusedEndpoint = this.focused ? this : this.project.focusedEndpoint;
 
     if (this.expanded && !this.endpoint.scripts.length) {
@@ -41,16 +42,13 @@ export class EndpointModel {
 
   @Action()
   public async runScript(scriptId: string, code?: string) {
-    if (code !== undefined) {
-      this.inProgress = true;
-
-      if (code !== this.endpoint.defaultScript) {
-        await this.updateScript(scriptId, code, true);
-      }
-    } else {
-      this.debouncedUpdateScript.cancel();
-      code = this.endpoint.scripts?.[0]?.code ?? this.endpoint.defaultScript;
+    const currentScriptCode = this.endpoint.scripts?.[0]?.code;
+    this.inProgress = true;
+    if (code !== undefined && code !== this.endpoint.defaultScript) {
       await this.updateScript(scriptId, code, true);
+    } else if (currentScriptCode !== undefined) {
+      this.debouncedUpdateScript.cancel();
+      await this.updateScript(scriptId, currentScriptCode, true);
     }
     await this.api.runScript(this.project.fileInfo!.path, scriptId);
     this.inProgress = false;
@@ -78,9 +76,6 @@ export class EndpointModel {
   @Action()
   public focus() {
     this.focused = true;
-    this.project.updateState({
-      activeEndpoint: this.endpoint.endpointId
-    });
   }
 
   @Action()

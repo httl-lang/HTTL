@@ -53,6 +53,11 @@ export const Label = styled.div`
 
 export const Placeholder = styled.div`
   color: var(--vscode-input-placeholderForeground);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 18px;
 `;
 
 export const Input = styled.input`
