@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { LoadingText } from '../../../../components/loading-text';
+import Button from '../../../../components/button';
 
 export const Container = styled.div`
   position: relative;
@@ -25,8 +26,8 @@ export const ScrollShadow = styled.div`
 `;
 
 export const Label = styled(LoadingText) <{ center?: boolean, dark?: boolean }>`
-  font-size: 10px;
-  margin: 0 4px 0;
+  font-size: 12px;
+  font-variant-caps: all-petite-caps;
   display: flex;
   align-items: center;
   justify-content: ${p => p.center ? 'center' : 'flex-start'};
@@ -60,4 +61,31 @@ export const EndpointTag = styled(LoadingText) <{ dark?: boolean }>`
   & svg {
     color: color-mix(in srgb, var(--vscode-input-foreground) 70%, transparent);
   }
+`;
+
+
+export const SpecButton = styled(Button)`
+  font-weight: var(--vscode-font-weight);
+  font-family: var(--vscode-font-family);
+
+  display: flex;
+  font-size: 10px;
+  gap: 3px;
+  font-variant-caps: all-petite-caps;
+  padding: 3px 5px;
+  border-radius: 3px;
+
+  & span {
+    margin-top: -1px;
+    pointer-events: none;
+  }
+`;
+
+export const Bar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 6px 0px 10px;
+  height: 30px;
+  border-bottom: 0.5px solid color-mix(in srgb, var(--vscode-editorGroup-border) 40%, transparent);
 `;

@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import fs from "fs";
 import * as fsPath from "path";
+import yaml from 'js-yaml';
 import { Json } from "httl-common";
 
 import { FileService, HttlExtensionContext, UIMessageType } from "../../../../../common";
@@ -257,8 +258,8 @@ export class HttlProjectService {
 
     if (project.props.spec) {
       const document = await vscode.workspace.openTextDocument({
-        content: JSON.stringify(project.props.spec, null, 2),
-        language: 'json',
+        content: yaml.dump(project.props.spec),
+        language: 'yaml',
       });
 
       vscode.window.showTextDocument(document);

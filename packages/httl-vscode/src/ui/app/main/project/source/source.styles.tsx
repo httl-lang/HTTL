@@ -10,7 +10,6 @@ export const Container = styled.div`
 
 export const Body = styled.div`
   overflow: hidden;
-  color: var(--vscode-input-foreground);
   border-radius: 5px;
   box-sizing: border-box;
   display: flex;
@@ -36,22 +35,4 @@ export const Label = styled.div`
   font-size: 12px;
   opacity: 0.6;
   user-select: none;
-`;
-
-
-export const SpecButton = styled(Button)`
-  font-weight: var(--vscode-font-weight);
-  font-family: var(--vscode-font-family);
-
-  display: flex;
-  font-size: 10px;
-  gap: 3px;
-  font-variant-caps: all-petite-caps;
-  padding: 3px 5px;
-  border-radius: 3px;
-
-  & span {
-    margin-top: -1px;
-    pointer-events: none;
-  }
 `;
