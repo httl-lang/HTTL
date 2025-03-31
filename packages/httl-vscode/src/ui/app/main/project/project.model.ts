@@ -231,7 +231,7 @@ export class ProjectModel {
     this.agentTagsProgress = [];
     this.agentProgress = undefined;
     this.projectState = undefined;
-    this.sessionState = undefined;
+    this.clearSessionState();
 
     this.focusedEndpoint = undefined;
 
@@ -254,14 +254,23 @@ export class ProjectModel {
 
   private updateSessionState(state: Partial<ProjectSessionState>) {
     const sessionState = this.getSessionState();
-    sessionStorage.setItem(ProjectModel.PROJECT_STATE(this.fileInfo?.path!), JSON.stringify(merge(sessionState, state)));
+    sessionStorage.setItem("projectSessionState", JSON.stringify(merge(sessionState, state)));
   }
 
   private getSessionState(): ProjectSessionState {
-    return JSON.parse(sessionStorage.getItem(ProjectModel.PROJECT_STATE(this.fileInfo?.path!)) || '{}') as ProjectSessionState;
+    return JSON.parse(sessionStorage.getItem("projectSessionState") || '{}') as ProjectSessionState;
+  }
+
+  private clearSessionState() {
+    sessionStorage.removeItem("projectSessionState");
+    this.sessionState = undefined;
   }
 
   private async setProject(project: HttlProjectViewData): Promise<void> {
+    if (!!this.fileInfo?.path && this.fileInfo?.path !== project.fileInfo.path) {
+      this.clearSessionState();
+    }
+
     this.app.setAppState({
       projectPath: project.fileInfo.path
     });

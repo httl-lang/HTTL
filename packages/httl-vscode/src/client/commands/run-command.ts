@@ -2,7 +2,6 @@ import vscode from 'vscode';
 import { HttlLanguageClient } from '../httl-language-client';
 import { HttlExtensionContext } from '../../common';
 import { HttlResponseViewProvider } from '../views/response';
-import { HttlMainViewProvider } from '../views/main/httl-main-view';
 
 export class HttlRunCommand {
 

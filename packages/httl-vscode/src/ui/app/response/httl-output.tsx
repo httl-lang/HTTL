@@ -9,6 +9,7 @@ import { HttlOutputResponse } from './httl-output-response';
 import { HttlOutputError } from './httl-output-error';
 import HttlResponseList from './httl-response-list';
 import { useResponseModel } from './response.model';
+import { RequestLoading } from './request-loading';
 
 export interface HttlOutputViewProps {
   inProgress: boolean | undefined;
@@ -66,9 +67,9 @@ const _HttlOutputView: FC = () => {
                 </s.Main>
               </>
             )
-            : !model.inProgress
-              ? <s.EmptyScript>No Requests to Process</s.EmptyScript>
-              : null
+            : model.inProgress
+              ? <RequestLoading file={resModel.currentFile} />
+              : <s.EmptyScript>No Requests to Process</s.EmptyScript>
         }
       </s.HttlOutputView>
     </>

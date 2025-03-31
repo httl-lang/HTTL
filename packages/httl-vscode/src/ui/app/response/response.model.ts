@@ -19,7 +19,7 @@ export class ResponseModel {
     commutator.onSetProgress(({ file, payload: active }) => {
       this.currentFile = file;
       let viewData = this.map.get(file);
-      viewData = { inProgress: active, output: viewData?.output };
+      viewData = { inProgress: active, output: undefined };
       this.setViewData(viewData);
     });
 
@@ -45,7 +45,6 @@ export class ResponseModel {
   public setViewData(viewData?: HttlOutputViewProps) {
     this.viewData = viewData;
     if (!!viewData) {
-      console.log('setViewData', viewData);
       this.appModel.navigateResponse(this.currentFile!);
     } else {
       this.appModel.navigateNoRequestsYet();
