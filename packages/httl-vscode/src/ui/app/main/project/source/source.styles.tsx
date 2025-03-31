@@ -32,7 +32,8 @@ export const Bar = styled.div`
 `;
 
 export const Label = styled.div`
-  font-size: 12px;
+  font-size: 13px;
   opacity: 0.6;
   user-select: none;
+  font-variant-caps: all-petite-caps;
 `;

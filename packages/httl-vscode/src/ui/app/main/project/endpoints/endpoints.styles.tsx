@@ -26,12 +26,13 @@ export const ScrollShadow = styled.div`
 `;
 
 export const Label = styled(LoadingText) <{ center?: boolean, dark?: boolean }>`
-  font-size: 12px;
+  font-size: 13px;
+  user-select: none;
   font-variant-caps: all-petite-caps;
   display: flex;
   align-items: center;
   justify-content: ${p => p.center ? 'center' : 'flex-start'};
-  color: ${p => p.dark ? 'color-mix(in srgb, var(--vscode-input-foreground) 70%, transparent)' : 'inherit'};
+  color: ${p => p.dark ? 'color-mix(in srgb, var(--vscode-input-foreground) 60%, transparent)' : 'inherit'};
 `;
 
 export const EndpointGroup = styled.div`

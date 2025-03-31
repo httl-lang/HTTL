@@ -23,8 +23,9 @@ export const Editor = styled(ResizePanel)`
 `;
 
 export const Label = styled.div`
-  font-size: 12px;
+  font-size: 13px;
   margin: 0 0 3px 1px;
   opacity: 0.6;
   user-select: none;
+  font-variant-caps: all-petite-caps;
 `;
