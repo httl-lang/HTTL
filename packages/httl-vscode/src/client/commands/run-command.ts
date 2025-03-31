@@ -2,6 +2,7 @@ import vscode from 'vscode';
 import { HttlLanguageClient } from '../httl-language-client';
 import { HttlExtensionContext } from '../../common';
 import { HttlResponseViewProvider } from '../views/response';
+import { HttlOutput } from 'httl-core';
 
 export class HttlRunCommand {
 
@@ -25,12 +26,16 @@ export class HttlRunCommand {
     await responseView.show();
     await responseView.setProgress(fsPath, true);
 
-    const response = await client.sendRun(
-      uri,
-      text,
-    );
+    try {
+      const response = await client.sendRun(
+        uri,
+        text,
+      );
 
-    await responseView.setResponse(fsPath, response);
+      await responseView.setResponse(fsPath, response);
+    } catch (error: any) {
+      await responseView.setResponse(fsPath, { errors: [{ error: error.message }] } as HttlOutput);
+    }
   };
 
   constructor(

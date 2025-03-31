@@ -7,7 +7,7 @@ import {
   TransportKind
 } from 'vscode-languageclient/node';
 import { HttlExtensionContext } from '../common';
-import { Lang } from 'httl-core';
+import { HttlOutput, Lang } from 'httl-core';
 
 export class HttlLanguageClient {
 
@@ -79,8 +79,8 @@ export class HttlLanguageClient {
   /**
    * Sends a Run request to the server
    */
-  public async sendRun(documentUri: string, selection: string) {
-    return await this.sendRequest("run", documentUri, { selection });
+  public async sendRun(documentUri: string, selection: string): Promise<HttlOutput> {
+    return await this.sendRequest("run", documentUri, { selection }) as any as HttlOutput;
   }
 
   /**

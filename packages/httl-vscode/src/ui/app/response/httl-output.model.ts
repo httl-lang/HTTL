@@ -37,7 +37,7 @@ export class HttlOutputModel {
     }
 
     this.errors = output.errors;
-    this.responses = output.result;
+    this.responses = output.result || [];
 
     if (this.responses.length > 0) {
       this.currentResponseIndex = this.responses.length - 1;
