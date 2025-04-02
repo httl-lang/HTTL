@@ -32,7 +32,7 @@ export default function HttlProject() {
               className={`${styles.button} hover:bg-gray-700`}
             >
               <img src="/vscode-logo.png" alt="VS Code" className="h-6 w-6 mr-1" />
-              Install From VS Code Marketplace
+              Install From <strong>VS Code Marketplace</strong>
             </a>
             <a href="/docs/httl-project" className="text-base font-semibold text-gray-400 hover:text-gray-100">
               Learn more <span aria-hidden="true">→</span>
@@ -43,9 +43,9 @@ export default function HttlProject() {
         <div className={`${styles.videoContainer} mt-14`}>
           <div className={styles.ambientVerlay} />
           <video className={styles.video}
-            autoPlay muted loop controls
-            poster="https://assets.apidog.com/static/fast-request-www/videos/poster.png">
-            <source src="https://assets.apidog.com/static/fast-request-www/videos/actions.mp4" type="video/mp4" />
+            autoPlay muted loop playsInline 
+            poster="/videos/httl-demo.jpg">
+            <source src="/videos/httl-demo.mp4" type="video/mp4" />
           </video>
         </div>
       </div>

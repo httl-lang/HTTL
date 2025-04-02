@@ -18,11 +18,11 @@ export const Container = styled.div`
 
   @keyframes showExecutingRequest {
     from {
-        transform: translateY(5%);
+        transform: translateY(3%);
         opacity: 0;
     }
     to {
-      transform: translateY(0);
+        transform: translateY(0);
         opacity: 1;
     }
   }

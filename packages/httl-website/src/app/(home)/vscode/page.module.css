@@ -43,4 +43,6 @@
 .video {
   z-index: 2;
   position: relative;
+  border-radius: 8px;
+  overflow: hidden;
 }
