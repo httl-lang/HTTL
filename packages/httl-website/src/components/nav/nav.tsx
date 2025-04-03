@@ -59,7 +59,7 @@ export function Nav({ navigation }: NavProps) {
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0  gap-1">
             <a
               type="button"
-              href='https://discord.gg/5C6hdPVE'
+              href='https://discord.gg/rAuRY4yF55'
               target='_blank'
               className="relative p-1 hover:bg-gray-600 rounded-full bg-gray-800 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
             >
