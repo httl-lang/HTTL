@@ -18,7 +18,7 @@ export default function HttlProject() {
         <div className="text-center">
           <ColoredText>
             <h1 className=" font-display text-5xl text-white">
-              Transform Your API Project with Ease
+              Reimagine Your API Projects with HTTL & Copilot
             </h1>
           </ColoredText>
 

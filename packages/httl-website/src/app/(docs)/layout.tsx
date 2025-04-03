@@ -36,7 +36,7 @@ export default async function RootLayout({ children }: any) {
       <body>
         <Banner storageKey="2025-03-25-release">
           <a href="/docs/release-notes#2025-03-25">
-            🎉 HTTL + Copilot is released, Read more →
+            🎉 HTTL + GitHub Copilot is released, Read more →
           </a>
         </Banner>
         <Layout
