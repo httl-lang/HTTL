@@ -1,5 +1,5 @@
 import { ApiEndpoint } from "../api-endpoint";
-import { IOpenApiVersionAdapter } from "../api-version-adapter";
+import { IApiInfo, IOpenApiVersionAdapter } from "../api-version-adapter";
 import { SchemaResolver } from "../schema-resolver";
 
 // Info Object
@@ -247,6 +247,21 @@ export class Swagger_2_x implements IOpenApiVersionAdapter {
     if (!Swagger_2_x.isvalid(spec)) {
       throw new Error(`Invalid OpenAPI version: ${spec.info.version}`);
     }
+  }
+
+  public getRaw(): object {
+    return this.spec;
+  }
+
+  public getApiInfo(): IApiInfo {
+    return {
+      title: this.spec.info.title,
+      version: this.spec.info.version,
+      description: this.spec.info.description,
+      termsOfService: this.spec.info.termsOfService,
+      contact: this.spec.info.contact,
+      license: this.spec.info.license,
+    };
   }
 
   public getBasePath() {

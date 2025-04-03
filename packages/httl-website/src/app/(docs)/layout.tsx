@@ -4,6 +4,7 @@ import { getPageMap } from 'nextra/page-map'
 import { Banner } from 'nextra/components'
 
 import 'nextra-theme-docs/style.css'
+import "./globals.css";
 import { HttlHead } from '@/components/head'
 import { HttlAnalytics } from '@/components/analytics'
 
@@ -24,7 +25,7 @@ const navbar = (
     projectLink="https://github.com/httl-lang/HTTL"
   />
 )
-const footer = <Footer>HTTL License {new Date().getFullYear()} © HTTL.</Footer>
+const footer = <Footer>MIT License {new Date().getFullYear()} © HTTL.</Footer>
 
 export default async function RootLayout({ children }: any) {
   return (
@@ -33,9 +34,9 @@ export default async function RootLayout({ children }: any) {
         <HttlHead />
       </Head>
       <body>
-        <Banner storageKey="0.1.1-release">
-          <a href="/docs/release-notes#2025-02-25">
-            🎉 HTTL 0.1.1 is released, Read more →
+        <Banner storageKey="2025-03-25-release">
+          <a href="/docs/release-notes#2025-03-25">
+            🎉 HTTL + GitHub Copilot is released, Read more →
           </a>
         </Banner>
         <Layout

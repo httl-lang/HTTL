@@ -2,8 +2,11 @@
 import vscode from 'vscode';
 import { AppData, HttlExtensionContext, UIMessage } from '../../common';
 import { Lang } from 'httl-core';
+import { AgentStopException } from '../../ai/core/agent';
 
 export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider {
+  private static readonly views = new Map<string, HttlBaseViewProvider>();
+
   private isAppReady = false;
   protected view!: vscode.WebviewView;
   protected delayedMessages: UIMessage[] = [];
@@ -11,8 +14,10 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
   constructor(
     protected readonly context: HttlExtensionContext,
     protected readonly viewType: string,
-    protected readonly appData: Omit<AppData, 'baseUri'> | any
+    protected readonly appData: Omit<AppData, 'baseUri'> | any,
+    protected readonly services?: Record<string, any>,
   ) {
+    HttlBaseViewProvider.views.set(viewType, this);
     context.ext.subscriptions.push(
       vscode.window.registerWebviewViewProvider(
         viewType,
@@ -39,7 +44,14 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
 
     webviewView.webview.onDidReceiveMessage(
       async message => {
-        switch (message.command) {
+        const { command, requestId } = message;
+
+        if (requestId) {
+          await this.handleApiCommand(webviewView, message);
+          return;
+        }
+
+        switch (command) {
           case 'ready': {
             this.isAppReady = true;
 
@@ -55,6 +67,10 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
           case 'save-state': {
             const { global, state: { key, value } } = message.payload;
             await this.context.saveState(`ui.${this.appData.view}.${key}`, value, global);
+            return;
+          }
+          case 'clear-state': {
+            await this.context.clearState();
             return;
           }
         }
@@ -88,6 +104,14 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
     }
   }
 
+  public async setResponse(file: string, payload: any) {
+    await this.postMessage({ command: 'set-response', file, payload });
+  }
+
+  protected getView(viewType: string) {
+    return HttlBaseViewProvider.views.get(viewType);
+  }
+
   protected async handleUIMessages(messagefromUI: any) { }
 
   protected async postMessage(message: UIMessage) {
@@ -97,6 +121,45 @@ export abstract class HttlBaseViewProvider implements vscode.WebviewViewProvider
     }
 
     await this.view.webview.postMessage(message);
+  }
+
+  protected async handleApiCommand(webviewView: vscode.WebviewView, { command, requestId, payload }: any) {
+    const [service, action] = command.split('.');
+    if (!service || !action) {
+      throw new Error(`Invalid Service action ${command}`);
+    }
+
+    if (!this.services) {
+      throw new Error('No services defined');
+    }
+
+    if (typeof this.services[service]?.[action] !== 'function') {
+      throw new Error(`API method ${command} is not defined`);
+    }
+    try {
+      const response = await this.services[service][action](payload);
+
+      await webviewView.webview.postMessage({
+        command,
+        requestId,
+        payload: response
+      });
+
+    } catch (error: any) {
+      console.error(error);
+      if (error instanceof AgentStopException) {
+        await webviewView.webview.postMessage({
+          command,
+          requestId,
+        });
+      } else {
+        await webviewView.webview.postMessage({
+          command,
+          requestId,
+          error: error.message
+        });
+      }
+    }
   }
 
   protected getHtmlForWebview(webview: vscode.Webview, appData: any): string {

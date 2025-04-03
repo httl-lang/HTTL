@@ -18,3 +18,36 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.pageBG {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.pageBG>div {
+  /* background: radial-gradient(circle at right center, #000000, #81c3af 30%, #12346d 55%, #32517380); */
+  background: radial-gradient(circle at right center, #000000, #4af3bf 30%, #216ce9 55%, #32517380);
+  opacity: 0.8;
+
+  mask-image: radial-gradient(ellipse 300% 30% at center center, #000 20%, #00000080 50%, #0000);
+  transform: matrix(1, 0, 4, 3, 0, 60);
+  height: 35%;
+
+  animation: bg 30s ease-in-out infinite;
+}
+
+@keyframes bg {
+  0% {
+    transform: matrix(1, 0, 4, 3, 0, 60);
+  }
+
+  50% {
+    transform: matrix(1, 0, 4, 3, 200, 60);
+  }
+
+  100% {
+    transform: matrix(1, 0, 4, 3, 0, 60);
+  }
+}

@@ -12,7 +12,6 @@ export interface HttpRequestOptions {
   method: string;
   body?: string | FormData;
   headers: http.OutgoingHttpHeaders;
-  rejectUnauthorized?: boolean;
 }
 
 export class HttpClient {
@@ -23,18 +22,23 @@ export class HttpClient {
       : url;
 
     const finalURL = httlUrl.toNodeUrl();
+    const finalheaders = {
+      ...options.headers,
+      'User-Agent': constants.HTTP_AGENT_NAME,
+    };
+
+    if (!Object.keys(options.headers).find((key) => key.toLowerCase() === 'host')) {
+      finalheaders.host = httlUrl.hostname;
+    }
 
     const reqOptions = {
       method: options.method.toUpperCase(),
       protocol: finalURL.protocol,
       family: 4, // IPv4 - (https://github.com/httl-lang/HTTL/issues/10)
-      headers: {
-        ...options.headers,
-        'User-Agent': constants.HTTP_AGENT_NAME,
-      },
+      headers: finalheaders,
       timeout: constants.DEFAULT_INSTRUCTION_TIMEOUT,
       // @ts-ignore
-      rejectUnauthorized: options.rejectUnauthorized,
+      rejectUnauthorized: false,
     } satisfies http.RequestOptions;
 
     const textualBodySent = options.body instanceof FormData
@@ -50,7 +54,7 @@ export class HttpClient {
         const req = client.request(finalURL, reqOptions, (res) => {
           const warnings: HttpWarning[] = [];
 
-          if (options.rejectUnauthorized === false && res.socket instanceof tls.TLSSocket) {
+          if (res.socket instanceof tls.TLSSocket) {
             const cert = res.socket.getPeerCertificate();
             if (cert && !!cert.subject?.CN && (cert.subject?.CN === cert.issuer?.CN)) {
               warnings.push({

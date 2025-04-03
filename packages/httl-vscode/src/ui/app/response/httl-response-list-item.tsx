@@ -5,6 +5,7 @@ import { HttpResponse } from 'httl-core';
 import * as s from './httl-response-list.styles';
 import Popup from '../../components/popup';
 import { Viewer } from '../../components/editor';
+import { MethodLabel } from '../../components/method-label';
 
 
 export interface HttlResponseListItemProps {
@@ -22,7 +23,7 @@ export const HttlResponseListItem: FC<HttlResponseListItemProps> = ({ response, 
       <s.ResponseItemHost>
         {showMultipleIndicator && <s.MultipleIndicator />}
         <s.ResponseItem onClick={() => { setExpanded(!expanded); onClick?.(); }}>
-          <s.ResMethod method={response.req.method}>{response.req.method}</s.ResMethod>
+          <MethodLabel method={response.req.method} />
           <s.ResUrl>{response.req.url}</s.ResUrl>
         </s.ResponseItem>
 

@@ -11,12 +11,12 @@ As usual, each tool has its own benefits and drawbacks, and after a long search 
    > For example, you don't need to write something like `get {{baseUrl}}/api/user`. Instead, you can define the base url at the top of your file and simply use `get /user`.
 <br />
 - **Flexibility**: There should be no limit to the number of requests that can be run at once.
-   > For example, you can run multiple requests within a single file and use the results of one request in another—potentially applying data transformations in between, etc.
+   > For example, you can run multiple requests within a single file and use the results of one request in another, potentially applying data transformations in between, etc.
 <br />
 - **Modularity**: It’s hard to imagine any modern language without the ability to separate code into different files, right?
    > For example, it’s convenient to define the authentication logic in one file and then import it for use in other files.
 <br />
-- **OpenAPI Integration**: This is my favorite one — there should be an easy way to point to an OpenAPI specification and benefit from built-in type checking and IntelliSense.
+- **OpenAPI Integration**: This is my favorite one - there should be an easy way to point to an OpenAPI specification and benefit from built-in type checking and IntelliSense.
 <br />
 - **Testability**: The language should support an easy way to test the output, without requiring any JavaScript inlining or other complex steps.
 <br />

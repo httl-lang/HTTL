@@ -15,7 +15,7 @@
     "tsc-watch": "tsc --watch"
   },
   "author": "Evgen Mykhailenko",
-  "license": "HTTL License",
+  "license": "MIT License",
   "description": "HTTL common package",
   "dependencies": {},
   "devDependencies": {

@@ -10,7 +10,7 @@
 
 # HTTL - HyperText Transfer Language
 
-HTTL (HyperText Transfer Language) is a lightweight programming language designed for developers who prefer using code to interact with APIs rather than relying on a UI. It is a declarative language that allows you to write HTTP queries, store their results in variables, and reference them in subsequent queries—similar to SQL.
+HTTL (HyperText Transfer Language) is a lightweight programming language designed for developers who prefer using code to interact with APIs rather than relying on a UI. It is a declarative language that allows you to write HTTP queries, store their results in variables, and reference them in subsequent queries - similar to SQL.
 
 HTTL simplifies data exchange and orchestration across diverse services by allowing you to write queries for multiple APIs in a single file.
 
@@ -46,4 +46,4 @@ We welcome contributions! Please see the [contributing guidelines](https://httl.
 
 ## License
 
-HTTL LICENSE.
+MIT LICENSE.

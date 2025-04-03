@@ -11,13 +11,16 @@ const _MainView: React.FC = () => {
   return (
     <s.Main>
       <s.Tabs>
-        <s.TabButton to="/main" end>
+        <s.TabButton to="/main/project">
+          Project
+        </s.TabButton>
+        <s.TabButton to="/main/quick-run">
           Run
         </s.TabButton>
-        <s.TabButton to="/main/utils" end>
+        <s.TabButton to="/main/utils">
           Utils
         </s.TabButton>
-        <s.TabButton to="/main/tutorials" end right icon>
+        <s.TabButton to="/main/tutorials" right icon>
           <VscBook />
         </s.TabButton>
       </s.Tabs>

@@ -1,7 +1,7 @@
 import { SchemaResolver } from "./schema-resolver";
 import { Operation, Parameter, RequestBody, SecurityRequirement, Server, Response, Example, Schema } from "./versions/open-api_3_x";
 
-export class ApiEndpointBody {
+class ApiEndpointBody {
   description?: string;
   required?: boolean;
   examples?: Record<string, Example>;
@@ -71,7 +71,7 @@ export class ApiEndpointBody {
         return [this.generateExample(items)];
 
       case "string":
-        return schema.example || "string_example";
+        return schema.example || "string";
 
       case "integer":
         return schema.example || 123;
@@ -87,6 +87,87 @@ export class ApiEndpointBody {
     }
   }
 }
+
+class ApiEndpointResponse {
+  constructor(
+    private readonly responses: Record<string, Response>,
+    private readonly schemaResolver: SchemaResolver
+  ) {
+    if (Object.keys(responses).length === 0)
+      return;
+  }
+
+  public hasResponse() {
+    return !!this.responses &&
+      Object.entries(this.responses)
+        .some(([statusCode, response]) =>
+          !!response.content?.['application/json']?.schema
+        );
+  }
+
+  public generateResponseString() {
+    const entries = Object.entries(this.responses)
+      .map(([statusCode, response]) => {
+        const schema = response.content?.['application/json']?.schema
+
+        if (schema) {
+          const json = this.generateExample(response.content?.['application/json']?.schema);
+          return [
+            statusCode,
+            json
+          ]
+        }
+      })
+      .filter(Boolean);
+
+    return entries.length > 0
+      ? JSON.stringify(Object.fromEntries(entries), null, 2)
+      : null;
+  }
+
+  private generateExample(schema) {
+    if (!schema || typeof schema !== "object") return null;
+
+    const { type, properties, items, $ref } = schema;
+
+    if ($ref) {
+      const resolvedSchema = this.schemaResolver.get($ref);
+      if (resolvedSchema) {
+        return this.generateExample(resolvedSchema);
+      }
+
+      return null;
+    }
+
+    switch (type) {
+      case "object":
+        const exampleObject = {};
+        for (const [key, propertySchema] of Object.entries(properties || {})) {
+          exampleObject[key] = this.generateExample(propertySchema);
+        }
+        return exampleObject;
+
+      case "array":
+        return [this.generateExample(items)];
+
+      case "string":
+        return schema.example || "string";
+
+      case "integer":
+        return schema.example || 123;
+
+      case "number":
+        return schema.example || 123.45;
+
+      case "boolean":
+        return schema.example !== undefined ? schema.example : true;
+
+      default:
+        return null;
+    }
+  }
+}
+
 export class ApiEndpoint {
 
   public readonly method: string;
@@ -97,8 +178,10 @@ export class ApiEndpoint {
   public readonly operationId?: string;
 
   public readonly parameters: Parameter[];
+  public readonly queryParameters: Parameter[];
+  
   public readonly requestBody: ApiEndpointBody;
-  public readonly responses: Record<string, Response>;
+  public readonly responses: ApiEndpointResponse;
 
   public readonly deprecated?: boolean;
   public readonly security?: SecurityRequirement[];
@@ -115,8 +198,9 @@ export class ApiEndpoint {
     this.operationId = operation.operationId;
 
     this.parameters = operation.parameters || [];
+    this.queryParameters = this.parameters.filter(x => x.in.toLowerCase() === 'query');
     this.requestBody = operation.requestBody && new ApiEndpointBody(operation.requestBody, schemaResolver);
-    this.responses = operation.responses;
+    this.responses = operation.responses && new ApiEndpointResponse(operation.responses, schemaResolver);
 
     this.deprecated = operation.deprecated;
     this.security = operation.security;
@@ -126,5 +210,39 @@ export class ApiEndpoint {
 
   public getMethodAndPath() {
     return `${this.method} ${this.path}`;
+  }
+
+  public generateFullRequest() {
+    let result = this.getMethodAndPath();
+
+    if (this.queryParameters?.length > 0) {
+      const params = this.queryParameters.map(param => {
+        return `${param.name}={${param.name}}`;
+      }).join('&');
+
+      result += `?${params}`;
+    }
+
+    if (!!this.requestBody) {
+      result += ` ${this.requestBody.generateBodyString()}`;
+    }
+
+    return result;
+  }
+
+  public hasBodySchema() {
+    return !!this.requestBody;
+  }
+
+  public getBodyModel(): string {
+    return this.requestBody?.generateBodyString();
+  }
+
+  public hasResponseSchema() {
+    return !!this.responses.hasResponse();
+  }
+
+  public getResponseModel(): string {
+    return this.responses?.generateResponseString();
   }
 }

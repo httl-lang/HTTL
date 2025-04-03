@@ -1,5 +1,42 @@
 [
   {
+    "date": "2025-03-25",
+    "packages": {
+      "vscode": {
+        "version": "0.1.9",
+        "changes": [
+          {
+            "title": "🚀 Introducing the HTTL Project",
+            "description": "Now **GitHub Copilot** automatically generates the OpenAPI specification based on your codebase, while the **HTTL Project** generates API calls for each endpoint. \n\n [Learn more about HTTL Project](/docs/httl-project) \n\n <br /> <img src='/images/vscode-httl-project.png' alt='HTTL Project Example' /> ",
+            "type": "feature"
+          },
+          {
+            "title": "MIT License !!!!!",
+            "description": "All HTTL packages are now licensed under the MIT License.",
+            "type": "feature"
+          },
+          {
+            "title": "Reduced bundle size of monaco editor",
+            "description": "The bundle size of the Monaco Editor has been reduced by 20%, resulting in faster load times.",
+            "type": "fix"
+          }
+        ]
+      },
+      "httl": {
+        "version": "0.1.2",
+        "changes": [
+          {
+            "title": "Fixed issue with HTTPS requests failing when using a self-signed certificate",
+            "type": "fix"
+          }
+        ]
+      },
+      "cli": {
+        "version": "0.1.11"
+      }
+    }
+  },
+  {
     "date": "2025-02-25",
     "packages": {
       "httl": {
@@ -11,7 +48,6 @@
             "type": "feature"
           },
           {
-            
             "title": "IPv4 is now the default for requests to localhost",
             "description": "[https://github.com/httl-lang/HTTL/issues/10](https://github.com/httl-lang/HTTL/issues/10)",
             "type": "fix"

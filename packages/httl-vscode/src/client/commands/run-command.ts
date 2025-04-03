@@ -1,19 +1,41 @@
 import vscode from 'vscode';
 import { HttlLanguageClient } from '../httl-language-client';
 import { HttlExtensionContext } from '../../common';
-import { HttlResponseViewProvider } from '../views/httl-response-view';
+import { HttlResponseViewProvider } from '../views/response';
+import { HttlOutput } from 'httl-core';
 
 export class HttlRunCommand {
 
-  public static async execute(responseView: HttlResponseViewProvider, client: HttlLanguageClient, text: string, documentUri: string, filePath: string) {
-    await responseView.show();
-    await responseView.setProgress(filePath, true);
+  public static async execute(
+    responseView: HttlResponseViewProvider,
+    client: HttlLanguageClient,
+    text: string,
+    document: vscode.Uri | string,
+  ) {
 
-    const response = await client.sendRun(
-      documentUri,
-      text,
-    );
-    await responseView.setResponse(filePath, response);
+    const { fsPath, uri } = typeof document === 'string'
+      ? {
+        fsPath: document,
+        uri: document,
+      }
+      : {
+        fsPath: document.fsPath,
+        uri: document.toString(),
+      };
+
+    await responseView.show();
+    await responseView.setProgress(fsPath, true);
+
+    try {
+      const response = await client.sendRun(
+        uri,
+        text,
+      );
+
+      await responseView.setResponse(fsPath, response);
+    } catch (error: any) {
+      await responseView.setResponse(fsPath, { errors: [{ error: error.message }] } as HttlOutput);
+    }
   };
 
   constructor(
@@ -28,13 +50,12 @@ export class HttlRunCommand {
 
   private onExecute = async (textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit, args: any[]) => {
     const { document, selection } = textEditor;
-    const text = document.isUntitled ? document.getText() : '';
+    const script = document.isUntitled ? document.getText() : '';
 
     await HttlRunCommand.execute(
       this.responseView,
       this.client,
-      text,
-      document.uri.toString(),
-      document.uri.fsPath);
+      script,
+      document.uri);
   };
 }

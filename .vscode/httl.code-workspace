@@ -5,10 +5,6 @@
 			"path": ".."
 		},
 		{
-			"name": "httl-mock",
-			"path": "../mock"
-		},
-		{
 			"name": "httl-common",
 			"path": "../packages/httl-common"
 		},

@@ -12,7 +12,7 @@
 
 .conatiner li {
   position: relative;
-  margin: 10px 20px;
+  margin: 20px;
 }
 
 .scale {
@@ -36,7 +36,7 @@
   /* border-left: 1px solid var(--x-color-neutral-800); */
   position: relative;
   flex-direction: column;
-  gap: 10px;
+  gap: 97px;
   padding-left: 25px;
 }
 
@@ -55,7 +55,7 @@
 }
 
 .releaseNoteItem .date {
-  color: var(--x-color-gray-400);
+  color: var(--x-color-primary-600);
   left: 0;
   text-align: center;
   border-radius: 4px;
@@ -93,7 +93,6 @@
 
 .item {
   padding: 15px 0;
-  margin-left: 10px;
 }
 
 .item h5 {

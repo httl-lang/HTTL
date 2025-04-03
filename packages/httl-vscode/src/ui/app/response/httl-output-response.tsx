@@ -1,18 +1,22 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 
 import { HttpResponse } from 'httl-core';
 import { Viewer } from '../../components/editor';
 
 import * as s from './httl-output-response.styles';
 import StatusLabel from '../../components/status-label';
+import { VscWarning } from 'react-icons/vsc';
+import { Tooltip } from '../../components/tooltip';
 
 export interface HttlOutputResponseProps {
   response: HttpResponse;
+  source: string;
+  onSourceClick?: () => void;
 }
 
 type Panels = 'body' | 'headers';
 
-export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response }) => {
+export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response, source, onSourceClick }) => {
   const [panel, setPanel] = useState<Panels>('body');
 
   // todo: very dirty
@@ -22,6 +26,28 @@ export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response }) =>
       : response.res.headers.some(([key, value]) => key.toLowerCase() === 'content-type' && value.includes('html'))
         ? 'html'
         : 'json';
+
+  const { type, name } = useMemo<{ type?: string, name?: string }>(() => {
+    const [type, ...rest] = source.split("::");
+    if (type === 'quick-run') {
+      return {
+        type,
+        name: 'Quick Run'
+      };
+    } else if (type === 'project') {
+      return {
+        type,
+        name: rest.pop()
+      };
+    }
+
+    const sourceFileName = source?.split(/\/|\\/).pop();
+    return {
+      type: 'file',
+      name: sourceFileName
+    };
+
+  }, [source]);
 
   return (
     <s.ResponseView>
@@ -34,15 +60,44 @@ export const HttlOutputResponse: FC<HttlOutputResponseProps> = ({ response }) =>
         </s.ToggleAction>
         <s.Information>
           <s.InfoItem>
+            <s.SourceLink type={type} title={source} onClick={onSourceClick}>
+              {name}
+            </s.SourceLink>
+          </s.InfoItem>
+          <s.Circle />
+          <s.InfoItem>
             {response.timings.totalFormatted} ms
           </s.InfoItem>
           <s.Circle />
-
           <s.InfoItem>
             {response.res.size.totalFormatted}
           </s.InfoItem>
           <s.Circle />
-
+          {
+            response.warnings.length > 0 && (
+              <>
+                <s.InfoItem warning>
+                  <Tooltip
+                    style={{ marginTop: '2px' }}
+                    content={
+                      <>
+                        {
+                          response.warnings.map((warning, index) => (
+                            <div key={index}>
+                              {warning.message}
+                            </div>
+                          ))
+                        }
+                      </>
+                    }
+                  >
+                    <VscWarning />
+                  </Tooltip>
+                </s.InfoItem>
+                <s.Circle />
+              </>
+            )
+          }
           <s.InfoItem>
             <StatusLabel value={response.statusCode} />
           </s.InfoItem>

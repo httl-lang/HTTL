@@ -1,22 +1,19 @@
 import React from 'react';
 import { Outlet } from 'react-router';
 
-import { ResponseContext, useResponseModel } from './response.model';
+import { ResponseContext } from './response.model';
 import * as s from './response.styles';
-import News from './news';
+import ReleaseNotes from './release-notes';
+import DebugPanel from '../../components/debug-panel';
 
 const _ResponseView: React.FC = () => {
-  const model = useResponseModel(({ isQuickRunResponse }) => ({ isQuickRunResponse }));
-
   return (
     <s.Container>
-      {
-        model.isQuickRunResponse && (
-          <s.Badge>Quick Run</s.Badge>
-        )
-      }
       <Outlet />
-      <News />
+      <ReleaseNotes />
+      {
+        process.env.NODE_ENV === 'development' && <DebugPanel />
+      }
     </s.Container>
   );
 };

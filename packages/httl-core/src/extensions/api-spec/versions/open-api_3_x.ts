@@ -1,5 +1,5 @@
 import { ApiEndpoint } from "../api-endpoint";
-import { IOpenApiVersionAdapter } from "../api-version-adapter";
+import { IApiInfo, IOpenApiVersionAdapter } from "../api-version-adapter";
 import { SchemaResolver } from "../schema-resolver";
 
 export type HTTPMethod = "get" | "post" | "put" | "delete" | "patch" | "head" | "options" | "trace";
@@ -181,6 +181,21 @@ export class OpenAPI_3_x implements IOpenApiVersionAdapter {
     if (!OpenAPI_3_x.isvalid(spec)) {
       throw new Error(`Invalid OpenAPI version: ${spec.info.version}`);
     }
+  }
+
+  public getRaw(): object {
+    return this.spec;
+  }
+
+  public getApiInfo(): IApiInfo {
+    return {
+      title: this.spec.info.title,
+      version: this.spec.info.version,
+      description: this.spec.info.description,
+      termsOfService: this.spec.info.termsOfService,
+      contact: this.spec.info.contact,
+      license: this.spec.info.license,
+    };
   }
 
   public getBasePath() {

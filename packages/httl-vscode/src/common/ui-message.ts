@@ -31,7 +31,32 @@ interface SetProgressMessage {
 }
 export type SetProgressMessagePayload = Omit<SetProgressMessage, 'command'>;
 
-export type UIMessage = InitializeMessage | ChangeActiveEditorMessage | CloseResponseMessage | SetResponseMessage | SetProgressMessage;
+interface AgentAnalysisEventMessage {
+  command: 'agent-analysis-event';
+  payload: { type: string, data: any };
+}
+export type AgentAnalysisEventPayload = Omit<AgentAnalysisEventMessage, 'command'>;
+
+interface HighlightViewSectionMessage {
+  command: 'highlight-section';
+  payload: { panel: string, paths: string[] };
+}
+export type HighlightViewSectionMessagePayload = Omit<HighlightViewSectionMessage, 'command'>;
+
+interface ReloadProjectMessage {
+  command: 'reload-project';
+  file: string;
+}
+export type ReloadProjectMessagePayload = Omit<ReloadProjectMessage, 'command'>;
+
+export type UIMessage = InitializeMessage |
+  ChangeActiveEditorMessage |
+  CloseResponseMessage |
+  SetResponseMessage |
+  SetProgressMessage |
+  AgentAnalysisEventMessage |
+  HighlightViewSectionMessage |
+  ReloadProjectMessage;
 
 export type UIMessageType = UIMessage['command'];
 

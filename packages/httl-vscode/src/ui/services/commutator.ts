@@ -4,15 +4,17 @@ import {
   UIMessage,
   UIMessageType,
   ChangeActiveEditorMessagePayload,
-  CloseResponseMessagePayload
+  CloseResponseMessagePayload,
+  AgentAnalysisEventPayload,
+  HighlightViewSectionMessagePayload,
+  ReloadProjectMessagePayload
+
 } from "../../common";
 
 export class Commutator {
-
   public static isUserCommand(data: any) {
     return data?.command === 'set-progress' || data?.command === 'change-active-editor' || data?.command === 'set-response';
   }
-
 
   public static createInstance() {
     const commutator = new Commutator();
@@ -43,6 +45,18 @@ export class Commutator {
 
   public onSetResponse(cb: (message: SetResponsePayload) => void) {
     this.subscribe('set-response', cb);
+  }
+
+  public onHighlightSection(cb: (message: HighlightViewSectionMessagePayload) => void) {
+    this.subscribe('highlight-section', cb);
+  }
+
+  public onReloadProject(cb: (message: ReloadProjectMessagePayload) => void) {
+    this.subscribe('reload-project', cb);
+  }
+
+  public onAgentAnalysisEvent(cb: (message: AgentAnalysisEventPayload) => void) {
+    this.subscribe('agent-analysis-event', cb);
   }
 
   private subscribe(command: UIMessageType, cb: (...args: any[]) => void) {

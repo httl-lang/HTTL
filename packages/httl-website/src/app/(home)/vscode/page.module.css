@@ -1,0 +1,48 @@
+.button {
+  /* background-color: #0078d4; */
+  /* border: 1px solid #003b68; */
+  box-shadow: 0 0 3px 0px #0078d4bd;
+  color: #fff;
+  border-radius: 35px;
+  font-size: 1.4rem;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.videoContainer {
+  position: relative;
+
+}
+
+.ambientVerlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(15vw);
+  overflow: auto;
+  /* opacity: 0.8; */
+}
+
+.ambientVerlay::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -40%;
+  width: 180%;
+  height: 180%;
+  background: radial-gradient(circle at right center, #000000, #4af3bf 30%, #216ce9 55%, #32517380);
+  mask-image: radial-gradient(ellipse 300% 30% at center center, #000 20%, #00000080 50%, #0000);
+}
+
+.video {
+  z-index: 2;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}

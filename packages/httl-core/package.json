@@ -1,6 +1,6 @@
 {
   "name": "httl-core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
@@ -14,7 +14,7 @@
   },
   "keywords": [],
   "author": "Evgen Mykhailenko",
-  "license": "HTTL License",
+  "license": "MIT License",
   "description": "Core library for HTTL",
   "dependencies": {
     "antlr4": "^4.13.2",

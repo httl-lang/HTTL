@@ -6,5 +6,6 @@ export default {
   'release-notes': 'Release Notes',
   introduction: 'Introduction',
   cli: 'CLI',
+  'httl-project': 'HTTL Project',
   guide: 'Language Guide',
 }

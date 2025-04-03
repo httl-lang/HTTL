@@ -2,6 +2,7 @@
 
 const path = require('path');
 const webpack = require("webpack");
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 
@@ -17,7 +18,8 @@ const extensionConfig = {
     // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
     path: path.resolve(__dirname, 'dist'),
     filename: 'extension.js',
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'commonjs2',
+    clean: true
   },
   externals: {
     vscode: 'commonjs vscode' // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
@@ -93,7 +95,7 @@ const languageServerConfig = {
 
 
 const uiConfig = {
-  mode: process.env.NODE_ENV || 'development',
+  mode: 'development',
 
   entry: './src/ui/index.tsx',
 
@@ -119,16 +121,6 @@ const uiConfig = {
         use: 'ts-loader',
       },
       {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
-          },
-        },
-      },
-      {
         test: /\.(sa|sc|c)ss$/,
         use: [
           "style-loader",
@@ -151,7 +143,7 @@ const uiConfig = {
   plugins: [
     new MonacoWebpackPlugin({
       features: ['format'],
-      languages: ['json', 'xml', 'html'],
+      languages: [],
     }),
     new webpack.ProvidePlugin({
       Buffer: ["buffer", "Buffer"],
@@ -160,9 +152,11 @@ const uiConfig = {
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
     }),
+    // process.env.NODE_ENV === 'development' &&
+    // new BundleAnalyzerPlugin(),
   ],
 
-  devtool: process.env.NODE_ENV === 'development' ? 'source-map' : false,
+  devtool: 'source-map',
 
   infrastructureLogging: {
     level: "log",

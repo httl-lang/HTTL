@@ -11,9 +11,10 @@ export interface PopupProps {
   onClose?: () => void;
   style?: React.CSSProperties;
   className?: string;
+  hostStyle?: React.CSSProperties;
 }
 
-const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, showCloseButton, closeOnEscape = true, onClose, className }) => {
+const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, showCloseButton, closeOnEscape = true, onClose, className, hostStyle }) => {
   const hostRef = useRef<HTMLDivElement>(null);
   const [showState, setShowState] = useState(show);
 
@@ -46,21 +47,26 @@ const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, showC
       }
     };
 
+    const onBlur = () => {
+      onClose?.();
+    };
+
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('click', onClick);
     window.addEventListener('message', onMessage, true);
-    // document.addEventListener('mouseleave', onDocMouseleave);
+    window.addEventListener('blur', onBlur);
+
 
     return () => {
       document.removeEventListener('click', onClick);
       document.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('message', onMessage);
-      // document.removeEventListener('mouseleave', onDocMouseleave);
+      window.removeEventListener('blur', onBlur);
     };
   }, [showState, closeOnEscape]);
 
   return (
-    <s.Host ref={hostRef} show={+showState} >
+    <s.Host ref={hostRef} show={+showState} style={showState ? hostStyle : {}}>
       <s.Popup style={style} className={className}>
         {showCloseButton && (
           <s.Controls>
@@ -69,7 +75,6 @@ const Popup: FC<PropsWithChildren<PopupProps>> = ({ show, style, children, showC
             </Button>
           </s.Controls>
         )}
-
         {children}
       </s.Popup>
     </s.Host>

@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from 'react';
-import LoadingBar from 'react-top-loading-bar';
+import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar';
 import { HttlOutput } from 'httl-core';
 
 import { HttlOutputContext, useHttlOutputModel } from './httl-output.model';
@@ -9,6 +9,7 @@ import { HttlOutputResponse } from './httl-output-response';
 import { HttlOutputError } from './httl-output-error';
 import HttlResponseList from './httl-response-list';
 import { useResponseModel } from './response.model';
+import { RequestLoading } from './request-loading';
 
 export interface HttlOutputViewProps {
   inProgress: boolean | undefined;
@@ -16,20 +17,27 @@ export interface HttlOutputViewProps {
 }
 
 const _HttlOutputView: FC = () => {
-  const ref = useRef(null);
+  const ref = useRef<LoadingBarRef>(null);
   const model = useHttlOutputModel(({ inProgress, currentResponse, errors, responses, selectResponse }) =>
     ({ inProgress, currentResponse, errors, responses, selectResponse }));
 
+  const resModel = useResponseModel(({ currentFile, highlightCode }) => ({ currentFile, highlightCode }));
+
   useEffect(() => {
+    const indicator = ref.current;
+    if (!indicator) {
+      return;
+    }
+
     if (model.inProgress) {
-      // @ts-ignore
-      ref.current?.continuousStart();
+      ref.current.getProgress() > 0
+        ? ref.current.continuousStart()
+        : ref.current.start();
     } else {
-      // @ts-ignore
-      ref.current?.complete();
+      ref.current.getProgress() > 0 &&
+        ref.current.complete();
     }
   }, [model.inProgress]);
-
 
   return (
     <>
@@ -51,20 +59,22 @@ const _HttlOutputView: FC = () => {
                   <HttlResponseList responses={model.responses} />
                 </s.ResponseList>
                 <s.Main>
-                  <HttlOutputResponse response={model.currentResponse} />
+                  <HttlOutputResponse
+                    response={model.currentResponse}
+                    source={resModel.currentFile!}
+                    onSourceClick={() => resModel.highlightCode(model.currentResponse.source)}
+                  />
                 </s.Main>
               </>
             )
-            : !model.inProgress
-              ? <s.EmptyScript>No Requests to Process</s.EmptyScript>
-              : null
+            : model.inProgress
+              ? <RequestLoading file={resModel.currentFile} />
+              : <s.EmptyScript>No Requests to Process</s.EmptyScript>
         }
       </s.HttlOutputView>
     </>
   );
 };
-
-// const HttlOutput = (props: HttlOutputProps) => <HttlOutputContext {...props}><_HttlOutput /></HttlOutputContext>;
 
 export const HttlOutputView: FC = () => {
   const { viewData } = useResponseModel(({ viewData }) => ({ viewData }));

@@ -6,6 +6,9 @@ import { ResponseView, HttlOutputView } from "./response";
 import { TutorialsView } from "./main/tutorials";
 import { QuickRunView } from "./main/quick-run";
 import { UtilsView } from "./main/utils";
+import { ProjectView } from "./main/project";
+import { ErrorBoundary } from "../components/error-boundary";
+import { NoRequestsYetView } from "./response/no-requests-yet";
 
 export const appRouter = createHashRouter([
   {
@@ -15,9 +18,18 @@ export const appRouter = createHashRouter([
   {
     path: '/main',
     element: <MainView />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         index: true,
+        element: <Navigate to='project' replace={true} />,
+      },
+      {
+        path: 'project',
+        element: <ProjectView />,
+      },
+      {
+        path: 'quick-run',
         element: <QuickRunView />,
       },
       {
@@ -28,6 +40,10 @@ export const appRouter = createHashRouter([
         path: 'tutorials',
         element: <TutorialsView />,
       },
+      {
+        path: '*',
+        element: <Navigate to="/main/project" replace />,
+      }
     ],
   },
   {
@@ -41,6 +57,10 @@ export const appRouter = createHashRouter([
       {
         path: ':editorPath',
         element: <HttlOutputView />,
+      },
+      {
+        path: 'no-requests-yet',
+        element: <NoRequestsYetView />,
       },
     ],
   },

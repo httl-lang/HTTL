@@ -70,7 +70,7 @@ export const ChangesTypeSection = async ({
 
   return (
     <div >
-      <h5 style={{ fontWeight: 'bold' }}>
+      <h5 style={{ fontWeight: 'bold', color: type === 'feature' ? 'var(--x-color-fuchsia-800)' : 'var(--x-color-orange-800)' }}>
         {
           type === 'feature' ? 'New Features' : 'Fixes'
         }

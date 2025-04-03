@@ -1,8 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Button = styled.a`
+export const Button = styled.a<{ disabled?: boolean, small?: boolean }>`
     cursor: pointer;
-    font: normal normal normal 16px / 1 codicon;
+    font: ${({ small }) => small
+      ? 'normal normal normal 12px / 1 codicon' 
+      : 'normal normal normal 16px / 1 codicon'
+    };
     text-align: center;
     text-decoration: none;
     text-rendering: auto;
@@ -17,4 +20,14 @@ export const Button = styled.a`
     &:hover {
       background-color: var(--vscode-toolbar-hoverBackground);
     }
+
+    ${({ disabled }) => disabled && css`
+      cursor: not-allowed;
+      filter: brightness(0.5);
+      color: var(--vscode-foreground) !important;
+
+      &:hover {
+        background-color: transparent;
+      }
+    `}
 `;

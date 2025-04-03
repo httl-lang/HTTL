@@ -11,7 +11,7 @@
     "tsc-watch": "tsc --watch"
   },
   "author": "Evgen Mykhailenko",
-  "license": "HTTL License",
+  "license": "MIT License",
   "description": "Language Server Protocol for HTTL",
   "dependencies": {
     "vscode-languageserver": "^9.0.1",
