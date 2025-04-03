@@ -2,6 +2,11 @@
 
 [HTTL for VS Code](https://marketplace.visualstudio.com/items?itemName=HTTL.httl-vscode) brings powerful language support for the [HTTL programming language](https://httl.dev/), making it easy to write, execute, and test HTTP requests directly within VS Code.
 
+<p align="center">
+<img src="docs/images/httl-project.gif" width="85%">
+<br/>
+</p>
+
 ## What is HTTL?
 
 If you search for an "HTTP programming language," you'll likely be told that HTTP is just a protocol, not a language. But why isn’t there a dedicated language for writing HTTP requests?
