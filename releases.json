@@ -7,7 +7,7 @@
         "changes": [
           {
             "title": "🚀 Introducing the HTTL Project",
-            "description": "Now **GitHub Copilot** automatically generates the OpenAPI specification based on your codebase, while the **HTTL Project** generates API calls for each endpoint. \n\n [Learn more about HTTL Project](/docs/httl-project) \n\n <img src='/images/vscode-httl-project.png' alt='HTTL Project Example' /> ",
+            "description": "Now **GitHub Copilot** automatically generates the OpenAPI specification based on your codebase, while the **HTTL Project** generates API calls for each endpoint. \n\n [Learn more about HTTL Project](/docs/httl-project) \n\n <br /> <img src='/images/vscode-httl-project.png' alt='HTTL Project Example' /> ",
             "type": "feature"
           },
           {
