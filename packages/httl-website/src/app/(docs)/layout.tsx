@@ -34,8 +34,8 @@ export default async function RootLayout({ children }: any) {
         <HttlHead />
       </Head>
       <body>
-        <Banner storageKey="2025-03-25-release">
-          <a href="/docs/release-notes#2025-03-25">
+        <Banner storageKey="2025-04-02-release">
+          <a href="/docs/release-notes#2025-04-02">
             🎉 HTTL + GitHub Copilot is released, Read more →
           </a>
         </Banner>
