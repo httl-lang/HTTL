@@ -19,7 +19,7 @@ const ReleaseNotes: FC = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <Markdown>
           {
-            `### **🚀 Updated to [${model.currentVersion}](https://httl.dev/docs/release-notes#VSCODE-0.1.9)**
+            `### **🚀 Updated to [${model.currentVersion}](https://httl.dev/docs/release-notes#VSCODE-0.2.0)**
 
 What's new: 
 - 💡[Introducing the **HTTL Project** with **Copilot** Integration!](https://httl.dev/docs/httl-project)

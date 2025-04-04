@@ -8,17 +8,20 @@ export class ProjectFileWatcher {
       onDidChange: (uri: string) => void,
     }
   ) => {
+    const rootDir = httlContext.getWorkspaceDirectory();
 
-    const rootDir = vscode.workspace.workspaceFolders![0];
+    if (!rootDir) {
+      return;
+    }
 
     const watcher = vscode.workspace.createFileSystemWatcher(
-      new vscode.RelativePattern(vscode.workspace.workspaceFolders![0], pattern)
+      new vscode.RelativePattern(rootDir, pattern)
     );
 
     // Register event handlers
     httlContext.ext.subscriptions.push(
       watcher,
-      watcher.onDidChange(uri => onDidChange(uri.path.replace(rootDir.uri.path, '.'))),
+      watcher.onDidChange(uri => onDidChange(uri.path.replace(rootDir.path, '.'))),
     );
   };
 }

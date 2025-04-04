@@ -119,6 +119,22 @@ export class HttlProject {
   }
 
   public static async fromSpecUrl(url: string) {
+    if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length === 0) {
+      const selected = await vscode.window.showOpenDialog({
+        canSelectFolders: true,
+        canSelectFiles: false,
+        canSelectMany: false,
+        openLabel: 'Select Folder',
+      });
+
+      if (!selected || selected.length === 0) {
+        vscode.window.showWarningMessage('You need to open a folder to use this extension.');
+        throw new Error('No folder selected');
+      }
+
+      await vscode.commands.executeCommand('vscode.openFolder', selected[0], false);
+    }
+
     const spec = await ApiSpec.fromUrl(url);
     return this.fromSpec(spec, url);
   }

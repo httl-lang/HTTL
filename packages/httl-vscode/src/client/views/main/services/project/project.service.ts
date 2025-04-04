@@ -16,7 +16,7 @@ export class HttlProjectService {
   private disableProjectSync = false;
   private readonly projectAgent: ProjectAgent;
   private readonly requestAgent: RequestAgent;
-  private readonly workDir: string;
+  private readonly workDir?: string;
 
   constructor(
     private readonly context: HttlExtensionContext,
@@ -27,7 +27,7 @@ export class HttlProjectService {
   ) {
     this.projectAgent = new ProjectAgent(this.context);
     this.requestAgent = new RequestAgent(this.context);
-    this.workDir = this.context.getWorkspaceDirectory()!;
+    this.workDir = this.context.getWorkspaceDirectory()?.fsPath;
 
     ProjectFileWatcher.register(context, '**/*.json')({
       onDidChange: this.onProjectFileChange
@@ -48,31 +48,32 @@ export class HttlProjectService {
 
   public async resolveProjects({ search }: { search: string }): Promise<HttlProjectItem[]> {
     try {
-      const files = await FileService.search('**/*.json', undefined, false);
+      let infos: HttlProjectItem[] = [];
 
-      const infos: HttlProjectItem[] = files
-        .map(file => {
-          const fullPath = fsPath.join(this.workDir, file);
-          return {
-            path: file,
-            content: Json.safeParse(
-              fs.readFileSync(fullPath, 'utf-8')
+      if (this.workDir) {
+        infos = (await FileService.search('**/*.json', undefined, false))
+          .map(file => {
+            const fullPath = fsPath.join(this.workDir!, file);
+            return {
+              path: file,
+              content: Json.safeParse(
+                fs.readFileSync(fullPath, 'utf-8')
+              )
+            };
+          })
+          .filter(({ path, content }) =>
+            HttlProject.isValid(content) && (
+              content.name.includes(search) ||
+              content.source.includes(search) ||
+              path.includes(search)
             )
-          };
-        }
-        )
-        .filter(({ path, content }) =>
-          HttlProject.isValid(content) && (
-            content.name.includes(search) ||
-            content.source.includes(search) ||
-            path.includes(search)
           )
-        )
-        .map(file => ({
-          id: file.path,
-          name: file.content.name,
-          path: file.path,
-        }));
+          .map(file => ({
+            id: file.path,
+            name: file.content.name,
+            path: file.path,
+          }));
+      }
 
       if (URL.canParse(search)) {
         infos.unshift({
@@ -267,6 +268,10 @@ export class HttlProjectService {
   }
 
   public async runAgentAnalysis({ projectFile }: { projectFile?: string }): Promise<void> {
+    if (!this.workDir) {
+      throw new Error('No workspace opened.');
+    }
+
     let project!: HttlProject;
 
     try {

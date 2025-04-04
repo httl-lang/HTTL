@@ -69,7 +69,7 @@ export class ProjectAgent {
       return;
     }
 
-    const instructions = INSTRUCTIONS_PROMPT.replace('<directory>', workDir);
+    const instructions = INSTRUCTIONS_PROMPT.replace('<directory>', workDir.fsPath);
 
     if (this.agent) {
       this.agent.stop();
