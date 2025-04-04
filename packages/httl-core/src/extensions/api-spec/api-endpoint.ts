@@ -239,7 +239,7 @@ export class ApiEndpoint {
   }
 
   public hasResponseSchema() {
-    return !!this.responses.hasResponse();
+    return !!this.responses?.hasResponse();
   }
 
   public getResponseModel(): string {

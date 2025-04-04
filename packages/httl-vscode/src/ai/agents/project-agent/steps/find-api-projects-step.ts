@@ -72,13 +72,17 @@ export class FindApiProjectsStep extends AgentStepBase<FindApiProjectsStepResult
   protected override startMessage = () =>
     `Instructions:
   - The next messages will contain root project files and their contents, based on the footprint.
-  - Identify only the projects that contain API frameworks.
+  - Identify only the projects that contain API frameworks including NextJS.
   - Return information only for API backend-based projects.
   - Provide the final response as a plain JSON array, where each element follows the format:
     { "name": "<project_name>", "path": "<project_path>", "technology": "<NodeJs - NestJs, Python - FastAPI, etc.>" }
   `;
 
   protected override resultMessage(projects: FindApiProjectsStepResult[]): string {
+    if (projects?.length === 0) {
+      return `No API projects found.`;
+    }
+
     const projectsText = projects.map((p) => `  - ${p.name}, path: ${p.path}, technology: ${p.technology};`).join('\n');
 
     return `Found API projects:
