@@ -258,7 +258,7 @@ export class HttlProject {
           endpointId,
           method: endpoint.method,
           path: endpoint.path,
-          tag: endpoint.tags?.[0] || 'default',
+          tag: endpoint.tags?.[0]?.toLowerCase() || 'default',
           description: endpoint.description,
           operationId: endpoint.operationId,
           scripts: this.props.scripts.filter(script => script.id === endpointId),

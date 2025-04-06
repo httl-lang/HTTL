@@ -6,9 +6,11 @@ export interface ToggleProps {
   toggled: boolean;
   onToggle: (state: boolean) => void;
   className?: string;
+  onOff?: (toggled: boolean) => React.ReactElement;
+  title?: string;
 }
 
-const Toggle: FC<PropsWithChildren<ToggleProps>> = ({ className, toggled, onToggle, children }) => {
+const Toggle: FC<PropsWithChildren<ToggleProps>> = ({ className, toggled, title, onToggle, onOff, children }) => {
   const [enabled, setEnabled] = useState(toggled);
 
   useEffect(() => {
@@ -26,8 +28,12 @@ const Toggle: FC<PropsWithChildren<ToggleProps>> = ({ className, toggled, onTogg
   };
 
   return (
-    <s.Toggle onClick={toggle} enabled={+enabled} className={className}>
-      {children}
+    <s.Toggle onClick={toggle} enabled={+enabled} className={className} title={title}>
+      {
+        onOff
+          ? onOff(enabled)
+          : children
+      }
     </s.Toggle>
   );
 };

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { LoadingText } from '../../../../components/loading-text';
 import Button from '../../../../components/button';
+import Toggle from '../../../../components/toggle';
 
 export const Container = styled.div`
   position: relative;
@@ -89,4 +90,18 @@ export const Bar = styled.div`
   padding: 0px 6px 0px 10px;
   height: 30px;
   border-bottom: 0.5px solid color-mix(in srgb, var(--vscode-editorGroup-border) 40%, transparent);
+`;
+
+export const ToolBar = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const EndpointExpander = styled(Toggle)`
+  color: var(--vscode-foreground) !important;
+  background-color: transparent !important;
+
+  &:hover {
+    background-color: var(--vscode-toolbar-hoverBackground) !important;
+  }
 `;

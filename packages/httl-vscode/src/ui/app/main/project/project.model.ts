@@ -14,6 +14,7 @@ interface ApiEndpointGroup {
 }
 
 export interface ApiEndpoint extends HttlProjectApiEndpoint {
+  id: string;
   defaultScript?: string;
 }
 export interface ProjectState {
@@ -252,6 +253,24 @@ export class ProjectModel {
     this.app.saveState(ProjectModel.PROJECT_STATE(this.fileInfo?.path!), this.projectState);
   }
 
+  public get isExpanded() {
+    // TODO: fix this logic in react-storm
+    try {
+      return this.endpoints.some(endpoint => store(EndpointModel, endpoint.id).expanded);
+    }
+    catch (error) {
+      return false;
+    }
+  }
+
+  @Action()
+  public toggleExpand() {
+    const isExpanded = this.isExpanded;
+    this.endpoints.forEach((endpoint) => {
+      store(EndpointModel, endpoint.id).setExpand(!isExpanded);
+    });
+  }
+
   private updateSessionState(state: Partial<ProjectSessionState>) {
     const sessionState = this.getSessionState();
     sessionStorage.setItem("projectSessionState", JSON.stringify(merge(sessionState, state)));
@@ -280,7 +299,10 @@ export class ProjectModel {
     this.source = project.source;
     this.technologies = project.technologies;
     this.prestart = project.prestart;
-    this.endpoints = project.endpoints;
+    this.endpoints = project.endpoints.map((endpoint) => ({
+      ...endpoint,
+      id: `${project.fileInfo.id}-${endpoint.endpointId}`
+    }));
     this.focusedEndpoint = undefined;
     this.sessionState = this.getSessionState();
 
@@ -290,7 +312,7 @@ export class ProjectModel {
       activeEndpoint: undefined
     };
 
-    const groupedEndpoints = project.endpoints.reduce((acc, endpoint) => {
+    const groupedEndpoints = this.endpoints.reduce((acc, endpoint) => {
       const group = acc.get(endpoint.tag) || {
         name: endpoint.tag,
         inProgress: false,

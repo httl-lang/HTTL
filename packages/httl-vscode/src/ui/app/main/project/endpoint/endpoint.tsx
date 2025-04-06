@@ -21,8 +21,8 @@ const _Endpoint: React.FC = () => {
 
   const [highlighted, setHighlighted] = useState(false);
 
-  const model = useEndpointModel(({ endpoint, inProgress, expanded, focused, onExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema, generateAiRequest, stopGeneratingAiRequest }) =>
-    ({ endpoint, inProgress, expanded, focused, onExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema, generateAiRequest, stopGeneratingAiRequest }));
+  const model = useEndpointModel(({ endpoint, inProgress, expanded, focused, toggleExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema, generateAiRequest, stopGeneratingAiRequest }) =>
+    ({ endpoint, inProgress, expanded, focused, toggleExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema, generateAiRequest, stopGeneratingAiRequest }));
 
   useEffect(() => {
     if (highlightedScriptId === model.endpoint.endpointId) {
@@ -51,7 +51,7 @@ const _Endpoint: React.FC = () => {
       highlighted={highlighted || model.focused}
       onClickCapture={model.onFocus}
     >
-      <s.Header onClick={() => model.onExpand()}>
+      <s.Header onClick={() => model.toggleExpand()}>
         <s.Name>
           <s.MethodLabelStyled method={model.endpoint.method} /> {model.endpoint.path} <small>{model.endpoint.operationId}</small>
         </s.Name>
@@ -131,8 +131,8 @@ const _Endpoint: React.FC = () => {
   );
 };
 
-export const Endpoint = ({ endpoint, id }: { endpoint: ApiEndpoint, id: string }) => (
-  <EndpointContext id={id} {...endpoint}>
+export const Endpoint = ({ endpoint }: { endpoint: ApiEndpoint }) => (
+  <EndpointContext {...endpoint}>
     <_Endpoint />
   </EndpointContext>
 );

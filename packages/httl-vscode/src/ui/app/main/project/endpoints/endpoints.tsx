@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { VscCloudDownload, VscSymbolInterface } from "react-icons/vsc";
+import { VscCloudDownload, VscExpandAll, VscCollapseAll, VscSymbolInterface } from "react-icons/vsc";
 
 import { useProjectModel } from '../project.model';
 import { Endpoint } from '../endpoint';
@@ -10,8 +10,8 @@ export const Endpoints: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const shadowRef = useRef<HTMLDivElement>(null);
 
-  const model = useProjectModel(({ fileInfo, endpointGoups, agentProgress, showOpenApiSpec }) =>
-    ({ fileInfo, endpointGoups, agentProgress, showOpenApiSpec }));
+  const model = useProjectModel(({ fileInfo, endpointGoups, agentProgress, isExpanded, showOpenApiSpec, toggleExpand }) =>
+    ({ fileInfo, endpointGoups, agentProgress, isExpanded, showOpenApiSpec, toggleExpand }));
 
   const inProgress = model.endpointGoups.some(c => c.inProgress) || model.agentProgress === 'tags';
 
@@ -23,12 +23,22 @@ export const Endpoints: React.FC = () => {
         </s.Label>
         {
           !inProgress &&
-          <s.SpecButton onClick={() => model.showOpenApiSpec()}>
-            <VscCloudDownload />
-            <span>Spec</span>
-          </s.SpecButton>
+          <s.ToolBar>
+            <s.SpecButton onClick={() => model.showOpenApiSpec()}>
+              <VscCloudDownload />
+              <span>Spec</span>
+            </s.SpecButton>
+            <s.EndpointExpander
+              title={model.isExpanded ? 'Collapse all' : 'Expand all'}
+              toggled={model.isExpanded}
+              onToggle={() => model.toggleExpand()}
+              onOff={(toggled) => (
+                toggled ? <VscCollapseAll /> : <VscExpandAll />
+              )}
+            />
+          </s.ToolBar>
         }
-      </s.Bar>
+      </s.Bar >
 
       <s.Container ref={scrollRef} onScroll={() => {
         if (scrollRef.current && shadowRef.current) {
@@ -49,8 +59,7 @@ export const Endpoints: React.FC = () => {
               {
                 group.endpoints.map((endpoint) => (
                   <Endpoint
-                    key={`${model.fileInfo?.id}-${endpoint.endpointId}`}
-                    id={`${model.fileInfo?.id}-${endpoint.endpointId}`}
+                    key={endpoint.id}
                     endpoint={endpoint}
                   />
                 ))

@@ -46,7 +46,10 @@ export class ApiControllerSpecResult {
   constructor(
     public readonly tag: string,
     public readonly spec: any
-  ) { }
+  ) {
+    this.spec = spec;
+    this.tag = tag.toLowerCase();
+   }
 }
 
 export class ProjectAgent {

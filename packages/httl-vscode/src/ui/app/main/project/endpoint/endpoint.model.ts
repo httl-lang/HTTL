@@ -84,8 +84,17 @@ export class EndpointModel {
   }
 
   @Action()
-  public async onExpand() {
-    this.expanded = !this.expanded;
+  public async toggleExpand() {
+    this.setExpand(!this.expanded);
+  }
+
+  @Action()
+  public async setExpand(expanded: boolean) {
+    if (this.expanded === expanded) {
+      return;
+    }
+
+    this.expanded = expanded;
 
     this.project.updateState({
       endpoints: {
