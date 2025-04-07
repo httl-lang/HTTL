@@ -19,16 +19,13 @@ const ReleaseNotes: FC = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <Markdown>
           {
-            `### **🚀 Updated to [${model.currentVersion}](https://httl.dev/docs/release-notes#VSCODE-0.2.0)**
+            `### **🚀 Updated to [${model.currentVersion}](https://httl.dev/docs/release-notes#VSCODE-${model.currentVersion})**
 
 What's new: 
-- 💡[Introducing the **HTTL Project** with **Copilot** Integration!](https://httl.dev/docs/httl-project)
-  - **Copilot** automatically generates the OpenAPI specification based on your codebase.
-  - **HTTL Project** generates API calls for each endpoint.
-  - Get smart, realistic request bodies based on endpoint data schema.
+  - **HTTL Project**: Added auto-resizer on double-click for each request panel.
 
 Bugfix:
-- Fixed issue with HTTPS requests failing when using a self-signed certificate`
+- Fixed recognition of Python projects.`
           }
         </Markdown>
       </Suspense>

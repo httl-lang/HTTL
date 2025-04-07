@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Popup from '../../../components/popup';
+import Popup from '../popup';
 
 export const ReleaseNotesPopup = styled(Popup)`
     font-size: 10px;

@@ -4,7 +4,7 @@ import { VscJson, VscBracketDot, VscSync, VscSparkleFilled } from "react-icons/v
 
 import RunSvg from '/media/run.svg';
 
-import { HttlEditor } from '../../../../components/editor';
+import { HttlEditor, HttlEditorRef } from '../../../../components/editor';
 import Button from '../../../../components/button';
 import { ApiEndpoint } from '../project.model';
 
@@ -13,6 +13,7 @@ import * as s from './endpoint.styles';
 
 const _Endpoint: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<HttlEditorRef>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [searchParams] = useSearchParams();
@@ -21,8 +22,8 @@ const _Endpoint: React.FC = () => {
 
   const [highlighted, setHighlighted] = useState(false);
 
-  const model = useEndpointModel(({ endpoint, inProgress, expanded, focused, toggleExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema, generateAiRequest, stopGeneratingAiRequest }) =>
-    ({ endpoint, inProgress, expanded, focused, toggleExpand, height, onResize, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema, generateAiRequest, stopGeneratingAiRequest }));
+  const model = useEndpointModel(({ endpoint, inProgress, expanded, focused, toggleExpand, height, setHeight, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema, generateAiRequest, stopGeneratingAiRequest }) =>
+    ({ endpoint, inProgress, expanded, focused, toggleExpand, height, setHeight, onFocus, generateRequest, updateScript, runScript, resetScript, showBodySchema, showResponseSchema, generateAiRequest, stopGeneratingAiRequest }));
 
   useEffect(() => {
     if (highlightedScriptId === model.endpoint.endpointId) {
@@ -66,8 +67,14 @@ const _Endpoint: React.FC = () => {
       {
         model.expanded &&
         <s.Expanded>
-          <s.Editor height={model.height} onResize={model.onResize}>
+          <s.Editor
+            height={model.height}
+            onResize={model.setHeight}
+            onResizeDoubleClick={() => editorRef.current && model.setHeight(editorRef.current.getHeight())}
+            title='Double-click to auto-resize this panel'
+          >
             <HttlEditor
+              ref={editorRef}
               value={model.endpoint.scripts.at(0)?.code ?? model.endpoint.defaultScript ?? ""}
               options={{
                 overviewRulerLanes: 0,

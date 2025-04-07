@@ -23,7 +23,7 @@ export class GenerateSpecStep extends AgentStepBase<any> {
      - If needed, use available tools to load metadata files (e.g., package.json, webpack.config.js, tsconfig.json) to resolve aliases
 
 - Generate a valid OpenAPI 3.x JSON specification for the ${this.args[0].name} controller file.
-
+- The return object should be a single JSON object, not an array.
 - Return ONLY a valid JSON string without code block formatting (no \`\`\`json\`\`\` wrappers).
 `;
 }

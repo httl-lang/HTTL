@@ -1,6 +1,6 @@
 import { Action, Model, connect, store } from "react-storm";
-import { AppModel } from "../../app.model";
-// import { version } from "../../../../../package.json";
+import { AppModel } from "../../app/app.model";
+import { version } from "../../../../package.json";
 
 @Model()
 export class ReleaseNotesModel {
@@ -8,7 +8,7 @@ export class ReleaseNotesModel {
 
   public show = false;
   public lastRelease = '';
-  public currentVersion = '0.1.9'; //version; // TOOD: temporary hardcoded version
+  public currentVersion = version;
 
   constructor(
     private readonly appModel = store(AppModel)

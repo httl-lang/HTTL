@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useRef, useState } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 
 import * as s from './resize-panel.styles';
 
@@ -6,9 +6,11 @@ export interface ResizePanelProps {
   onResize?: (height: string) => void;
   height?: string;
   className?: string;
+  onResizeDoubleClick?: () => void;
+  title?: string;
 }
 
-export const ResizePanel: React.FC<PropsWithChildren<ResizePanelProps>> = ({ height, children, onResize, className }) => {
+export const ResizePanel: React.FC<PropsWithChildren<ResizePanelProps>> = ({ height, children, className, title, onResize, onResizeDoubleClick }) => {
   const panelRef = useRef<HTMLDivElement>(null);
 
   const onHandleResize = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -32,12 +34,18 @@ export const ResizePanel: React.FC<PropsWithChildren<ResizePanelProps>> = ({ hei
     document.addEventListener('mouseup', onMouseUp);
   }, []);
 
+  useEffect(() => {
+    if (panelRef.current) {
+      panelRef.current.style.height = height || 'auto';
+    }
+  }, [height]);
+
   return (
     <s.Container className={className}>
       <s.Panel ref={panelRef} style={{ height }}>
         {children}
       </s.Panel>
-      <s.Resizer onMouseDown={onHandleResize}>
+      <s.Resizer onMouseDown={onHandleResize} onDoubleClick={onResizeDoubleClick} title={title}>
         <s.Handler />
       </s.Resizer>
     </s.Container>

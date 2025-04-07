@@ -5,7 +5,7 @@ import { AgentStepBase } from '../../../core/agent-step-base';
 const PROJECT_FOOTPRINTS = {
   nodejs: 'package.json',
   dotnet: '*.csproj',
-  python: 'pyproject.toml',
+  python: ['pyproject.toml', 'requirements.txt', 'app.py', 'run.py', 'manage.py'],
   go: 'go.mod',
   java: ['pom.xml', 'build.gradle'],
   ruby: 'Gemfile',

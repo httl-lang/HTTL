@@ -1,5 +1,24 @@
 [
   {
+    "date": "2025-04-06",
+    "packages": {
+      "vscode": {
+        "version": "0.2.3",
+        "changes": [
+          {
+            "title": "Added auto-resizer on double-click for each request panel.",
+            "description": "In the **HTTL Project**, you can now double-click the request resizer handle to automatically resize it to fit the content.",
+            "type": "feature"
+          },
+          {
+            "title": "Fixed recognition of Python projects.",
+            "type": "fix"
+          }
+        ]
+      }
+    }
+  },
+  {
     "date": "2025-04-02",
     "packages": {
       "vscode": {

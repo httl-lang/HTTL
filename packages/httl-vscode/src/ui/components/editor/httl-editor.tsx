@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import * as monaco from "monaco-editor";
 import { httlLangInit, jwtLangInit } from "./loaders";
 
@@ -33,9 +33,11 @@ const defaultOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   fontSize: 12,
 };
 
+export interface HttlEditorRef {
+  getHeight: () => string;
+}
 
-
-export const HttlEditor: React.FC<EditorProps> = ({
+export const HttlEditor = forwardRef<HttlEditorRef, EditorProps>(({
   value,
   onChange,
   onRun,
@@ -44,11 +46,17 @@ export const HttlEditor: React.FC<EditorProps> = ({
   language = "httl",
   theme = "vs-dark",
   options = defaultOptions,
-}) => {
+}: EditorProps, ref: React.Ref<HttlEditorRef>) => {
   const [editorValue, setEditorValue] = useState(value);
 
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useImperativeHandle(ref, () => ({
+    getHeight: () => {
+      return (editorRef.current?.getContentHeight() ?? 0) + 'px';
+    }
+  }));
 
   useEffect(() => {
     if (!containerRef.current) { return; }
@@ -114,4 +122,4 @@ export const HttlEditor: React.FC<EditorProps> = ({
 
 
   return <div ref={containerRef} style={{ width: "100%", height: "100%" }} />;
-};
+});

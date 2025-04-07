@@ -155,6 +155,7 @@ export class ProjectModel {
     finally {
       this.setAgentProgress(false);
       this.agentTagsProgress = [];
+      await this.reloadProject();
     }
   }
 

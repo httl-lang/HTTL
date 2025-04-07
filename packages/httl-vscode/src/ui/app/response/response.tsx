@@ -3,7 +3,7 @@ import { Outlet } from 'react-router';
 
 import { ResponseContext } from './response.model';
 import * as s from './response.styles';
-import ReleaseNotes from './release-notes';
+import ReleaseNotes from '../../components/release-notes';
 import DebugPanel from '../../components/debug-panel';
 
 const _ResponseView: React.FC = () => {

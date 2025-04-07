@@ -112,7 +112,8 @@ export class EndpointModel {
   }
 
   @Action()
-  public onResize(height: string) {
+  public setHeight(height: string) {
+    this.height = height;
     this.project.updateState({
       endpoints: {
         [this.endpoint.endpointId]: {
