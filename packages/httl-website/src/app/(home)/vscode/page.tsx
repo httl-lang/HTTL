@@ -14,12 +14,7 @@ export default function HttlProject() {
     <div className="relative isolate px-6 pt-14 lg:px-8">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="mb-8 flex justify-center">
-          <a href="https://www.producthunt.com/posts/httl-project?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-httl&#0045;project" target="_blank">
-            <img
-              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=949212&theme=light&t=1744077126105"
-              alt="HTTL&#0032;Project - HTTL&#0032;&#0043;&#0032;GitHub&#0032;Copilot&#0032;&#0061;&#0032;Instant&#0032;OpenAPI&#0032;Specs | Product Hunt"
-              style={{ width: 250, height: 54 }} width="250" height="54" />
-          </a>
+          <a href="https://www.producthunt.com/posts/httl-project?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-httl&#0045;project" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=949212&theme=dark&t=1744077524180" alt="HTTL&#0032;Project - HTTL&#0032;&#0043;&#0032;GitHub&#0032;Copilot&#0032;&#0061;&#0032;Instant&#0032;OpenAPI&#0032;Specs | Product Hunt" style={{ width: 250, height: 54 }} width="250" height="54" /></a>
         </div>
         <ReleaseLabel className="mb-8 flex justify-center" />
         <div className="text-center">
