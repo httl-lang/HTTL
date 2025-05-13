@@ -38,6 +38,7 @@ export const Label = styled(LoadingText) <{ center?: boolean, dark?: boolean }>`
 
 export const EndpointGroup = styled.div`
   margin-bottom: 20px;
+  overflow: hidden;
 `;
 
 export const EndpointTag = styled(LoadingText) <{ dark?: boolean }>`

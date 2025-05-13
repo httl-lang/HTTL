@@ -143,7 +143,7 @@ const uiConfig = {
   plugins: [
     new MonacoWebpackPlugin({
       features: ['format'],
-      languages: [],
+      languages: ['json'],
     }),
     new webpack.ProvidePlugin({
       Buffer: ["buffer", "Buffer"],

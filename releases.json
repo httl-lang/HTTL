@@ -1,5 +1,19 @@
 [
   {
+    "date": "2025-05-13",
+    "packages": {
+      "vscode": {
+        "version": "0.2.4",
+        "changes": [
+          {
+            "title": "Fixed JSON collapsing issue in the response panel.",
+            "type": "fix"
+          }
+        ]
+      }
+    }
+  },
+  {
     "date": "2025-04-06",
     "packages": {
       "vscode": {
