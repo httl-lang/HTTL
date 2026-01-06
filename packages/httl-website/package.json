@@ -25,7 +25,7 @@
     "httl-lsp": "^0.1.0",
     "monaco-editor": "npm:@codingame/monaco-vscode-editor-api@^11.1.2",
     "monaco-languageclient": "^9.1.0",
-    "next": "15.1.4",
+    "next": "15.1.11",
     "nextra": "^4.0.8",
     "nextra-theme-docs": "^4.0.8",
     "react": "^19.0.0",
