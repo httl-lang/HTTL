@@ -1,11 +1,14 @@
+import { withLogging } from '@/lib/logging/with-logging';
 import data from './data.json'
 
-export async function GET(request: Request) {
+async function getHandler(request: Request) {
   return Response.json(data)
 }
 
-export async function POST(request: Request) {
+async function postHandler(request: Request) {
   const body = await request.json();
   return Response.json(body)
 }
 
+export const GET = withLogging(getHandler);
+export const POST = withLogging(postHandler);

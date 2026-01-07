@@ -1,6 +1,7 @@
+import { withLogging } from "@/lib/logging/with-logging";
 import { apiToken } from "../_constants";
 
-export async function POST(request: Request) {
+async function postHandler(request: Request) {
   const authorization = request.headers.get('authorization')?.replace('Basic ', '');
   if (!authorization) {
     return Response.json({ error: 'Authorization header is required' }, { status: 400 });
@@ -14,3 +15,5 @@ export async function POST(request: Request) {
 
   return Response.json({ error: 'Invalid credentials' }, { status: 401 });
 }
+
+export const POST = withLogging(postHandler);

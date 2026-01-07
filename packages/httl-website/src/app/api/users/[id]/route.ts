@@ -1,7 +1,8 @@
+import { withLogging } from '@/lib/logging/with-logging';
 import { apiToken } from '../../_constants';
 import data from '../data.json'
 
-export async function GET(
+async function getHandler(
   request: Request,
   { params }: { params: Promise<{ id: number }> }
 ) {
@@ -14,7 +15,7 @@ export async function GET(
   return Response.json(user)
 }
 
-export async function PUT(
+async function putHandler(
   request: Request,
   { params }: { params: Promise<{ id: number }> }
 ) {
@@ -37,7 +38,7 @@ export async function PUT(
   return Response.json({ ...user, ...body })
 }
 
-export async function DELETE(
+async function deleteHandler(
   request: Request,
   { params }: { params: Promise<{ id: number }> }
 ) {
@@ -49,3 +50,7 @@ export async function DELETE(
 
   return Response.json({ message: 'User deleted' })
 }
+
+export const GET = withLogging(getHandler);
+export const PUT = withLogging(putHandler);
+export const DELETE = withLogging(deleteHandler);

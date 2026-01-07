@@ -11,13 +11,15 @@ import {
   toSocket
 } from 'vscode-ws-jsonrpc';
 
+import { withLoggingPages } from '@/lib/logging/with-logging-pages';
+
 interface SocketWithServer extends Socket {
   server?: HTTPServer & {
     wss?: WebSocketServer
   }
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+function handler(req: NextApiRequest, res: NextApiResponse) {
   const socket = res.socket as SocketWithServer
 
   if (socket.server && socket.server.wss) {
@@ -44,3 +46,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   res.end()
 }
+
+export default withLoggingPages(handler);
