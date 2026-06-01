@@ -1,3 +1,5 @@
 import { startBrowserServer } from 'httl-lsp/browser';
 
-startBrowserServer(self as unknown as DedicatedWorkerGlobalScope);
+// `self` is the worker global scope at runtime. startBrowserServer accepts it
+// untyped so this file does not need the WebWorker TS lib alongside the DOM lib.
+startBrowserServer(self);
