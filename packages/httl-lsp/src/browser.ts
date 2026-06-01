@@ -5,7 +5,7 @@ import {
   createConnection,
 } from 'vscode-languageserver/browser';
 
-import { FetchHttpClient } from 'httl-core';
+import { FetchHttpClient, IHttpClient } from 'httl-core';
 import { configureServer } from './configure-server';
 
 /**
@@ -15,13 +15,16 @@ import { configureServer } from './configure-server';
  * `workerScope` is intentionally untyped so this package does not need the
  * DOM/WebWorker lib (it ships alongside Node types). The caller (the website
  * worker) provides the typed `self`.
+ *
+ * `httpClient` defaults to a plain fetch client; callers may inject a wrapper
+ * (e.g. to mock demo endpoints) as long as it implements IHttpClient.
  */
-export function startBrowserServer(workerScope: any) {
+export function startBrowserServer(workerScope: any, httpClient: IHttpClient = new FetchHttpClient()) {
   const reader = new BrowserMessageReader(workerScope);
   const writer = new BrowserMessageWriter(workerScope);
   const connection = createConnection(ProposedFeatures.all, reader, writer);
 
-  configureServer(connection, { httpClient: new FetchHttpClient() });
+  configureServer(connection, { httpClient });
 
   connection.listen();
   return connection;

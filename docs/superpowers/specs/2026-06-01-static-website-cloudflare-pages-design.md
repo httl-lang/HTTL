@@ -23,8 +23,13 @@ Two server-coupled subsystems must change:
 
 - **Run execution:** fully client-side via browser `fetch`. CORS limits accepted
   (the demo targets the site's own origin, so it works).
-- **Demo API:** GET → static JSON; dynamic endpoints (auth POST, users
-  PUT/DELETE/POST) dropped.
+- **Demo API:** the OpenAPI spec stays a real static asset (`/api/spec.json`,
+  loaded same-origin). The user/auth endpoints are **mocked in the playground
+  worker** (a `DemoHttpClient` wrapping the fetch client) so all four QuickRun
+  examples — including the POST/PUT/auth flows — work with no backend. (Revised
+  from the original "GET → static JSON, drop dynamic" after review: dropping the
+  dynamic examples lost valuable demos, and worker-side mocking keeps the site
+  fully static while restoring them.)
 - **Shared-package changes:** "simplest to ship" — bundler aliases + fallbacks +
   a hand-written browser `HttpClient`, no invasive DI refactor of core unless a
   specific file forces it. The Node code paths (CLI, VSCode extension) stay
