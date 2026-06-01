@@ -1,4 +1,4 @@
-import http from 'http';
+import type http from 'http';
 import FormData from 'form-data';
 import { HttpEventTimes } from './http-timings';
 import { TokenRange, TokenSource } from '../../common';
@@ -86,6 +86,58 @@ export class HttpResponse {
       },
 
       timings,
+    });
+
+    return response;
+  }
+
+  public static fromFetch(input: {
+    requestUrl: string;
+    requestMethod: string;
+    requestHeaders: object;
+    requestBody: string | undefined;
+    status: number;
+    statusText: string;
+    responseHeaders: [string, string][];
+    data: string;
+    totalMs: number;
+  }): HttpResponse {
+    const response = new HttpResponse();
+
+    const sortedHeaders = [...input.responseHeaders]
+      .sort((a, b) => a[0].localeCompare(b[0]));
+
+    Object.assign(response, {
+      statusCode: input.status,
+      statusMessage: input.statusText,
+      httpVersion: '1.1',
+      warnings: [],
+
+      req: {
+        method: input.requestMethod,
+        url: input.requestUrl,
+        headers: input.requestHeaders,
+        body: input.requestBody,
+      },
+
+      res: {
+        headers: sortedHeaders,
+        data: input.data,
+        size: HttpSize.sizeOf({
+          headers: input.responseHeaders.flat(),
+          data: input.data,
+        }),
+      },
+
+      timings: {
+        dnsLookup: undefined,
+        tcpConnection: undefined,
+        tlsHandshake: undefined,
+        firstByte: undefined,
+        contentTransfer: undefined,
+        total: input.totalMs,
+        totalFormatted: input.totalMs.toFixed(2),
+      },
     });
 
     return response;
