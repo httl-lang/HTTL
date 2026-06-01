@@ -23,6 +23,7 @@ const withNextra = nextra({
 });
 
 const nextConfig = {
+  output: 'export',
   compiler: {
     styledComponents: true,
   },
@@ -53,15 +54,6 @@ const nextConfig = {
     }
 
     return config;
-  },
-  async redirects() {
-    return [
-      {
-        source: '/docs',
-        destination: '/docs/introduction/about-httl',
-        permanent: false,
-      },
-    ];
   },
 };
 
