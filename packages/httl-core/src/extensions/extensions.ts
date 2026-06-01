@@ -1,17 +1,18 @@
 import { HttlUrl } from "../common/url";
+import { IHttpClient } from "../runtime/http/http-client.types";
 import { ApiSpec } from "./api-spec/api-spec";
 
 export type ApplicableType = 'api' | 'request';
 
 export interface IExtension {
   applicable: ApplicableType | ApplicableType[];
-  call: (...args: string[]) => Promise<any>;
+  call: (...args: any[]) => Promise<any>;
 }
 
 export const extensions: Record<string, IExtension> = {
   base: {
     applicable: 'api',
-    call: async (url: string) => {
+    call: async (_httpClient: IHttpClient, url: string) => {
       const httlUrl = HttlUrl.parse(url);
 
       if (httlUrl === HttlUrl.INVALID) {
@@ -25,7 +26,7 @@ export const extensions: Record<string, IExtension> = {
   },
   "auth-basic": {
     applicable: ['request', 'api'],
-    call: async (username: string, password: string) => {
+    call: async (_httpClient: IHttpClient, username: string, password: string) => {
       const str = `${username}:${password}`;
       const uint8Array = new TextEncoder().encode(str);
       const hash = btoa(String.fromCharCode(...uint8Array));
@@ -39,8 +40,8 @@ export const extensions: Record<string, IExtension> = {
   },
   spec: {
     applicable: 'api',
-    call: async (url: string) => {
-      const apiSpec = await ApiSpec.fromUrl(HttlUrl.parse(url));
+    call: async (httpClient: IHttpClient, url: string) => {
+      const apiSpec = await ApiSpec.fromUrl(HttlUrl.parse(url), httpClient);
 
       return {
         baseUrl: apiSpec.getBasePath(),

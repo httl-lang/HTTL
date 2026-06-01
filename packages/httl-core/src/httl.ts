@@ -90,6 +90,11 @@ export default class Httl implements IHttlContext {
   }
 
   public hasDefaultHttlFile(): boolean {
+    // In the browser there is no filesystem (webpack stubs `fs`), so
+    // `fs.existsSync` is undefined. There is no default .httl file there.
+    if (typeof fs.existsSync !== 'function') {
+      return false;
+    }
     return fs.existsSync(Path.toAbsolutePath(this.workdir, ".httl"));
   }
 }

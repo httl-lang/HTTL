@@ -1,6 +1,7 @@
 import { Json, Yaml } from "../../common";
 import { HttlUrl } from "../../common/url";
-import { HttpClient } from "../../runtime/http";
+import { IHttpClient } from "../../runtime/http/http-client.types";
+import { NodeHttpClient } from "../../runtime/http/node-http-client";
 import { ApiEndpoint } from "./api-endpoint";
 import { IApiInfo, IOpenApiVersionAdapter } from "./api-version-adapter";
 import { OpenAPI_3_x } from "./versions/open-api_3_x";
@@ -14,11 +15,11 @@ export interface IApiEndpointFilter {
 
 export class ApiSpec {
 
-  public static async fromUrl(url: HttlUrl | string): Promise<ApiSpec> {
+  public static async fromUrl(url: HttlUrl | string, httpClient: IHttpClient = new NodeHttpClient()): Promise<ApiSpec> {
     if (typeof url === 'string') {
       url = HttlUrl.parse(url);
     }
-    const response = await HttpClient.request(url, { method: 'GET', headers: {} });
+    const response = await httpClient.request(url, { method: 'GET', headers: {} });
     if (response.statusCode !== 200) {
       throw new Error('Failed to fetch spec');
     }

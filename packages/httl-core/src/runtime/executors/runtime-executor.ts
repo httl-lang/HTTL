@@ -142,8 +142,9 @@ export class RuntimeExecutor implements IRuntimeExecutor {
 
     const { applicable, call } = extensions[name];
     const args = arg.split(" ");
+    const httpClient = this.runtime.context.httpClient;
 
-    return Ok({ applicable, call: () => call(...args) });
+    return Ok({ applicable, call: () => call(httpClient, ...args) });
   }
 
   public addDiagnostic(diagnostic: HttlDiagnostic): void {
