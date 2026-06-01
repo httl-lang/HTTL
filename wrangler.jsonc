@@ -1,0 +1,11 @@
+{
+  // Must match your Cloudflare Workers project name.
+  "name": "httl-website",
+  "compatibility_date": "2025-01-01",
+  // Static-assets-only Worker (no server script): serve the exported site.
+  // Path is relative to this file (the repo root). `_redirects` / `_headers`
+  // inside the directory are honored automatically.
+  "assets": {
+    "directory": "./packages/httl-website/out"
+  }
+}
