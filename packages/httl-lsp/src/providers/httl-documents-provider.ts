@@ -2,7 +2,7 @@ import {
   TextDocuments,
   _Connection,
   TextDocumentChangeEvent,
-} from 'vscode-languageserver/node';
+} from 'vscode-languageserver';
 
 import {
   TextDocument,

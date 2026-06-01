@@ -3,7 +3,7 @@ import {
   TextDocumentPositionParams,
   _Connection,
   Position
-} from 'vscode-languageserver/node';
+} from 'vscode-languageserver';
 
 import { HttlLanguageServerProvider } from './httl-provider';
 import { HttlDocumentsProvider } from './httl-documents-provider';
