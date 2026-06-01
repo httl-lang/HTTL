@@ -30,10 +30,26 @@ const nextConfig = {
     if (!isServer) {
       config.resolve.mainFields = ['browser', 'module', 'main', 'exports'];
       config.resolve.fallback = {
+        ...config.resolve.fallback,
         fs: false,
         module: false,
         vm: false,
-      }
+        http: false,
+        https: false,
+        tls: false,
+        net: false,
+        zlib: false,
+        os: false,
+        crypto: false,
+        stream: false,
+        'form-data': false,
+        path: 'path-browserify',
+      };
+      config.plugins.push(
+        new webpack.ProvidePlugin({
+          process: 'process/browser',
+        }),
+      );
     }
 
     return config;

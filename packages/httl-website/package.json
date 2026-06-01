@@ -37,9 +37,11 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^20",
+    "@types/path-browserify": "^1.0.3",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/vscode": "^1.96.0",
+    "path-browserify": "^1.0.1",
     "postcss": "^8.5.1",
     "tailwindcss": "^4.0.0",
     "typescript": "^5"
