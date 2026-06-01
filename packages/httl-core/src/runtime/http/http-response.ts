@@ -25,10 +25,12 @@ export interface HttpWarning {
   message: string;
 }
 
+const utf8ByteLength = (value: string): number => new TextEncoder().encode(value).length;
+
 export class HttpSize {
   public static sizeOf({ headers, data }: { headers: string[], data: string }) {
-    const headersSize = headers.reduce((acc, curr) => acc + Buffer.byteLength(curr), 0);
-    const dataSize = data ? Buffer.byteLength(data) : 0;
+    const headersSize = headers.reduce((acc, curr) => acc + utf8ByteLength(curr), 0);
+    const dataSize = data ? utf8ByteLength(data) : 0;
 
     const totalSize = headersSize + dataSize;
     const totalFormated = totalSize < 1024
