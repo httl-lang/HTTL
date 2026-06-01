@@ -93,7 +93,7 @@ export class RuntimeExecutor implements IRuntimeExecutor {
   }
 
   public async httpRequest(url: HttlUrl, options: HttpRequestOptions): Promise<HttpResponse> {
-    return await HttpClient.request(url, options);
+    return await this.runtime.context.httpClient.request(url, options);
   }
 
   public isAlreadyImported(path: string): boolean {

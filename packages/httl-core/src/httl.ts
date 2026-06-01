@@ -4,9 +4,12 @@ import { HttlDocument } from "./document";
 import { Id, Lang, Path } from "./common";
 import fs from "fs";
 import dotenv from 'dotenv'
+import { IHttpClient } from "./runtime/http/http-client.types";
+import { NodeHttpClient } from "./runtime/http/node-http-client";
 
 export interface HttlOptions {
   workdir: string;
+  httpClient?: IHttpClient;
 }
 
 export class EnvironmentVariables {
@@ -16,8 +19,13 @@ export class EnvironmentVariables {
   }
 
   public refresh() {
-    if (this.workdir) {
-      dotenv.config({ path: Path.toAbsolutePath(this.workdir, '.env') });
+    const isNode = typeof process !== 'undefined' && !!process.versions?.node;
+    if (this.workdir && isNode) {
+      try {
+        dotenv.config({ path: Path.toAbsolutePath(this.workdir, '.env') });
+      } catch {
+        // no filesystem available (browser) — ignore
+      }
     }
   }
 
@@ -36,6 +44,7 @@ export class EnvironmentVariables {
 
 export interface IHttlContext {
   workdir: string;
+  httpClient: IHttpClient;
   compiler: HttlCompiler;
   runtime: HttlRuntime;
   env: EnvironmentVariables;
@@ -47,6 +56,7 @@ export default class Httl implements IHttlContext {
   private readonly documents = new Map<string, HttlDocument>();
 
   public readonly workdir: string;
+  public readonly httpClient: IHttpClient;
 
   constructor(
     public readonly options: HttlOptions,
@@ -55,6 +65,7 @@ export default class Httl implements IHttlContext {
     public readonly env = new EnvironmentVariables(options.workdir)
   ) {
     this.workdir = options.workdir;
+    this.httpClient = options.httpClient ?? new NodeHttpClient();
   }
 
 
