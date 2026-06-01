@@ -13,15 +13,14 @@ export async function activate() {
 
   initialized = true;
 
-  const lspUrl = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + window.location.host + '/lsp';
-  const lspActivationUrl = '/api/lsp';
-  if (!lspUrl || !lspActivationUrl) {
-    throw new Error('LSP URL or LSP Activation URL is not provided');
-  }
-
   const extApi = await registerHttlConfig();
 
-  const lsp = new HttlLanguageClient(lspUrl, lspActivationUrl, extApi);
+  const worker = new Worker(
+    new URL('./lsp.worker.ts', import.meta.url),
+    { type: 'module', name: 'httl-lsp' },
+  );
+
+  const lsp = new HttlLanguageClient(worker, extApi);
   const commands = new HttlCommands(extApi, lsp);
 
   await lsp.start()
